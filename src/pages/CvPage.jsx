@@ -6,7 +6,7 @@ import DownloadIcon from '@mui/icons-material/Download'; // Icon for button
 // --- Import the PDF from the components folder ---
 // This assumes CvPage.jsx is in src/pages. Adjust path if needed.
 // Make sure the filename 'Gulfam-CV.pdf' is correct.
-import cvPath from '../components/Gulfam_CV.pdf';
+import cvPath from '../components/Gulfam_CV_updated.pdf';
 
 function CvPage() {
   // The cvPath variable now holds the correct URL path processed by Vite
