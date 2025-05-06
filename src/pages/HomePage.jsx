@@ -120,40 +120,30 @@ function HomePage() {
           </Typography>
 
           {/* Call to Action Buttons */}
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              href={cvPath}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} // Subtle shadow
-            >
-              Download CV
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              component={RouterLink}
-              to="/research"
-              endIcon={<ArrowForwardIcon />}
-            >
-              Explore Research
-            </Button>
-             <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              component={RouterLink}
-              to="/publications"
-              endIcon={<ArrowForwardIcon />}
-            >
-              View Publications
-            </Button>
-          </Box>
+         {/* Call to Action Buttons */}
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
+          {/* The Download CV Button has been removed from here */}
+          <Button
+            variant="outlined"
+            color="primary"
+            size="large"
+            component={RouterLink}
+            to="/research"
+            endIcon={<ArrowForwardIcon />}
+          >
+            Explore Research
+          </Button>
+           <Button
+            variant="outlined"
+            color="primary"
+            size="large"
+            component={RouterLink}
+            to="/publications"
+            endIcon={<ArrowForwardIcon />}
+          >
+            View Publications
+          </Button>
+        </Box>
 
           <Divider sx={{ mb: 4 }} />
 
