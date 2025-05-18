@@ -32,7 +32,7 @@ const peerReviewData = {
 // --- Teaching/Mentoring Data (Replace with your actual activities) ---
 const teachingMentoringData = [
   "Research Mentor, NSF Research Experiences for Undergraduates (REU), UMass Dartmouth, Summer 2023",
-  "Grading Assistant, Artificial Intelligence, UMass Dartmouth (Spring 2025)",
+  "Grading Assistant, Artificial Intelligence, UMass Dartmouth (Fall 2024)",
   "Instructor, International English Language Testing System (IELTS), 2021",
   // Add more items like: "Teaching Assistant, Course Name, University (Semester/Year)"
 ];
