@@ -184,6 +184,7 @@ function HomePage() {
                     <Chip label="Python" size="small" variant="outlined" /> {/* Added variant="outlined" for consistency */}
                     <Chip label="PyTorch" size="small" variant="outlined" />
                     <Chip label="TensorFlow" size="small" variant="outlined" />
+                    <Chip label="LangChain" size="small" variant="outlined" />
                     <Chip label="Medical Image Analysis" size="small" variant="outlined" />
                     <Chip label="MRI Reconstruction" size="small" variant="outlined" />
                     <Chip label="Machine Learning" size="small" variant="outlined" />
