@@ -54,7 +54,7 @@ function HomePage() {
         color: "#bbbbbb", // Link color (slightly lighter gray)
         distance: 150, // Max distance for links
         enable: true,
-        opacity: 0.3, // Low opacity for subtlety
+        opacity: 0.15, // Low opacity for subtlety
         width: 1,
       },
       collisions: { enable: false, }, // Disable collisions for smoother flow
@@ -63,14 +63,14 @@ function HomePage() {
         enable: true,
         outModes: { default: "bounce", }, // Bounce off edges
         random: true, // Random movement direction
-        speed: 1, // Slow speed
+        speed: 0.5, // Slow speed
         straight: false,
       },
       number: {
         density: { enable: true, area: 800, }, // Adjust area for density
-        value: 50, // Number of particles (adjust for performance/look)
+        value: 35, // Number of particles (adjust for performance/look)
       },
-      opacity: { value: 0.4, }, // Low particle opacity
+      opacity: { value: 0.2, }, // Low particle opacity
       shape: { type: "circle", },
       size: { value: { min: 1, max: 3 }, }, // Small particle size
     },
@@ -108,7 +108,7 @@ function HomePage() {
           <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
             {headline}
           </Typography>
-          <Typography variant="h6" component="p" color="primary.main" sx={{ mb: 3 }}>
+          <Typography variant="h6" component="p" color="primary.main" sx={{ mb: 3, fontWeight: 500 }}>
             {jobGoal}
           </Typography>
 
@@ -151,7 +151,16 @@ function HomePage() {
           <Grid container spacing={4}>
             {/* Research Highlight Card */}
             <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ height: '100%', borderColor: 'rgba(0, 0, 0, 0.08)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }}> {/* Slightly transparent card */}
+              <Card sx={{
+                height: '100%',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.1), 0px 4px 5px 0px rgba(0,0,0,0.07), 0px 1px 10px 0px rgba(0,0,0,0.06)',
+                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-3px)',
+                  boxShadow: '0px 3px 6px -1px rgba(0,0,0,0.12), 0px 5px 8px 0px rgba(0,0,0,0.08), 0px 1px 12px 0px rgba(0,0,0,0.07)',
+                }
+              }}> {/* Slightly transparent card */}
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                     <ScienceIcon color="action" sx={{ mr: 1 }} /> {/* Icon */}
@@ -168,7 +177,16 @@ function HomePage() {
 
             {/* Skills Snapshot Card */}
             <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ height: '100%', borderColor: 'rgba(0, 0, 0, 0.08)', backgroundColor: 'rgba(255, 255, 255, 0.8)' }}> {/* Slightly transparent card */}
+              <Card sx={{
+                height: '100%',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.1), 0px 4px 5px 0px rgba(0,0,0,0.07), 0px 1px 10px 0px rgba(0,0,0,0.06)',
+                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-3px)',
+                  boxShadow: '0px 3px 6px -1px rgba(0,0,0,0.12), 0px 5px 8px 0px rgba(0,0,0,0.08), 0px 1px 12px 0px rgba(0,0,0,0.07)',
+                }
+              }}> {/* Slightly transparent card */}
                 <CardContent>
                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                     <BuildIcon color="action" sx={{ mr: 1 }} /> {/* Icon */}
