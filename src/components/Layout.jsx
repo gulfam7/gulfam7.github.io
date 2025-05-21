@@ -24,7 +24,7 @@ function Layout() {
         <Box
           sx={{
             flexGrow: 1,
-            p: 3,
+            p: 4,
             overflowY: 'auto',
             overflowX: 'hidden',
           }}

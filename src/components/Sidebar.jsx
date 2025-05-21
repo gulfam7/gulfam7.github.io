@@ -32,29 +32,29 @@ const profileData = {
       name: 'LinkedIn',
       url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/',
       // Apply color using sx prop for MUI icons
-      icon: <LinkedInIcon sx={{ color: '#0A66C2' }} /> // Keep brand color or make light
+      icon: <LinkedInIcon sx={{ color: 'rgba(255, 255, 255, 0.7)' }} /> // Keep brand color or make light
     },
     {
       name: 'Scholar',
       url: 'https://scholar.google.com/citations?user=qewXRr4AAAAJ&hl=en&inst=8491034277084204831&oi=ao',
-      icon: <SchoolIcon sx={{ color: '#4285F4' }} /> // Keep brand color or make light
+      icon: <SchoolIcon sx={{ color: 'rgba(255, 255, 255, 0.7)' }} /> // Keep brand color or make light
     },
     {
       name: 'ResearchGate',
       url: 'https://www.researchgate.net/profile/Gulfam-Saju',
       // Apply color using style prop for react-icons
-      icon: <FaResearchgate size={24} style={{ color: '#00CCBB' }} /> // Keep brand color or make light
+      icon: <FaResearchgate size={24} style={{ color: 'rgba(255, 255, 255, 0.7)' }} /> // Keep brand color or make light
     },
     {
       name: 'GitHub',
       url: 'https://github.com/gulfam7',
       // Adjust GitHub icon color for dark background
-      icon: <GitHubIcon sx={{ color: '#ffffff' }} /> // White icon
+      icon: <GitHubIcon sx={{ color: 'rgba(255, 255, 255, 0.7)' }} /> // White icon
     },
     {
       name: 'ORCID',
       url: 'https://orcid.org/0009-0007-7391-0485', // Replace XXXX with actual ORCID parts
-      icon: <FaOrcid size={24} style={{ color: '#A6CE39' }} /> // Keep brand color or make light
+      icon: <FaOrcid size={24} style={{ color: 'rgba(255, 255, 255, 0.7)' }} /> // Keep brand color or make light
     },
   ],
 };
@@ -172,9 +172,9 @@ function Sidebar() {
           boxSizing: 'border-box',
           // --- Glassmorphism Styles ---
           // Dark semi-transparent background
-          backgroundColor: 'rgba(30, 30, 40, 0.7)', // Adjust color & opacity as needed
+          backgroundColor: 'rgba(40, 40, 50, 0.65)', // Adjust color & opacity as needed
           // Backdrop blur effect
-          backdropFilter: 'blur(12px)',
+          backdropFilter: 'blur(10px)',
           // Remove default border, add a subtle light one if desired
           borderRight: '1px solid rgba(255, 255, 255, 0.1)',
           // Ensure content scrolls if needed

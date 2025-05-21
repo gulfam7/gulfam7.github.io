@@ -23,6 +23,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   padding: theme.spacing(0, 2),
   '&:hover': {
     color: theme.palette.primary.main,
+    backgroundColor: 'rgba(0, 0, 0, 0.04)', // Subtle background on hover
   },
   '&.Mui-selected': {
     fontWeight: 600,
