@@ -1,6 +1,4 @@
-// -----------------------------------------------------------------------------
-// Sidebar.jsx – modern pastel-glass design
-// -----------------------------------------------------------------------------
+// Sidebar.jsx – modern pastel-glass design with contrasting accent
 import React from 'react';
 import {
   Drawer,
@@ -23,11 +21,9 @@ import SchoolIcon from '@mui/icons-material/School';
 import { FaResearchgate, FaOrcid } from 'react-icons/fa';
 import profilePic from './IMG_7270.jpg';
 
-// ---------------- constants ----------------
 export const drawerWidth = 260;
 export const collapsedWidth = 84;
 
-// ---------------- data ----------------
 const user = {
   name: 'Gulfam Ahmed Saju',
   title: 'PhD Candidate · GRA',
@@ -36,22 +32,22 @@ const user = {
   loc: 'Dartmouth, MA',
   img: profilePic,
   links: [
-    { text: 'LinkedIn', url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/', icon: <LinkedInIcon /> },
-    { text: 'Scholar',  url: 'https://scholar.google.com/citations?user=qewXRr4AAAAJ', icon: <SchoolIcon /> },
-    { text: 'ResearchGate', url: 'https://www.researchgate.net/profile/Gulfam-Saju', icon: <FaResearchgate size={20} /> },
-    { text: 'GitHub',   url: 'https://github.com/gulfam7', icon: <GitHubIcon /> },
-    { text: 'ORCID',    url: 'https://orcid.org/0009-0007-7391-0485', icon: <FaOrcid size={20} /> },
+    { text: 'LinkedIn',     url: 'https://linkedin.com/in/...', icon: <LinkedInIcon /> },
+    { text: 'Scholar',      url: 'https://scholar.google.com/...', icon: <SchoolIcon /> },
+    { text: 'ResearchGate', url: 'https://researchgate.net/...',    icon: <FaResearchgate size={20} /> },
+    { text: 'GitHub',       url: 'https://github.com/...',          icon: <GitHubIcon /> },
+    { text: 'ORCID',        url: 'https://orcid.org/...',           icon: <FaOrcid size={20} /> },
   ],
 };
 
-// ---------------- component ----------------
 function Sidebar() {
   const theme = useTheme();
   const collapsed = useMediaQuery('(max-width:900px)');
   const width = collapsed ? collapsedWidth : drawerWidth;
 
-  // pastel accent for icon badge on hover
-  const hoverBg = alpha(theme.palette.primary.main, 0.08);
+  // Secondary accent
+  const accent = theme.palette.secondary.main;
+  const hoverBg = alpha(accent, 0.2);
 
   return (
     <Drawer
@@ -74,7 +70,7 @@ function Sidebar() {
         },
       }}
     >
-      {/* ---------- avatar / header ---------- */}
+      {/* Avatar & Header */}
       <Box textAlign="center" sx={{ px: 1 }}>
         <Avatar
           src={user.img}
@@ -102,7 +98,7 @@ function Sidebar() {
         )}
       </Box>
 
-      {/* ---------- account section ---------- */}
+      {/* Account Section */}
       {!collapsed && (
         <>
           <Divider sx={{ my: 1.5 }} />
@@ -114,9 +110,8 @@ function Sidebar() {
           </Typography>
         </>
       )}
-
       <Box sx={{ px: collapsed ? 0 : 1 }}>
-        {/* email */}
+        {/* Email */}
         <ListItemButton
           component={MuiLink}
           href={`mailto:${user.email}`}
@@ -129,8 +124,8 @@ function Sidebar() {
           <ListItemIcon
             sx={{
               minWidth: 36,
-              bgcolor: alpha(theme.palette.primary.main, 0.15),
-              color: theme.palette.primary.main,
+              bgcolor: alpha(accent, 0.15),
+              color: accent,
               p: 0.7,
               borderRadius: 2,
               mr: collapsed ? 0 : 2,
@@ -144,7 +139,7 @@ function Sidebar() {
           )}
         </ListItemButton>
 
-        {/* location */}
+        {/* Location */}
         <ListItemButton
           disableRipple
           sx={{
@@ -173,7 +168,7 @@ function Sidebar() {
         </ListItemButton>
       </Box>
 
-      {/* ---------- links ---------- */}
+      {/* Profiles Section */}
       {!collapsed && (
         <>
           <Divider sx={{ my: 1.5 }} />
@@ -185,7 +180,6 @@ function Sidebar() {
           </Typography>
         </>
       )}
-
       <Box sx={{ px: collapsed ? 0 : 1, mb: 1 }}>
         {user.links.map((l) => (
           <ListItemButton
@@ -204,8 +198,8 @@ function Sidebar() {
             <ListItemIcon
               sx={{
                 minWidth: 36,
-                bgcolor: alpha(theme.palette.info.main, 0.15),
-                color: theme.palette.info.main,
+                bgcolor: alpha(accent, 0.15),
+                color: accent,
                 p: 0.7,
                 borderRadius: 2,
                 mr: collapsed ? 0 : 2,
@@ -221,7 +215,7 @@ function Sidebar() {
         ))}
       </Box>
 
-      {/* ---------- footer ---------- */}
+      {/* Footer */}
       {!collapsed && (
         <Typography
           variant="caption"
