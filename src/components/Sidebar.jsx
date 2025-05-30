@@ -32,11 +32,11 @@ const user = {
   loc: 'Dartmouth, MA',
   img: profilePic,
   links: [
-    { text: 'LinkedIn', url: 'https://linkedin.com/in/...', icon: <LinkedInIcon /> },
-    { text: 'Scholar',  url: 'https://scholar.google.com/...', icon: <SchoolIcon /> },
-    { text: 'ResearchGate', url: 'https://researchgate.net/...', icon: <FaResearchgate size={20} /> },
-    { text: 'GitHub',   url: 'https://github.com/...',     icon: <GitHubIcon /> },
-    { text: 'ORCID',    url: 'https://orcid.org/...',      icon: <FaOrcid size={20} /> },
+    { text: 'LinkedIn', url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/', icon: <LinkedInIcon /> },
+    { text: 'Scholar',  url: 'https://scholar.google.com/citations?user=qewXRr4AAAAJ', icon: <SchoolIcon /> },
+    { text: 'ResearchGate', url: 'https://www.researchgate.net/profile/Gulfam-Saju', icon: <FaResearchgate size={20} /> },
+    { text: 'GitHub',   url: 'https://github.com/gulfam7',     icon: <GitHubIcon /> },
+    { text: 'ORCID',    url: 'https://orcid.org/0009-0007-7391-0485',      icon: <FaOrcid size={20} /> },
   ],
 };
 
