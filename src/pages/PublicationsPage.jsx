@@ -14,6 +14,21 @@ export const publications = [
   {
     id: 1, // From user list [1]
     type: 'journal',
+    authors: 'Gulfam Ahmed Saju, Marjan Akhi and Yuchou Chang',
+    title:
+      'AgentMRI: A Vison Language Model-Powered AI System for Self-regulating MRI Reconstruction with Multiple Degradations',
+    journal: 'Journal of Imaging Informatics in Medicine',
+    volume: '',
+    issue: '', // Article 136 might go here or in pages depending on journal style
+    month: '', // Month not specified, inferred from year
+    year: 2025,
+    pages: '', // Using pages for article number
+    url: 'https://link.springer.com/epdf/10.1007/s10278-025-01617-0?sharing_token=fa6wcw11cACNFJi5GaA1NPe4RwlQNchNByi7wbcMAY58-OKFNqPPxq4AJD8-TBxkLaoQF6Ofmh1n14pK8aRV7ukI0vltXEgX1bHxF4h4O7HdfeXsHrFNqsM1dAztoyeCOBBAGS9sRhx4Gc1QEy__qetDO22NTLLE_SWkqrYnE64%3D', // Left blank as requested
+    doi: '10.1007/s10278-025-01617-0',
+  },
+  {
+    id: 2, // From user list [1]
+    type: 'journal',
     authors: 'Gulfam Ahmed Saju, Alan Okinaka, Marjan Akhi and Yuchou Chang',
     title:
       'An ensemble approach for accelerated and noise-resilient parallel MRI reconstruction utilizing CycleGANs',
@@ -27,7 +42,7 @@ export const publications = [
     doi: '10.1007/s00138-024-01617-0',
   },
   {
-    id: 2, // From user list [2]
+    id: 3, // From user list [2]
     type: 'journal',
     authors:
       'Gulfam Ahmed Saju, Zhiqiang Li, Hui Mao, Tianming Liu, and Yuchou Chang',
@@ -42,7 +57,7 @@ export const publications = [
     doi: '10.1088/1361-6560/acebb1', // Corrected DOI from list
   },
   {
-    id: 3, // From user list [3]
+    id: 4, // From user list [3]
     type: 'journal',
     authors: 'Gulfam Ahmed Saju, Zhiqiang Li and Yuchou Chang',
     title: 'Improving Deep PROPELLER MRI via Synthetic Blade Augmentation and Enhanced Generalization',
@@ -56,7 +71,7 @@ export const publications = [
     doi: '10.1016/j.mri.2024.01.017',
   },
   {
-    id: 4, // From user list [4]
+    id: 5, // From user list [4]
     type: 'journal',
     authors: 'Yuchou Chang, Zhiqiang Li, Gulfam Ahmed Saju, Hui Mao, and Tianming Liu',
     title: 'Deep Learning-Based Rigid Motion Correction for Magnetic Resonance Imaging: A Survey',
@@ -238,14 +253,6 @@ export const publications = [
     type: 'under-review',
     authors: 'Gulfam Ahmed Saju, Zhiqiang Li, Marjan Akhi, Yuchou Chang',
     title: 'Attention-UNN: Attention-Enhanced Untrained Neural Networks for Accelerated MRI Reconstruction',
-    journal: 'Journal of Imaging Informatics in Medicine', // Indicate status
-    volume: '', issue: '', month: '', year: '', pages: '', url: '', doi: '',
-  },
-  {
-    id: 2, // Restart ID for this type
-    type: 'under-review',
-    authors: 'Gulfam Ahmed Saju, Marjan Akhi, Yuchou Chang',
-    title: 'AgentMRI: A Vison Language Model-Powered AI System for Self-Regulating MRI Reconstruction with Multiple Degradations',
     journal: 'Journal of Imaging Informatics in Medicine', // Indicate status
     volume: '', issue: '', month: '', year: '', pages: '', url: '', doi: '',
   },
