@@ -253,7 +253,7 @@ export const publications = [
     type: 'under-review',
     authors: 'Gulfam Ahmed Saju, Zhiqiang Li, Marjan Akhi, Yuchou Chang',
     title: 'Attention-UNN: Attention-Enhanced Untrained Neural Networks for Accelerated MRI Reconstruction',
-    journal: 'Journal of Imaging Informatics in Medicine', // Indicate status
+    journal: 'Magnetic Resonance Materials in Physics, Biology and Medicine', // Indicate status
     volume: '', issue: '', month: '', year: '', pages: '', url: '', doi: '',
   },
   {
