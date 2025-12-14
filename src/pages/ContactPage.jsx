@@ -1,3 +1,4 @@
+// src/pages/ContactPage.jsx
 import React, { useMemo, useState } from "react";
 import {
   Box,
@@ -10,20 +11,19 @@ import {
   IconButton,
   Tooltip,
   Divider,
+  Chip,
 } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { alpha, useTheme } from "@mui/material/styles";
 
-const cardSx = {
-  backgroundColor: "var(--panel)",
-  border: "1px solid var(--panel-border)",
-  borderRadius: "16px",
-  boxShadow: "var(--shadow)",
-  backdropFilter: "blur(10px)",
-};
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 export default function ContactPage() {
+  const theme = useTheme();
+  const ACCENT = "#22d3ee";
+
   const email = "gulfamahmedsaju@gmail.com"; // update if needed
 
   const links = useMemo(
@@ -45,97 +45,185 @@ export default function ContactPage() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1200);
     } catch {
-      // no-op (clipboard can fail in some browsers)
+      // clipboard may fail in some contexts; ignore
     }
   };
 
+  // Modern, consistent “soft border” card (no black outline)
+  const cardSx = {
+    borderRadius: 3,
+    border: "1px solid transparent",
+    background: `
+      linear-gradient(${alpha("#ffffff", 0.96)}, ${alpha("#ffffff", 0.96)}) padding-box,
+      linear-gradient(135deg, ${alpha(ACCENT, 0.28)}, ${alpha("#0b1220", 0.10)}) border-box
+    `,
+    boxShadow: `0 12px 34px ${alpha("#0b1220", 0.10)}`,
+    transition: "transform 220ms ease, box-shadow 220ms ease, background 220ms ease",
+    "&:hover": {
+      transform: "translateY(-3px)",
+      boxShadow: `0 18px 55px ${alpha("#0b1220", 0.14)}`,
+      background: `
+        linear-gradient(${alpha("#ffffff", 0.98)}, ${alpha("#ffffff", 0.98)}) padding-box,
+        linear-gradient(135deg, ${alpha(ACCENT, 0.40)}, ${alpha("#0b1220", 0.10)}) border-box
+      `,
+    },
+  };
+
+  const lightDivider = { borderColor: alpha("#0b1220", 0.08) };
+
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-      <Box sx={{ color: "var(--text)" }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: -0.3 }}>
+      <Box sx={{ mb: 3.5 }}>
+        <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.4 }}>
           Contact
         </Typography>
-        <Typography sx={{ color: "var(--muted)", mt: 1, maxWidth: 860 }}>
+        <Typography sx={{ color: "text.secondary", mt: 1, maxWidth: 860, lineHeight: 1.75 }}>
           For research discussions, collaborations, or speaking invitations, email is the most reliable channel.
         </Typography>
+      </Box>
 
-        <Stack spacing={3} sx={{ mt: 4, maxWidth: 840 }}>
-          <Card sx={cardSx}>
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1 }}>
-                <EmailIcon sx={{ color: "var(--accent)" }} />
-                <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                  Email
-                </Typography>
+      <Stack spacing={3} sx={{ maxWidth: 920 }}>
+        <Card sx={cardSx}>
+          <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+            {/* Header */}
+            <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 1.75 }}>
+              <Box
+                sx={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 2,
+                  display: "grid",
+                  placeItems: "center",
+                  background: alpha(ACCENT, 0.10),
+                  border: `1px solid ${alpha(ACCENT, 0.22)}`,
+                }}
+              >
+                <EmailRoundedIcon sx={{ color: ACCENT }} />
               </Box>
 
-              <Typography sx={{ color: "rgba(226,232,240,0.92)", mb: 2 }}>
-                <Box component="span" sx={{ fontWeight: 800 }}>
-                  {email}
-                </Box>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: -0.2 }}>
+                  Email
+                </Typography>
+                <Typography sx={{ color: "text.secondary", mt: 0.25 }}>
+                  Typically responds within 1–2 business days.
+                </Typography>
+              </Box>
+            </Stack>
+
+            {/* Email row */}
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={1.25}
+              alignItems={{ xs: "stretch", sm: "center" }}
+              justifyContent="space-between"
+              sx={{
+                p: 2,
+                borderRadius: 2.5,
+                backgroundColor: alpha("#0b1220", 0.03),
+                border: `1px solid ${alpha("#0b1220", 0.08)}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 900,
+                  letterSpacing: -0.1,
+                  fontFamily:
+                    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                }}
+              >
+                {email}
               </Typography>
 
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+              <Stack direction="row" spacing={1} justifyContent="flex-end">
                 <Button
                   variant="contained"
-                  startIcon={<EmailIcon />}
+                  startIcon={<EmailRoundedIcon />}
                   href={`mailto:${email}`}
                   sx={{
-                    backgroundColor: "var(--accent)",
-                    color: "#0b1220",
-                    fontWeight: 800,
-                    "&:hover": { backgroundColor: "rgba(34,211,238,0.9)" },
+                    borderRadius: 999,
+                    px: 2.0,
+                    fontWeight: 900,
+                    backgroundColor: alpha(ACCENT, 0.9),
+                    color: "#081018",
+                    "&:hover": { backgroundColor: ACCENT },
                   }}
                 >
-                  Compose Email
+                  Compose
                 </Button>
 
-                <Tooltip title={copied ? "Copied" : "Copy email"}>
+                <Tooltip title={copied ? "Copied" : "Copy email"} arrow>
                   <IconButton
                     onClick={onCopy}
                     sx={{
-                      border: "1px solid rgba(255,255,255,0.10)",
-                      color: "var(--text)",
                       width: 44,
                       height: 44,
+                      borderRadius: 999,
+                      border: `1px solid ${alpha("#0b1220", 0.10)}`,
+                      backgroundColor: alpha("#ffffff", 0.7),
+                      "&:hover": {
+                        backgroundColor: alpha("#ffffff", 0.95),
+                        borderColor: alpha(ACCENT, 0.35),
+                      },
                     }}
+                    aria-label="Copy email"
                   >
-                    <ContentCopyIcon fontSize="small" />
+                    {copied ? (
+                      <CheckCircleRoundedIcon fontSize="small" sx={{ color: ACCENT }} />
+                    ) : (
+                      <ContentCopyRoundedIcon fontSize="small" />
+                    )}
                   </IconButton>
                 </Tooltip>
               </Stack>
+            </Stack>
 
-              <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", my: 2.5 }} />
+            <Divider sx={{ ...lightDivider, my: 2.5 }} />
 
-              <Typography sx={{ color: "var(--muted)", mb: 1.5 }}>
-                Profiles
-              </Typography>
+            {/* Profiles */}
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.25 }}>
+              <Typography sx={{ fontWeight: 900, letterSpacing: -0.1 }}>Profiles</Typography>
+              <Chip
+                size="small"
+                label="External links"
+                variant="outlined"
+                sx={{
+                  ml: 0.5,
+                  borderColor: alpha(ACCENT, 0.22),
+                  backgroundColor: alpha(ACCENT, 0.05),
+                }}
+              />
+            </Stack>
 
-              <Stack direction="row" spacing={1.25} flexWrap="wrap" useFlexGap>
-                {links.map((l) => (
-                  <Button
-                    key={l.href}
-                    variant="outlined"
-                    endIcon={<OpenInNewIcon fontSize="small" />}
-                    href={l.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{
-                      borderColor: "rgba(255,255,255,0.15)",
-                      color: "rgba(226,232,240,0.92)",
-                      "&:hover": { borderColor: "rgba(34,211,238,0.5)" },
-                      textTransform: "none",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {l.label}
-                  </Button>
-                ))}
-              </Stack>
-            </CardContent>
-          </Card>
-        </Stack>
-      </Box>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              {links.map((l) => (
+                <Button
+                  key={l.href}
+                  variant="outlined"
+                  endIcon={<OpenInNewRoundedIcon fontSize="small" />}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    borderRadius: 999,
+                    textTransform: "none",
+                    fontWeight: 800,
+                    borderColor: alpha("#0b1220", 0.12),
+                    color: "text.primary",
+                    backgroundColor: alpha("#ffffff", 0.65),
+                    "&:hover": {
+                      backgroundColor: alpha("#ffffff", 0.95),
+                      borderColor: alpha(ACCENT, 0.40),
+                    },
+                  }}
+                >
+                  {l.label}
+                </Button>
+              ))}
+            </Stack>
+          </CardContent>
+        </Card>
+      </Stack>
     </Container>
   );
 }
