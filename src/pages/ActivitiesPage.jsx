@@ -1,4 +1,3 @@
-
 // src/pages/ActivitiesPage.jsx
 import React from "react";
 import {
@@ -67,7 +66,6 @@ function SplitFirstComma({ text }) {
 }
 
 function SectionTitle({ icon: Icon, title, subtitle }) {
-  const theme = useTheme();
   const ACCENT = "#22d3ee";
 
   return (
@@ -80,8 +78,8 @@ function SectionTitle({ icon: Icon, title, subtitle }) {
             borderRadius: 2,
             display: "grid",
             placeItems: "center",
-            background: alpha(ACCENT, 0.12),
-            border: `1px solid ${alpha(ACCENT, 0.28)}`,
+            background: alpha(ACCENT, 0.10),
+            border: `1px solid ${alpha(ACCENT, 0.22)}`,
           }}
         >
           <Icon sx={{ color: ACCENT }} />
@@ -101,7 +99,6 @@ function SectionTitle({ icon: Icon, title, subtitle }) {
 }
 
 function BulletList({ items }) {
-  const theme = useTheme();
   const ACCENT = "#22d3ee";
 
   return (
@@ -115,7 +112,7 @@ function BulletList({ items }) {
               height: 7,
               borderRadius: "50%",
               backgroundColor: alpha(ACCENT, 0.9),
-              boxShadow: `0 0 0 4px ${alpha(ACCENT, 0.12)}`,
+              boxShadow: `0 0 0 4px ${alpha(ACCENT, 0.10)}`,
               flex: "0 0 auto",
             }}
           />
@@ -130,29 +127,31 @@ export default function ActivitiesPage() {
   const theme = useTheme();
   const ACCENT = "#22d3ee";
 
-  const pageSx = {
-    py: { xs: 5, md: 7 },
-  };
-
+  // Modern, non-dark “border”: gradient border + soft shadow
   const cardSx = {
     height: "100%",
     borderRadius: 3,
-    backgroundColor: alpha("#ffffff", 0.92),
-    border: `1px solid ${alpha(theme.palette.divider, 0.9)}`,
-    boxShadow: `0 18px 50px ${alpha("#0b1220", 0.08)}`,
-    transition: "transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease",
+    border: "1px solid transparent",
+    background: `
+      linear-gradient(${alpha("#ffffff", 0.96)}, ${alpha("#ffffff", 0.96)}) padding-box,
+      linear-gradient(135deg, ${alpha(ACCENT, 0.28)}, ${alpha("#0b1220", 0.10)}) border-box
+    `,
+    boxShadow: `0 12px 34px ${alpha("#0b1220", 0.10)}`,
+    transition: "transform 220ms ease, box-shadow 220ms ease, background 220ms ease",
     "&:hover": {
       transform: "translateY(-4px)",
-      boxShadow: `0 22px 65px ${alpha("#0b1220", 0.12)}`,
-      borderColor: alpha(ACCENT, 0.35),
+      boxShadow: `0 18px 55px ${alpha("#0b1220", 0.14)}`,
+      background: `
+        linear-gradient(${alpha("#ffffff", 0.98)}, ${alpha("#ffffff", 0.98)}) padding-box,
+        linear-gradient(135deg, ${alpha(ACCENT, 0.40)}, ${alpha("#0b1220", 0.10)}) border-box
+      `,
     },
   };
 
-  const subtleDivider = { borderColor: alpha(theme.palette.divider, 0.7) };
+  const lightDivider = { borderColor: alpha("#0b1220", 0.08) };
 
   return (
-    <Container maxWidth="lg" sx={pageSx}>
-      {/* Header */}
+    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
       <Box sx={{ mb: 3.5 }}>
         <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.4 }}>
           Professional Activities
@@ -168,7 +167,7 @@ export default function ActivitiesPage() {
           <Card sx={cardSx}>
             <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
               <SectionTitle icon={RateReviewIcon} title="Peer Review" />
-              <Divider sx={{ ...subtleDivider, mb: 2.5 }} />
+              <Divider sx={{ ...lightDivider, mb: 2.5 }} />
 
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
@@ -176,7 +175,6 @@ export default function ActivitiesPage() {
                     Journals
                   </Typography>
 
-                  {/* Chips look more modern for journal lists */}
                   <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
                     {peerReviewData.journals.map((j) => (
                       <Chip
@@ -185,9 +183,9 @@ export default function ActivitiesPage() {
                         size="small"
                         variant="outlined"
                         sx={{
-                          borderColor: alpha(ACCENT, 0.25),
-                          backgroundColor: alpha(ACCENT, 0.06),
-                          "&:hover": { backgroundColor: alpha(ACCENT, 0.10) },
+                          borderColor: alpha(ACCENT, 0.22),
+                          backgroundColor: alpha(ACCENT, 0.05),
+                          "&:hover": { backgroundColor: alpha(ACCENT, 0.09) },
                         }}
                       />
                     ))}
@@ -210,7 +208,7 @@ export default function ActivitiesPage() {
           <Card sx={cardSx}>
             <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
               <SectionTitle icon={SchoolIcon} title="Teaching & Mentoring" />
-              <Divider sx={{ ...subtleDivider, mb: 2.25 }} />
+              <Divider sx={{ ...lightDivider, mb: 2.25 }} />
               <Stack spacing={1.25}>
                 {teachingMentoringData.map((t, i) => (
                   <SplitFirstComma key={`teach-${i}`} text={t} />
@@ -225,7 +223,7 @@ export default function ActivitiesPage() {
           <Card sx={cardSx}>
             <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
               <SectionTitle icon={GroupIcon} title="Affiliations & Service" />
-              <Divider sx={{ ...subtleDivider, mb: 2.25 }} />
+              <Divider sx={{ ...lightDivider, mb: 2.25 }} />
               <Stack spacing={1.25}>
                 {affiliationsData.map((a, i) => (
                   <SplitFirstComma key={`aff-${i}`} text={a} />
@@ -238,4 +236,3 @@ export default function ActivitiesPage() {
     </Container>
   );
 }
-
