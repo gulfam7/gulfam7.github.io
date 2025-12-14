@@ -1,94 +1,133 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Typography,
   Container,
-  List,
-  ListItem,
-  ListItemText,
+  Card,
+  CardContent,
+  Stack,
   Divider,
   Chip,
-  Stack
-} from '@mui/material';
+  Button,
+} from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Link as RouterLink } from "react-router-dom";
 
-function ResearchPage() {
+const cardSx = {
+  backgroundColor: "var(--panel)",
+  border: "1px solid var(--panel-border)",
+  borderRadius: "16px",
+  boxShadow: "var(--shadow)",
+  backdropFilter: "blur(10px)",
+};
+
+function ProjectCard({ title, text, tags }) {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ my: 4 }}>
+    <Card sx={cardSx}>
+      <CardContent>
+        <Typography variant="h6" sx={{ fontWeight: 900, color: "var(--text)" }}>
+          {title}
+        </Typography>
+        <Typography sx={{ color: "rgba(148,163,184,0.95)", mt: 1, lineHeight: 1.85 }}>
+          {text}
+        </Typography>
 
-        {/* Page Title */}
-        <Typography variant="h4" component="h1" gutterBottom>
+        {tags?.length ? (
+          <>
+            <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", my: 2 }} />
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              {tags.map((t) => (
+                <Chip
+                  key={t}
+                  label={t}
+                  variant="outlined"
+                  sx={{
+                    borderColor: "rgba(255,255,255,0.14)",
+                    color: "rgba(226,232,240,0.92)",
+                    "& .MuiChip-label": { fontWeight: 800 },
+                  }}
+                />
+              ))}
+            </Stack>
+          </>
+        ) : null}
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function ResearchPage() {
+  return (
+    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
+      <Box sx={{ color: "var(--text)" }}>
+        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: -0.3 }}>
           Research
         </Typography>
 
-        {/* Overview */}
-        <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem' }}>
-          My research is centered on advancing Magnetic Resonance Imaging (MRI) through cutting-edge artificial intelligence approaches. I work on accelerating MRI reconstruction, correcting motion artifacts, and developing automated AI agents by leveraging generative models and large foundation models. The overarching goal is to make MRI faster, more reliable, and more accessible in clinical environments.
+        <Typography sx={{ color: "var(--muted)", mt: 1, maxWidth: 980, lineHeight: 1.9 }}>
+          My research advances MRI through modern AI methods, with emphasis on robust reconstruction, motion artifact
+          correction, and automated pipelines that reduce manual intervention. A key goal is improving reliability under
+          realistic degradations while maintaining clinically meaningful image quality.
         </Typography>
 
-        <Divider sx={{ my: 3 }} />
-
-        {/* Ongoing Projects */}
-        <Typography variant="h5" component="h2" gutterBottom>
-          Ongoing Projects
-        </Typography>
-
-        {/* Project 1 */}
-        <Box component="article" sx={{ mb: 4 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            Generative AI for Motion Correction in MRI
+        <Stack spacing={3} sx={{ mt: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: 900 }}>
+            Ongoing Projects
           </Typography>
-          <Typography variant="body2" paragraph>
-            Motion artifacts remain a major challenge in clinical MRI, often leading to reduced image quality and diagnostic reliability. My research explores generative AI techniques to automatically correct motion-induced artifacts and enhance the robustness of MRI scans, aiming to minimize rescans and improve diagnostic workflows.
-          </Typography>
-        </Box>
 
-        <Divider sx={{ my: 3 }} />
+          <ProjectCard
+            title="Generative AI for Motion Correction in MRI"
+            text="Motion artifacts are a major source of quality degradation in clinical MRI. I study generative and physics-guided approaches to correct motion-induced artifacts and improve robustness, with the practical objective of reducing rescans and stabilizing downstream analysis."
+            tags={["Motion Correction", "Generative Models", "Robustness", "Clinical MRI"]}
+          />
 
-        {/* Project 2 */}
-        <Box component="article" sx={{ mb: 4 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            Foundation Models for AI Agents in MRI Reconstruction
-          </Typography>
-          <Typography variant="body2" paragraph>
-            Building intelligent AI agents that can autonomously analyze MRI data and determine appropriate reconstruction strategies is a key direction of my research. I am investigating the use of large foundation models to classify data corruption types and automatically select and execute expert correction models, paving the way toward fully automated MRI processing pipelines.
-          </Typography>
-        </Box>
+          <ProjectCard
+            title="Foundation Models for AI Agents in MRI Reconstruction"
+            text="I investigate agentic systems that can interpret MRI data, identify corruption types, and select appropriate reconstruction or correction strategies. The broader objective is an automated pipeline that integrates foundation models with specialized domain experts."
+            tags={["Foundation Models", "AI Agents", "Automated Pipelines", "MRI Reconstruction"]}
+          />
 
-        <Divider sx={{ my: 3 }} />
+          <ProjectCard
+            title="Spiking Neural Networks for Efficient AI"
+            text="I explore spiking neural networks and related efficient inference strategies to improve compute and energy efficiency for temporal data. This work targets next-generation efficient learning and inference, including potential integration with imaging workloads."
+            tags={["Spiking Neural Networks", "Efficient Inference", "Temporal Models"]}
+          />
 
-        {/* Project 3 */}
-        <Box component="article" sx={{ mb: 4 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            Spiking Neural Networks for Efficient AI
-          </Typography>
-          <Typography variant="body2" paragraph>
-            Inspired by the efficiency of biological neural systems, my recent work investigates Spiking Neural Networks (SNNs) for learning temporal and sparse representations. This research aims to explore how SNNs can be applied to low-power and real-time AI applications, potentially contributing to next-generation neural computing in medical imaging and beyond.
-          </Typography>
-        </Box>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 1 }}>
+            <Button
+              component={RouterLink}
+              to="/publications"
+              variant="outlined"
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                borderColor: "rgba(255,255,255,0.15)",
+                color: "rgba(226,232,240,0.92)",
+                "&:hover": { borderColor: "rgba(34,211,238,0.5)" },
+                textTransform: "none",
+                fontWeight: 900,
+              }}
+            >
+              See Publications
+            </Button>
 
-        <Divider sx={{ my: 4 }} />
-
-        {/* Research Interests */}
-        <Box component="section">
-          <Typography variant="h5" component="h2" gutterBottom>
-            Research Interests
-          </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            <Chip label="MRI Reconstruction" />
-            <Chip label="Motion Correction" />
-            <Chip label="Generative AI" />
-            <Chip label="Foundation Models" />
-            <Chip label="AI Agents" />
-            <Chip label="Spiking Neural Networks" />
-            <Chip label="Medical Image Analysis" />
-            <Chip label="Deep Learning" />
+            <Button
+              component={RouterLink}
+              to="/contact"
+              variant="contained"
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                backgroundColor: "var(--accent)",
+                color: "#0b1220",
+                fontWeight: 900,
+                "&:hover": { backgroundColor: "rgba(34,211,238,0.9)" },
+                textTransform: "none",
+              }}
+            >
+              Contact for Collaboration
+            </Button>
           </Stack>
-        </Box>
-
+        </Stack>
       </Box>
     </Container>
   );
 }
-
-export default ResearchPage;
