@@ -1,4 +1,6 @@
-// Sidebar.jsx – modern dark gradient sidebar with responsive collapse + tooltips
+// Sidebar.jsx – modern slate/cyan style (MUI-only; safe copy-paste)
+// Keeps exports: drawerWidth, collapsedWidth (Layout.jsx compatible)
+
 import React from 'react';
 import {
   Drawer,
@@ -14,11 +16,14 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
+
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SchoolIcon from '@mui/icons-material/School';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import { FaResearchgate, FaOrcid } from 'react-icons/fa';
 import profilePic from './IMG_7270.jpg';
 
@@ -33,11 +38,11 @@ const user = {
   loc: 'Dartmouth, MA',
   img: profilePic,
   links: [
-    { text: 'LinkedIn', url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/', icon: <LinkedInIcon /> },
-    { text: 'Scholar', url: 'https://scholar.google.com/citations?user=qewXRr4AAAAJ', icon: <SchoolIcon /> },
-    { text: 'ResearchGate', url: 'https://www.researchgate.net/profile/Gulfam-Saju', icon: <FaResearchgate size={20} /> },
-    { text: 'GitHub', url: 'https://github.com/gulfam7', icon: <GitHubIcon /> },
-    { text: 'ORCID', url: 'https://orcid.org/0009-0007-7391-0485', icon: <FaOrcid size={20} /> },
+    { text: 'LinkedIn', url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/', icon: <LinkedInIcon fontSize="small" /> },
+    { text: 'Scholar', url: 'https://scholar.google.com/citations?user=qewXRr4AAAAJ', icon: <SchoolIcon fontSize="small" /> },
+    { text: 'ResearchGate', url: 'https://www.researchgate.net/profile/Gulfam-Saju', icon: <FaResearchgate size={18} /> },
+    { text: 'GitHub', url: 'https://github.com/gulfam7', icon: <GitHubIcon fontSize="small" /> },
+    { text: 'ORCID', url: 'https://orcid.org/0009-0007-7391-0485', icon: <FaOrcid size={18} /> },
   ],
 };
 
@@ -46,57 +51,65 @@ export default function Sidebar() {
   const collapsed = useMediaQuery('(max-width:900px)');
   const width = collapsed ? collapsedWidth : drawerWidth;
 
-  const paperBorder = alpha(theme.palette.common.white, 0.08);
-  const textMuted = alpha(theme.palette.common.white, 0.68);
-  const hoverBg = alpha(theme.palette.common.white, 0.10);
-  const iconBg = alpha(theme.palette.common.white, 0.12);
+  const cyan = '#22d3ee'; // cyan-400-like accent
+  const paperBg = '#0f172a'; // slate-900-like
+  const border = alpha(theme.palette.common.white, 0.06);
+  const muted = alpha(theme.palette.common.white, 0.62);
 
-  const iconWrapSx = {
-    minWidth: 40,
-    width: 40,
-    height: 40,
-    borderRadius: 2,
-    bgcolor: iconBg,
-    color: '#fff',
+  const itemSx = {
+    borderRadius: 3,
+    mx: collapsed ? 1 : 1.5,
+    my: 0.5,
+    px: collapsed ? 1 : 1.5,
+    py: 1,
+    justifyContent: collapsed ? 'center' : 'flex-start',
+    color: muted,
+    transition: theme.transitions.create(['background-color', 'color', 'transform'], {
+      duration: theme.transitions.duration.shortest,
+    }),
+    '&:hover': {
+      bgcolor: alpha(theme.palette.common.white, 0.05),
+      color: cyan,
+    },
+    '&:hover .sidebar-icon': {
+      color: cyan,
+    },
+    '&:hover .chev': {
+      opacity: 1,
+      transform: 'translateX(2px)',
+    },
+  };
+
+  const iconBoxSx = {
+    minWidth: collapsed ? 0 : 40,
+    mr: collapsed ? 0 : 1.25,
     display: 'grid',
     placeItems: 'center',
-    transition: theme.transitions.create(['background-color', 'transform'], {
+    color: alpha(theme.palette.common.white, 0.55),
+    transition: theme.transitions.create(['color'], {
       duration: theme.transitions.duration.shortest,
     }),
   };
 
-  const itemSx = {
-    borderRadius: 2,
-    mx: collapsed ? 0.5 : 1,
-    my: 0.5,
-    px: collapsed ? 0.5 : 1,
-    py: 0.75,
-    justifyContent: collapsed ? 'center' : 'flex-start',
-    '&:hover': { bgcolor: hoverBg },
-    '&:hover .MuiListItemIcon-root > *': {
-      bgcolor: alpha(theme.palette.common.white, 0.16),
-      transform: 'translateY(-1px)',
-    },
-  };
-
-  const SectionHeader = ({ label }) =>
+  const SectionLabel = ({ label }) =>
     collapsed ? null : (
-      <>
-        <Divider sx={{ my: 1.5, borderColor: paperBorder }} />
-        <Typography
-          variant="overline"
-          sx={{
-            color: textMuted,
-            pl: 2,
-            letterSpacing: 1,
-          }}
-        >
-          {label}
-        </Typography>
-      </>
+      <Typography
+        variant="overline"
+        sx={{
+          px: 3,
+          mt: 2,
+          mb: 0.75,
+          fontSize: 10,
+          letterSpacing: 2,
+          fontWeight: 800,
+          color: alpha(theme.palette.common.white, 0.35),
+        }}
+      >
+        {label}
+      </Typography>
     );
 
-  const WrapTooltip = ({ title, children }) => (
+  const WithTooltip = ({ title, children }) => (
     <Tooltip
       title={title}
       placement="right"
@@ -119,13 +132,9 @@ export default function Sidebar() {
           width,
           boxSizing: 'border-box',
           border: 'none',
+          backgroundColor: paperBg,
+          borderRight: `1px solid ${border}`,
           overflowX: 'hidden',
-          py: 3,
-          px: collapsed ? 0 : 2,
-          background: 'linear-gradient(160deg, #0F172A 0%, #111827 55%, #0B1220 100%)',
-          color: alpha(theme.palette.common.white, 0.92),
-          backdropFilter: 'blur(12px)',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
           transition: theme.transitions.create('width', {
             duration: theme.transitions.duration.standard,
             easing: theme.transitions.easing.easeInOut,
@@ -133,121 +142,177 @@ export default function Sidebar() {
         },
       }}
     >
-      {/* Profile Header */}
-      <Box textAlign="center" sx={{ px: 1 }}>
+      {/* Profile */}
+      <Box
+        sx={{
+          pt: 3,
+          pb: 2,
+          px: collapsed ? 1 : 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <Avatar
           src={user.img}
           alt={user.name}
           sx={{
-            width: collapsed ? 54 : 78,
-            height: collapsed ? 54 : 78,
-            mx: 'auto',
+            width: collapsed ? 48 : 92,
+            height: collapsed ? 48 : 92,
             mb: 1.5,
-            border: `1px solid ${paperBorder}`,
-            boxShadow: '0 10px 25px rgba(0,0,0,0.35)',
+            border: `2px solid ${alpha(cyan, 0.35)}`,
+            boxShadow: `0 0 18px ${alpha(cyan, 0.16)}`,
           }}
         />
         {!collapsed && (
-          <>
-            <Typography variant="subtitle1" sx={{ color: '#fff', fontWeight: 700, lineHeight: 1.2 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography
+              sx={{
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: 16,
+                letterSpacing: -0.2,
+                lineHeight: 1.15,
+              }}
+            >
               {user.name}
             </Typography>
-            <Typography variant="caption" sx={{ color: textMuted, display: 'block', mt: 0.25 }}>
+            <Typography sx={{ color: cyan, fontSize: 12, fontWeight: 600, mt: 0.5 }}>
               {user.title}
             </Typography>
-            <Typography variant="caption" sx={{ color: textMuted, display: 'block', mt: 0.25 }}>
+            <Typography
+              sx={{
+                color: alpha(theme.palette.common.white, 0.38),
+                fontSize: 11,
+                mt: 0.5,
+                letterSpacing: 1.6,
+                textTransform: 'uppercase',
+              }}
+            >
               {user.org}
             </Typography>
-          </>
+          </Box>
         )}
       </Box>
 
-      <SectionHeader label="Account" />
+      <Divider sx={{ borderColor: border }} />
 
-      <Box sx={{ px: collapsed ? 0.5 : 1 }}>
-        <WrapTooltip title={user.email}>
-          <ListItemButton
-            component={MuiLink}
-            href={`mailto:${user.email}`}
-            underline="none"
-            sx={itemSx}
-            aria-label={`Email ${user.email}`}
-          >
-            <ListItemIcon sx={{ minWidth: collapsed ? 0 : 48, mr: collapsed ? 0 : 1.5 }}>
-              <Box sx={iconWrapSx}>
-                <EmailIcon fontSize="small" />
-              </Box>
-            </ListItemIcon>
+      {/* Content */}
+      <Box sx={{ flex: 1, py: 1.5 }}>
+        <SectionLabel label="Account" />
 
-            {!collapsed && (
-              <ListItemText
-                primary={user.email}
-                primaryTypographyProps={{ variant: 'body2', sx: { color: '#fff', fontWeight: 500 } }}
-              />
-            )}
-          </ListItemButton>
-        </WrapTooltip>
-
-        <WrapTooltip title={user.loc}>
-          <ListItemButton disableRipple sx={itemSx} aria-label={`Location ${user.loc}`}>
-            <ListItemIcon sx={{ minWidth: collapsed ? 0 : 48, mr: collapsed ? 0 : 1.5 }}>
-              <Box sx={iconWrapSx}>
-                <LocationOnIcon fontSize="small" />
-              </Box>
-            </ListItemIcon>
-
-            {!collapsed && (
-              <ListItemText
-                primary={user.loc}
-                primaryTypographyProps={{ variant: 'body2', sx: { color: '#fff', fontWeight: 500 } }}
-              />
-            )}
-          </ListItemButton>
-        </WrapTooltip>
-      </Box>
-
-      <SectionHeader label="Profiles" />
-
-      <Box sx={{ px: collapsed ? 0.5 : 1, mb: 1 }}>
-        {user.links.map((l) => (
-          <WrapTooltip key={l.text} title={l.text}>
+        <Box sx={{ mt: 0.5 }}>
+          <WithTooltip title={user.email}>
             <ListItemButton
               component={MuiLink}
-              href={l.url}
+              href={`mailto:${user.email}`}
               underline="none"
-              target="_blank"
-              rel="noopener noreferrer"
               sx={itemSx}
-              aria-label={l.text}
+              aria-label={`Email ${user.email}`}
             >
-              <ListItemIcon sx={{ minWidth: collapsed ? 0 : 48, mr: collapsed ? 0 : 1.5 }}>
-                <Box sx={iconWrapSx}>{l.icon}</Box>
+              <ListItemIcon sx={iconBoxSx}>
+                <EmailIcon className="sidebar-icon" fontSize="small" />
               </ListItemIcon>
 
               {!collapsed && (
                 <ListItemText
-                  primary={l.text}
-                  primaryTypographyProps={{ variant: 'body2', sx: { color: '#fff', fontWeight: 500 } }}
+                  primary={user.email}
+                  primaryTypographyProps={{
+                    variant: 'body2',
+                    sx: { color: 'inherit', fontWeight: 600 },
+                    noWrap: true,
+                  }}
                 />
               )}
             </ListItemButton>
-          </WrapTooltip>
-        ))}
+          </WithTooltip>
+
+          <WithTooltip title={user.loc}>
+            <ListItemButton disableRipple sx={itemSx} aria-label={`Location ${user.loc}`}>
+              <ListItemIcon sx={iconBoxSx}>
+                <LocationOnIcon className="sidebar-icon" fontSize="small" />
+              </ListItemIcon>
+
+              {!collapsed && (
+                <ListItemText
+                  primary={user.loc}
+                  primaryTypographyProps={{
+                    variant: 'body2',
+                    sx: { color: 'inherit', fontWeight: 600 },
+                    noWrap: true,
+                  }}
+                />
+              )}
+            </ListItemButton>
+          </WithTooltip>
+        </Box>
+
+        {!collapsed && (
+          <Box sx={{ px: 3, mt: 2 }}>
+            <Box sx={{ height: 1, bgcolor: border, width: '100%', mb: 2 }} />
+          </Box>
+        )}
+
+        <SectionLabel label="Profiles" />
+
+        <Box sx={{ mt: 0.5 }}>
+          {user.links.map((link) => (
+            <WithTooltip key={link.text} title={link.text}>
+              <ListItemButton
+                component={MuiLink}
+                href={link.url}
+                underline="none"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={itemSx}
+                aria-label={link.text}
+              >
+                <ListItemIcon sx={iconBoxSx}>
+                  <Box className="sidebar-icon" sx={{ display: 'grid', placeItems: 'center' }}>
+                    {link.icon}
+                  </Box>
+                </ListItemIcon>
+
+                {!collapsed && (
+                  <>
+                    <ListItemText
+                      primary={link.text}
+                      primaryTypographyProps={{
+                        variant: 'body2',
+                        sx: { color: 'inherit', fontWeight: 600 },
+                      }}
+                    />
+                    <Box
+                      className="chev"
+                      sx={{
+                        ml: 'auto',
+                        opacity: 0,
+                        transform: 'translateX(0px)',
+                        transition: theme.transitions.create(['opacity', 'transform'], {
+                          duration: theme.transitions.duration.shortest,
+                        }),
+                        color: alpha(cyan, 0.9),
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <ChevronRightIcon fontSize="small" />
+                    </Box>
+                  </>
+                )}
+              </ListItemButton>
+            </WithTooltip>
+          ))}
+        </Box>
       </Box>
 
       {/* Footer */}
       {!collapsed && (
-        <Typography
-          variant="caption"
-          sx={{
-            mt: 'auto',
-            pb: 2,
-            px: 2,
-            color: alpha(theme.palette.common.white, 0.5),
-          }}
-        >
-          © {new Date().getFullYear()} G. A. Saju
-        </Typography>
+        <Box sx={{ p: 2.5, borderTop: `1px solid ${border}` }}>
+          <Typography sx={{ fontSize: 10, color: alpha(theme.palette.common.white, 0.30), textAlign: 'center' }}>
+            © {new Date().getFullYear()} G. A. Saju
+          </Typography>
+        </Box>
       )}
     </Drawer>
   );
