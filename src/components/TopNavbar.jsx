@@ -1,4 +1,5 @@
-// TopNavbar.jsx (modern dark-glass + icons, consistent with sidebar)
+// src/components/TopNavbar.jsx
+// Modern dark-glass + icons, consistent with sidebar, with Profile right after Home.
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Tabs, Tab, Box, useMediaQuery } from '@mui/material';
@@ -6,19 +7,19 @@ import { styled, useTheme, alpha } from '@mui/material/styles';
 
 // MUI Icons
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 
-const ACCENT = '#22d3ee'; // cyan accent similar to your sidebar vibe
+const ACCENT = '#22d3ee';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   minHeight: 48,
   '& .MuiTabs-flexContainer': { gap: 6 },
-  '& .MuiTabs-indicator': { height: 0 }, // no underline indicator
+  '& .MuiTabs-indicator': { height: 0 }, // remove underline
 }));
 
 const StyledTab = styled(Tab)(({ theme }) => ({
@@ -60,11 +61,14 @@ export default function TopNavbar() {
   const navItems = useMemo(
     () => [
       { label: 'Home', path: '/', icon: <HomeRoundedIcon fontSize="small" /> },
+
+      // Profile right after Home (uses AboutPage component routed as /profile)
+      { label: 'Profile', path: '/profile', icon: <PersonRoundedIcon fontSize="small" /> },
+
       { label: 'Research', path: '/research', icon: <ScienceRoundedIcon fontSize="small" /> },
       { label: 'Publications', path: '/publications', icon: <LibraryBooksRoundedIcon fontSize="small" /> },
       { label: 'Activities', path: '/activities', icon: <EventNoteRoundedIcon fontSize="small" /> },
       { label: 'CV', path: '/cv', icon: <DescriptionRoundedIcon fontSize="small" /> },
-      { label: 'About', path: '/about', icon: <InfoRoundedIcon fontSize="small" /> },
       { label: 'Contact', path: '/contact', icon: <EmailRoundedIcon fontSize="small" /> },
     ],
     []
@@ -85,8 +89,8 @@ export default function TopNavbar() {
         background: 'linear-gradient(160deg, rgba(31,41,55,0.86) 0%, rgba(17,24,39,0.86) 100%)',
         backdropFilter: 'blur(10px)',
         color: '#fff',
-        borderBottom: 'none', // removes the “black line”
-        boxShadow: `0 1px 0 ${alpha('#ffffff', 0.08)}`, // subtle separation instead
+        borderBottom: 'none',
+        boxShadow: `0 1px 0 ${alpha('#ffffff', 0.08)}`, // subtle separation line (not thick/black)
       }}
     >
       <Toolbar sx={{ minHeight: 56, px: 2 }}>
