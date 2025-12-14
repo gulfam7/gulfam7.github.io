@@ -19,7 +19,7 @@ const experienceData = [
     role: "Postdoctoral Research Associate",
     institution: "Washington University School of Medicine",
     location: "St. Louis, MO, USA",
-    years: "2025 – Present",
+    years: "January 2026 – Present",
     details:
       "Develop AI systems for medical imaging and efficient inference, spanning foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks.",
   },
@@ -27,7 +27,7 @@ const experienceData = [
     role: "Graduate Research Assistant (GRA)",
     institution: "University of Massachusetts Dartmouth",
     location: "Dartmouth, MA, USA",
-    years: "2022 – 2025",
+    years: "January 2022 – December 2025",
     details:
       "Conduct research in AI and medical imaging, including automated AI agents for MRI workflows and compute-efficient learning/inference. Develop and evaluate deep learning models using Python and modern frameworks.",
   },
@@ -37,13 +37,13 @@ const educationData = [
   {
     degree: "PhD in Computer Science and Information Systems",
     institution: "University of Massachusetts Dartmouth, Dartmouth, MA, USA",
-    years: "Jan 2022 – 2025",
+    years: "January 2022 – December 2025",
     details: "Dissertation Focus: Leveraging AI for Solving Inverse Problems in MRI",
   },
   {
     degree: "BSc in Computer Science and Engineering",
     institution: "Daffodil International University, Dhaka, Bangladesh",
-    years: "2016 – 2019",
+    years: "January 2016 – December 2019",
     details: "",
   },
 ];
