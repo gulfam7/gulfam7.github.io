@@ -35,7 +35,7 @@ function HomePage() {
   // WashU (approx. brand red used on many official assets)
   const WASHU_RED = '#A51417';
 
-  const name = 'Gulfam Ahmed Saju';
+  const name = 'Gulfam Ahmed Saju, PhD';
   const role = 'Postdoctoral Research Associate';
   const institution = 'Washington University School of Medicine';
 
