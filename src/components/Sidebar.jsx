@@ -31,11 +31,11 @@ export const drawerWidth = 260;
 export const collapsedWidth = 84;
 
 const user = {
-  name: 'Gulfam Ahmed Saju',
-  title: 'PhD Candidate · GRA',
-  org: 'UMass Dartmouth',
-  email: 'gsaju@umassd.edu',
-  loc: 'Dartmouth, MA',
+  name: 'Gulfam Ahmed Saju, PhD',
+  title: 'Postdoctoral Research Associate',
+  org: 'Washington University School of Medicine',
+  email: 'gsaju@wustl.edu',
+  loc: 'St. Louis, MO',
   img: profilePic,
   links: [
     { text: 'LinkedIn', url: 'https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/', icon: <LinkedInIcon fontSize="small" /> },
