@@ -1,128 +1,101 @@
-// TopNavbar.jsx (modern + icons, MUI-only)
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import {
-  AppBar,
-  Toolbar,
-  Tabs,
-  Tab,
-  Box,
-  useMediaQuery,
-} from '@mui/material';
-import { styled, useTheme, alpha } from '@mui/material/styles';
+import { AppBar, Toolbar, Tabs, Tab, Box } from '@mui/material';
+import { styled, alpha, useTheme } from '@mui/material/styles';
 
-// Icons (MUI)
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
-import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
+import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import MailRoundedIcon from '@mui/icons-material/MailRounded';
 
-// --- Modern Tabs (pill tabs + subtle glow indicator) ---
+// Keep your routes exactly the same
+const navItems = [
+  { label: 'Home', path: '/', icon: <HomeRoundedIcon fontSize="small" /> },
+  { label: 'Research', path: '/research', icon: <ScienceRoundedIcon fontSize="small" /> },
+  { label: 'Publications', path: '/publications', icon: <ArticleRoundedIcon fontSize="small" /> },
+  { label: 'Activities', path: '/activities', icon: <EventNoteRoundedIcon fontSize="small" /> },
+  { label: 'CV', path: '/cv', icon: <PictureAsPdfRoundedIcon fontSize="small" /> },
+  { label: 'About', path: '/about', icon: <InfoRoundedIcon fontSize="small" /> },
+  { label: 'Contact', path: '/contact', icon: <MailRoundedIcon fontSize="small" /> },
+];
+
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   minHeight: 48,
-  '& .MuiTabs-flexContainer': {
-    gap: 6,
-  },
-  '& .MuiTabs-indicator': {
-    height: 0, // we use pill highlight instead of indicator bar
+  '& .MuiTabs-indicator': { display: 'none' }, // removes the “line” behavior entirely
+  '& .MuiTabs-flexContainer': { gap: 6 },
+  '& .MuiTabs-scrollButtons': {
+    color: alpha(theme.palette.common.white, 0.7),
+    '&.Mui-disabled': { opacity: 0.2 },
   },
 }));
 
 const StyledTab = styled(Tab)(({ theme }) => ({
-  minHeight: 44,
-  padding: theme.spacing(0, 1.5),
-  textTransform: 'none',
+  minHeight: 40,
+  padding: theme.spacing(0.75, 1.25),
   borderRadius: 999,
-  fontWeight: 500,
-  fontSize: '0.92rem',
+  textTransform: 'none',
+  fontWeight: 600,
+  fontSize: '0.9rem',
   letterSpacing: '0.2px',
-  color: alpha(theme.palette.text.primary, 0.75),
-  transition: 'background-color 200ms ease, color 200ms ease, transform 200ms ease',
+  color: alpha(theme.palette.common.white, 0.72),
+  transition: 'all 180ms ease',
   '& .MuiTab-iconWrapper': {
-    marginRight: theme.spacing(1),
-    marginBottom: 0,
-    opacity: 0.9,
+    marginRight: 8,
+    color: alpha(theme.palette.common.white, 0.55),
+    transition: 'color 180ms ease',
   },
   '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.08),
-    color: theme.palette.primary.main,
+    backgroundColor: alpha('#22d3ee', 0.10),
+    color: alpha(theme.palette.common.white, 0.95),
+    '& .MuiTab-iconWrapper': { color: alpha('#22d3ee', 0.9) },
   },
   '&.Mui-selected': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.12),
-    color: theme.palette.primary.main,
-    fontWeight: 700,
-  },
-  '&:active': {
-    transform: 'translateY(1px)',
+    backgroundColor: alpha('#22d3ee', 0.14),
+    border: `1px solid ${alpha('#22d3ee', 0.25)}`,
+    color: alpha('#22d3ee', 0.95),
+    '& .MuiTab-iconWrapper': { color: alpha('#22d3ee', 0.95) },
   },
 }));
 
-export default function TopNavbar() {
+function TopNavbar() {
   const theme = useTheme();
   const location = useLocation();
 
-  // Keep icons when possible; if you want, you can hide labels on very small screens.
-  const isCompact = useMediaQuery('(max-width:600px)');
-
-  const navItems = useMemo(
-    () => [
-      { label: 'Home', path: '/', icon: <HomeRoundedIcon fontSize="small" /> },
-      { label: 'Research', path: '/research', icon: <ScienceRoundedIcon fontSize="small" /> },
-      { label: 'Publications', path: '/publications', icon: <LibraryBooksRoundedIcon fontSize="small" /> },
-      { label: 'Activities', path: '/activities', icon: <EventNoteRoundedIcon fontSize="small" /> },
-      { label: 'CV', path: '/cv', icon: <DescriptionRoundedIcon fontSize="small" /> },
-      { label: 'About', path: '/about', icon: <InfoRoundedIcon fontSize="small" /> },
-      { label: 'Contact', path: '/contact', icon: <EmailRoundedIcon fontSize="small" /> },
-    ],
-    []
-  );
-
-  const [value, setValue] = useState(false);
-
-  useEffect(() => {
-    const idx = navItems.findIndex((item) => item.path === location.pathname);
-    setValue(idx !== -1 ? idx : false);
-  }, [location.pathname, navItems]);
+  const currentValue = navItems.some((x) => x.path === location.pathname)
+    ? location.pathname
+    : false;
 
   return (
     <AppBar
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: alpha(theme.palette.background.paper, 0.72),
+        background: 'linear-gradient(160deg, rgba(31,41,55,0.92) 0%, rgba(17,24,39,0.92) 100%)',
         backdropFilter: 'blur(10px)',
-        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
+        // Replace the “black line” with a subtle modern separator
+        boxShadow: `0 1px 0 ${alpha(theme.palette.common.white, 0.08)}`,
       }}
     >
-      <Toolbar
-        sx={{
-          minHeight: 56,
-          px: 2,
-          gap: 1,
-        }}
-      >
-        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <Toolbar sx={{ minHeight: 56, px: 2 }}>
+        <Box sx={{ width: '100%' }}>
           <StyledTabs
-            value={value}
-            onChange={(_, v) => setValue(v)}
+            value={currentValue}
             variant="scrollable"
             scrollButtons="auto"
-            allowScrollButtonsMobile
             aria-label="navigation tabs"
           >
-            {navItems.map((item, idx) => (
+            {navItems.map((item) => (
               <StyledTab
-                key={item.label}
-                value={idx}
-                component={RouterLink}
-                to={item.path}
+                key={item.path}
+                value={item.path}
+                label={item.label}
                 icon={item.icon}
                 iconPosition="start"
-                label={isCompact ? '' : item.label}
-                aria-label={item.label}
+                component={RouterLink}
+                to={item.path}
               />
             ))}
           </StyledTabs>
@@ -131,3 +104,5 @@ export default function TopNavbar() {
     </AppBar>
   );
 }
+
+export default TopNavbar;
