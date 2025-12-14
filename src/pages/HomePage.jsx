@@ -1,4 +1,4 @@
-```jsx
+
 // src/pages/HomePage.jsx
 import React, { useCallback } from 'react';
 import {
@@ -357,4 +357,3 @@ function HomePage() {
 }
 
 export default HomePage;
-```
