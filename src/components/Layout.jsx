@@ -1,44 +1,35 @@
-// Layout.jsx (updated; responsive to collapsed sidebar width)
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, CssBaseline, Typography, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Sidebar, { drawerWidth, collapsedWidth } from './Sidebar';
 import TopNavbar from './TopNavbar';
 
 function Layout() {
-  const isCollapsed = useMediaQuery('(max-width:900px)');
-  const sidebarW = isCollapsed ? collapsedWidth : drawerWidth;
+  const theme = useTheme();
+  const collapsed = useMediaQuery(theme.breakpoints.down('md')); // md == 900px by default
+  const sideW = collapsed ? collapsedWidth : drawerWidth;
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
-
       <Sidebar />
 
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          width: `calc(100% - ${sidebarW}px)`,
-          minWidth: 0,
+          width: `calc(100% - ${sideW}px)`,
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          bgcolor: (theme) =>
-            theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.background.default,
+          minWidth: 0,
+          backgroundColor: theme.palette.background.default,
         }}
       >
         <TopNavbar />
 
-        <Box
-          sx={{
-            flexGrow: 1,
-            px: { xs: 2, sm: 3, md: 4 },
-            py: { xs: 2, sm: 3 },
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-        >
+        <Box sx={{ flexGrow: 1, p: 4, overflowY: 'auto', overflowX: 'hidden' }}>
           <Outlet />
         </Box>
 
@@ -48,10 +39,7 @@ function Layout() {
             py: 1.5,
             px: 3,
             mt: 'auto',
-            bgcolor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[200] : t.palette.grey[800]),
             borderTop: '1px solid',
             borderColor: 'divider',
           }}
