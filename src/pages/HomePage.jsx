@@ -1,206 +1,229 @@
-// src/pages/HomePage.jsx
-import React, { useCallback } from 'react';
-import { Box, Typography, Container, Button, Divider, Grid, Chip, Card, CardContent } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ScienceIcon from '@mui/icons-material/Science';
-import BuildIcon from '@mui/icons-material/Build';
+import React, { useCallback, useMemo } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  Stack,
+  Chip,
+  useMediaQuery,
+} from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ScienceIcon from "@mui/icons-material/Science";
+import BuildIcon from "@mui/icons-material/Build";
 
-// --- Import Particles and Engine ---
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 
-function HomePage() {
-  const headline = "PhD Candidate specializing in Artificial Intelligence and Machine Learning";
-  const jobGoal = "Seeking Research Positions in Academia or Industry";
-  const cvPath = '/Gulfam_Saju_CV.pdf'; // **IMPORTANT: Update with your actual CV filename**
+const cardSx = {
+  backgroundColor: "var(--panel)",
+  border: "1px solid var(--panel-border)",
+  borderRadius: "16px",
+  boxShadow: "var(--shadow)",
+  backdropFilter: "blur(10px)",
+  height: "100%",
+};
+
+export default function HomePage() {
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
 
-  const particlesLoaded = useCallback(async (container) => {
-    // Optional: await console.log(container);
-  }, []);
-
-  // --- Enhanced Particle Configuration ---
-  const particlesOptions = {
-    background: {
-      // Keep background transparent to show page background
-    },
-    fpsLimit: 60,
-    interactivity: {
-      events: {
-        onClick: { enable: false, mode: "push" },
-        onHover: { enable: true, mode: "repulse" }, // Keep repulse on hover
-        resize: true,
+  const particlesOptions = useMemo(
+    () => ({
+      fpsLimit: 60,
+      interactivity: {
+        events: {
+          onClick: { enable: false },
+          onHover: { enable: true, mode: "repulse" },
+          resize: true,
+        },
+        modes: { repulse: { distance: 120, duration: 0.35 } },
       },
-      modes: {
-        push: { quantity: 2 },
-        repulse: { distance: 120, duration: 0.4 }, // Slightly increased distance
+      particles: {
+        color: { value: "#22d3ee" },
+        links: {
+          color: "#22d3ee",
+          distance: 160,
+          enable: true,
+          opacity: 0.14,
+          width: 1,
+        },
+        move: { enable: true, speed: 0.7, random: true, outModes: { default: "bounce" } },
+        number: { density: { enable: true, area: 900 }, value: 40 },
+        opacity: { value: 0.25 },
+        shape: { type: "circle" },
+        size: { value: { min: 1, max: 3 } },
       },
-    },
-    particles: {
-      color: { value: "#999999" }, // Darker gray for particles
-      links: {
-        color: "#aaaaaa", // Darker gray for links
-        distance: 160,    // Slightly increased distance for links
-        enable: true,
-        opacity: 0.35,   // Increased link opacity
-        width: 1,
-      },
-      collisions: { enable: false },
-      move: {
-        direction: "none",
-        enable: true,
-        outModes: { default: "bounce" },
-        random: true,
-        speed: 1, // Increased particle speed
-        straight: false,
-      },
-      number: {
-        density: { enable: true, area: 800 },
-        value: 45, // Slightly more particles
-      },
-      opacity: { value: 0.45 }, // Increased particle opacity
-      shape: { type: "circle" },
-      size: { value: { min: 1, max: 4 } }, // Slightly larger max size
-    },
-    detectRetina: true,
-  };
-  // --- End Particle Configuration ---
+      detectRetina: true,
+    }),
+    []
+  );
 
   return (
-    <Box sx={{
-      position: 'relative',
-      overflow: 'hidden',
-      // Optional: Add a subtle gradient background for a more modern feel
-      // background: 'linear-gradient(180deg, #f4f6f8 0%, #e8ecf1 100%)', // Example subtle gradient
-      // If using a gradient, ensure particles are still visible and theme matches
-    }}>
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        loaded={particlesLoaded}
-        options={particlesOptions}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0
-        }}
-      />
+    <Box sx={{ position: "relative", overflow: "hidden" }}>
+      {!reduceMotion && (
+        <Particles
+          id="tsparticles"
+          init={particlesInit}
+          options={particlesOptions}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 0,
+          }}
+        />
+      )}
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 3, md: 5 } }}> {/* Added padding top/bottom */}
-        <Box sx={{ my: 4 }}>
-
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
-            {headline}
-          </Typography>
-          <Typography variant="h6" component="p" color="primary.main" sx={{ mb: 3, fontWeight: 500 }}>
-            {jobGoal}
-          </Typography>
-
-          <Divider sx={{ mb: 3 }} />
-
-          <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.7 }}>
-            Welcome! I'm a final-year PhD candidate at the University of Massachusetts Dartmouth, passionate about developing and applying cutting-edge AI and machine learning techniques. My research explores areas such as automated AI agents using foundation models and brain-inspired architectures like Spiking Neural Networks, aiming to enhance intelligent systems and computational efficiency. While I have applied these techniques to areas like medical imaging, my core expertise lies in building robust AI solutions. I possess strong skills in Python, PyTorch, TensorFlow, and high-performance computing, and I am eager to leverage this expertise to solve complex problems across various domains.
-          </Typography>
-
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              component={RouterLink}
-              to="/research"
-              endIcon={<ArrowForwardIcon />}
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, py: { xs: 5, md: 7 } }}>
+        <Box sx={{ color: "var(--text)" }}>
+          {/* Hero */}
+          <Box sx={{ maxWidth: 980 }}>
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                px: 1.5,
+                py: 0.75,
+                borderRadius: "999px",
+                border: "1px solid rgba(34,211,238,0.25)",
+                backgroundColor: "rgba(34,211,238,0.08)",
+                color: "rgba(34,211,238,0.95)",
+                fontWeight: 800,
+                fontSize: 12,
+                mb: 2,
+              }}
             >
-              Explore Research
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="large"
-              component={RouterLink}
-              to="/publications"
-              endIcon={<ArrowForwardIcon />}
-            >
-              View Publications
-            </Button>
+              Open to collaborations
+            </Box>
+
+            <Typography variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.6 }}>
+              Gulfam Ahmed Saju
+            </Typography>
+            <Typography sx={{ color: "rgba(148,163,184,0.95)", mt: 1, fontSize: 18 }}>
+              PhD Candidate · University of Massachusetts Dartmouth
+            </Typography>
+
+            <Typography sx={{ color: "rgba(226,232,240,0.92)", mt: 2.5, fontSize: 16.5, lineHeight: 1.8 }}>
+              I work on AI methods for MRI reconstruction and motion correction, and on agentic systems that automate
+              decision-making in imaging pipelines. I also explore efficient learning paradigms, including spiking neural
+              networks, with an emphasis on robustness and interpretability.
+            </Typography>
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ mt: 3 }}>
+              <Button
+                component={RouterLink}
+                to="/research"
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                sx={{
+                  backgroundColor: "var(--accent)",
+                  color: "#0b1220",
+                  fontWeight: 900,
+                  "&:hover": { backgroundColor: "rgba(34,211,238,0.9)" },
+                  textTransform: "none",
+                }}
+              >
+                Explore Research
+              </Button>
+
+              <Button
+                component={RouterLink}
+                to="/publications"
+                variant="outlined"
+                endIcon={<ArrowForwardIcon />}
+                sx={{
+                  borderColor: "rgba(255,255,255,0.15)",
+                  color: "rgba(226,232,240,0.92)",
+                  "&:hover": { borderColor: "rgba(34,211,238,0.5)" },
+                  textTransform: "none",
+                  fontWeight: 900,
+                }}
+              >
+                View Publications
+              </Button>
+
+              <Button
+                component={RouterLink}
+                to="/contact"
+                variant="text"
+                sx={{ color: "rgba(226,232,240,0.92)", textTransform: "none", fontWeight: 900 }}
+              >
+                Contact
+              </Button>
+            </Stack>
           </Box>
 
-          <Divider sx={{ mb: 4 }} />
-
-          <Grid container spacing={4}>
+          {/* Cards */}
+          <Grid container spacing={3} sx={{ mt: 4 }}>
             <Grid item xs={12} md={6}>
-              <Card sx={{
-                height: '100%',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)', // Made slightly more opaque
-                backdropFilter: 'blur(3px)', // Optional: subtle blur for frosted glass effect
-                boxShadow: '0px 4px 15px rgba(0,0,0,0.08)', // Softer, more modern shadow
-                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: '0px 6px 20px rgba(0,0,0,0.1)',
-                }
-              }}>
+              <Card sx={cardSx}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                    <ScienceIcon color="primary" sx={{ mr: 1.5 }} /> {/* Changed color to primary for consistency */}
-                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1.5 }}>
+                    <ScienceIcon sx={{ color: "var(--accent)" }} />
+                    <Typography variant="h6" sx={{ fontWeight: 900 }}>
                       Research Highlight
                     </Typography>
                   </Box>
-                  <Typography variant="body2" paragraph color="text.secondary">
-                    My current research focuses on developing automated AI agents leveraging foundation models, alongside exploring brain-inspired architectures like Spiking Neural Networks (SNNs). This work aims to enhance medical imaging workflows by improving efficiency and reducing human intervention, while the exploration of SNNs targets energy-efficient, event-driven computation suitable for edge devices and real-time processing.
+                  <Typography sx={{ color: "rgba(148,163,184,0.95)", lineHeight: 1.8 }}>
+                    My current work focuses on automated MRI pipelines that combine foundation models with specialized
+                    reconstruction and correction modules. The goal is to reduce manual intervention while improving
+                    reliability under realistic degradations.
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Card sx={{
-                height: '100%',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)', // Made slightly more opaque
-                backdropFilter: 'blur(3px)', // Optional: subtle blur for frosted glass effect
-                boxShadow: '0px 4px 15px rgba(0,0,0,0.08)', // Softer, more modern shadow
-                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: '0px 6px 20px rgba(0,0,0,0.1)',
-                }
-              }}>
+              <Card sx={cardSx}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-                    <BuildIcon color="primary" sx={{ mr: 1.5 }} /> {/* Changed color to primary for consistency */}
-                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1.5 }}>
+                    <BuildIcon sx={{ color: "var(--accent)" }} />
+                    <Typography variant="h6" sx={{ fontWeight: 900 }}>
                       Core Skills
                     </Typography>
                   </Box>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    <Chip label="Python" size="small" variant="outlined" /> {/* Added variant="outlined" for consistency */}
-                    <Chip label="PyTorch" size="small" variant="outlined" />
-                    <Chip label="TensorFlow" size="small" variant="outlined" />
-                    <Chip label="LangChain" size="small" variant="outlined" />
-                    <Chip label="Medical Image Analysis" size="small" variant="outlined" />
-                    <Chip label="MRI Reconstruction" size="small" variant="outlined" />
-                    <Chip label="Machine Learning" size="small" variant="outlined" />
-                    <Chip label="HPC" size="small" variant="outlined" />
-                    <Chip label="Foundation Models" size="small" variant="outlined" />
-                    <Chip label="Spiking Neural Networks" size="small" variant="outlined" />
-                    <Chip label="AI Agents" size="small" variant="outlined" />
-                  </Box>
+
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {[
+                      "Python",
+                      "PyTorch",
+                      "TensorFlow",
+                      "MRI Reconstruction",
+                      "Motion Correction",
+                      "Medical Image Analysis",
+                      "Foundation Models",
+                      "AI Agents",
+                      "Spiking Neural Networks",
+                      "HPC",
+                    ].map((x) => (
+                      <Chip
+                        key={x}
+                        label={x}
+                        variant="outlined"
+                        sx={{
+                          borderColor: "rgba(255,255,255,0.14)",
+                          color: "rgba(226,232,240,0.92)",
+                          "& .MuiChip-label": { fontWeight: 700 },
+                        }}
+                      />
+                    ))}
+                  </Stack>
                 </CardContent>
               </Card>
             </Grid>
           </Grid>
-
         </Box>
       </Container>
     </Box>
   );
 }
-export default HomePage;
