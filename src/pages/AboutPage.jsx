@@ -1,3 +1,4 @@
+// src/pages/AboutPage.jsx
 import React from "react";
 import {
   Box,
@@ -10,12 +11,32 @@ import {
 } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+
+const experienceData = [
+  {
+    role: "Postdoctoral Research Associate",
+    institution: "Washington University School of Medicine",
+    location: "St. Louis, MO, USA",
+    years: "January 2026 – Present",
+    details:
+      "Develop AI systems for medical imaging and efficient inference, spanning foundation-model-driven agents, and MRI reconstruction and artifact correction.",
+  },
+  {
+    role: "Graduate Research Assistant (GRA)",
+    institution: "University of Massachusetts Dartmouth",
+    location: "Dartmouth, MA, USA",
+    years: "January 2022 – December 2025",
+    details:
+      "Conduct research in AI and medical imaging, including automated AI agents for MRI workflows and compute-efficient learning/inference. Develop and evaluate deep learning models using Python and modern frameworks.",
+  },
+];
 
 const educationData = [
   {
-    degree: "PhD in Computer Science and Information System",
+    degree: "PhD in Computer Science and Information Systems",
     institution: "University of Massachusetts Dartmouth, Dartmouth, MA, USA",
-    years: "Jan 2022 – Present (Expected Graduation: May 2026)",
+    years: "Jan 2022 – 2025",
     details: "Dissertation Focus: Leveraging AI for Solving Inverse Problems in MRI",
   },
   {
@@ -46,9 +67,45 @@ function SectionTitle({ icon: Icon, title }) {
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 2 }}>
       <Icon sx={{ color: "var(--accent)" }} />
-      <Typography variant="h5" sx={{ color: "var(--text)", fontWeight: 700 }}>
+      <Typography variant="h5" sx={{ color: "var(--text)", fontWeight: 800 }}>
         {title}
       </Typography>
+    </Box>
+  );
+}
+
+function TimelineItem({ title, subtitle, meta, details }) {
+  return (
+    <Box sx={{ pl: 2, borderLeft: "2px solid rgba(34, 211, 238, 0.35)" }}>
+      <Typography sx={{ fontWeight: 900, color: "var(--text)", lineHeight: 1.25 }}>
+        {title}
+      </Typography>
+
+      {subtitle ? (
+        <Typography sx={{ color: "var(--muted)", mt: 0.4, lineHeight: 1.4 }}>
+          {subtitle}
+        </Typography>
+      ) : null}
+
+      {meta ? (
+        <Typography
+          sx={{
+            color: "rgba(148,163,184,0.85)",
+            mt: 0.6,
+            fontSize: 13,
+            fontFamily:
+              'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+          }}
+        >
+          {meta}
+        </Typography>
+      ) : null}
+
+      {details ? (
+        <Typography sx={{ color: "rgba(148,163,184,0.92)", mt: 0.9, lineHeight: 1.75 }}>
+          {details}
+        </Typography>
+      ) : null}
     </Box>
   );
 }
@@ -57,51 +114,49 @@ export default function AboutPage() {
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
       <Box sx={{ color: "var(--text)" }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: -0.3 }}>
-          About
+        <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.4 }}>
+          Profile
         </Typography>
-        <Typography sx={{ color: "var(--muted)", mt: 1, maxWidth: 860 }}>
-          Academic background and selected recognitions.
+        <Typography sx={{ color: "var(--muted)", mt: 1, maxWidth: 920, lineHeight: 1.7 }}>
+          Professional experience, academic background, and selected recognitions.
         </Typography>
 
         <Stack spacing={3} sx={{ mt: 4 }}>
+          {/* Work Experience */}
+          <Card sx={cardSx}>
+            <CardContent>
+              <SectionTitle icon={WorkOutlineIcon} title="Work Experience" />
+              <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", mb: 2 }} />
+
+              <Stack spacing={2.25}>
+                {experienceData.map((exp, idx) => (
+                  <TimelineItem
+                    key={`exp-${idx}`}
+                    title={exp.role}
+                    subtitle={`${exp.institution}${exp.location ? ` · ${exp.location}` : ""}`}
+                    meta={exp.years}
+                    details={exp.details}
+                  />
+                ))}
+              </Stack>
+            </CardContent>
+          </Card>
+
           {/* Education */}
           <Card sx={cardSx}>
             <CardContent>
               <SectionTitle icon={SchoolIcon} title="Education" />
+              <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", mb: 2 }} />
 
-              <Stack spacing={2}>
+              <Stack spacing={2.25}>
                 {educationData.map((edu, idx) => (
-                  <Box
+                  <TimelineItem
                     key={`edu-${idx}`}
-                    sx={{
-                      pl: 2,
-                      borderLeft: "2px solid rgba(34, 211, 238, 0.35)",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: 800, color: "var(--text)" }}>
-                      {edu.degree}
-                    </Typography>
-                    <Typography sx={{ color: "var(--muted)", mt: 0.25 }}>
-                      {edu.institution}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "rgba(148,163,184,0.85)",
-                        mt: 0.5,
-                        fontSize: 13,
-                        fontFamily:
-                          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                      }}
-                    >
-                      {edu.years}
-                    </Typography>
-                    {edu.details ? (
-                      <Typography sx={{ color: "rgba(148,163,184,0.9)", mt: 0.5 }}>
-                        {edu.details}
-                      </Typography>
-                    ) : null}
-                  </Box>
+                    title={edu.degree}
+                    subtitle={edu.institution}
+                    meta={edu.years}
+                    details={edu.details}
+                  />
                 ))}
               </Stack>
             </CardContent>
@@ -127,7 +182,7 @@ export default function AboutPage() {
                         opacity: 0.85,
                       }}
                     />
-                    <Typography sx={{ color: "rgba(226,232,240,0.92)" }}>
+                    <Typography sx={{ color: "rgba(226,232,240,0.92)", lineHeight: 1.7 }}>
                       {award}
                     </Typography>
                   </Box>
