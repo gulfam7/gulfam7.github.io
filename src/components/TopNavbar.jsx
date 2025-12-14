@@ -63,7 +63,7 @@ export default function TopNavbar() {
       { label: 'Home', path: '/', icon: <HomeRoundedIcon fontSize="small" /> },
 
       // Profile right after Home (uses AboutPage component routed as /profile)
-      { label: 'Profile', path: '/profile', icon: <PersonRoundedIcon fontSize="small" /> },
+      { label: 'Profile', path: '/about', icon: <PersonRoundedIcon fontSize="small" /> },
 
       { label: 'Research', path: '/research', icon: <ScienceRoundedIcon fontSize="small" /> },
       { label: 'Publications', path: '/publications', icon: <LibraryBooksRoundedIcon fontSize="small" /> },
