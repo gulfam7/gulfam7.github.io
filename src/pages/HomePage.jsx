@@ -31,13 +31,15 @@ export default function HomePage() {
   const theme = useTheme();
 
   const ACCENT = "#22d3ee";
-  // Use your project-wide WashU red (also used in Sidebar)
+  // Use your project-wide WashU red (consistent with your sidebar usage)
   const WASHU_RED = "#BA0C2F";
 
   const name = "Gulfam Ahmed Saju, PhD";
   const role = "Postdoctoral Research Associate";
   const institution = "Washington University in St. Louis";
+  const school = "School of Medicine";
 
+  // Keep EXACT summary text as you provided
   const summary =
     "I develop AI systems for medical imaging and efficient intelligence. My work spans foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks for compute-efficient inference.";
 
@@ -112,7 +114,6 @@ export default function HomePage() {
         // Removes visible gutter if Layout uses content padding (p: 4)
         mx: { xs: -4, md: -4 },
         my: { xs: -4, md: -4 },
-
         position: "relative",
         overflow: "hidden",
         bgcolor: "#ffffff",
@@ -144,7 +145,6 @@ export default function HomePage() {
         style={{ position: "absolute", inset: 0, zIndex: 0 }}
       />
 
-      {/* Content */}
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, py: { xs: 5, md: 7 } }}>
         {/* Hero */}
         <Box
@@ -158,17 +158,65 @@ export default function HomePage() {
             boxShadow: `0 18px 55px ${alpha("#0f172a", 0.10)}`,
             px: { xs: 3, md: 5 },
             py: { xs: 4, md: 5 },
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          <Stack spacing={1.15}>
-            <Typography variant="overline" sx={{ color: alpha("#0f172a", 0.60), letterSpacing: 2 }}>
-              AI • MRI Reconstruction • Neuroimaging
-            </Typography>
+          {/* Sleek “upper portion” treatment (keeps your colors) */}
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              background: `radial-gradient(520px 260px at 12% 18%, ${alpha(
+                ACCENT,
+                0.14
+              )} 0%, rgba(255,255,255,0) 62%),
+                           radial-gradient(520px 280px at 88% 22%, ${alpha(
+                             WASHU_RED,
+                             0.08
+                           )} 0%, rgba(255,255,255,0) 60%)`,
+            }}
+          />
+
+          <Stack spacing={1.15} sx={{ position: "relative" }}>
+            {/* Small status pill (like your reference), but using your palette */}
+            <Box
+              sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1,
+                width: "fit-content",
+                px: 1.4,
+                py: 0.6,
+                borderRadius: 999,
+                border: `1px solid ${alpha(ACCENT, 0.35)}`,
+                backgroundColor: alpha(ACCENT, 0.06),
+              }}
+            >
+              <Box
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor: ACCENT,
+                  boxShadow: `0 0 0 4px ${alpha(ACCENT, 0.12)}`,
+                }}
+              />
+              <Typography sx={{ fontSize: 13, fontWeight: 900, color: alpha("#0f172a", 0.78) }}>
+                Open to collaborations
+              </Typography>
+            </Box>
 
             <Typography
               variant="h3"
               component="h1"
-              sx={{ fontWeight: 900, lineHeight: 1.08, color: "#0f172a" }}
+              sx={{
+                fontWeight: 900,
+                lineHeight: 1.08,
+                color: "#0f172a",
+                letterSpacing: -0.6,
+              }}
             >
               {name}
             </Typography>
@@ -177,40 +225,58 @@ export default function HomePage() {
               {role}
             </Typography>
 
-            {/* Larger WashU line */}
+            {/* Make WashU bigger + keep separate from summary */}
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 900,
-                color: WASHU_RED,
                 lineHeight: 1.25,
-                fontSize: { xs: "1.10rem", md: "1.22rem" },
+                fontSize: { xs: "1.12rem", md: "1.28rem" }, // increased
+                color: alpha("#0f172a", 0.90),
               }}
             >
-              {institution}
+              <Box component="span" sx={{ color: WASHU_RED }}>
+                {institution}
+              </Box>
+              <Box component="span" sx={{ color: alpha("#0f172a", 0.55), fontWeight: 800 }}>
+                {" "}
+                | {school}
+              </Box>
             </Typography>
 
-            {/* Summary on new line */}
-            <Typography
-              sx={{
-                color: alpha("#0f172a", 0.72),
-                maxWidth: 980,
-                lineHeight: 1.85,
-                fontSize: "1.03rem",
-              }}
-            >
-              {summary}
-            </Typography>
+            {/* Summary on its own line (as you requested) */}
+            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mt: 0.5 }}>
+              <Box
+                sx={{
+                  width: 4,
+                  borderRadius: 999,
+                  backgroundColor: alpha(ACCENT, 0.55),
+                  mt: 0.4,
+                  alignSelf: "stretch",
+                  minHeight: 68,
+                }}
+              />
+              <Typography
+                sx={{
+                  color: alpha("#0f172a", 0.72),
+                  maxWidth: 980,
+                  lineHeight: 1.85,
+                  fontSize: "1.03rem",
+                }}
+              >
+                {summary}
+              </Typography>
+            </Box>
 
-            {/* Current focus */}
-            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.4 }}>
+            {/* Current focus (WashU work) */}
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.2 }}>
               <Chip label="Accelerated MRI" size="small" variant="outlined" sx={chipBaseSx} />
               <Chip label="Motion Artifact Correction" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Neuroimaging AI" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Alzheimer’s / CNS" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Neuroimaging AI (CNS)" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Alzheimer’s Disease" size="small" variant="outlined" sx={chipBaseSx} />
             </Stack>
 
-            {/* Expertise / interests */}
+            {/* Expertise / interests (keep SNN as interest area, not framed as current postdoc work) */}
             <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
               <Chip label="Foundation Models" size="small" variant="outlined" sx={chipBaseSx} />
               <Chip label="AI Agents" size="small" variant="outlined" sx={chipBaseSx} />
@@ -233,7 +299,7 @@ export default function HomePage() {
                   "&:hover": { backgroundColor: ACCENT },
                 }}
               >
-                Research
+                Explore Research
               </Button>
 
               <Button
@@ -254,7 +320,7 @@ export default function HomePage() {
                   },
                 }}
               >
-                Publications
+                View Publications
               </Button>
 
               <Button
@@ -296,7 +362,7 @@ export default function HomePage() {
 
         <Divider sx={{ borderColor: alpha("#0f172a", 0.10), my: 4 }} />
 
-        {/* Cards */}
+        {/* Cards (aligned with your new postdoc focus) */}
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Card sx={cardSx}>
@@ -338,7 +404,7 @@ export default function HomePage() {
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
                   <PsychologyRoundedIcon sx={{ color: ACCENT }} />
                   <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
-                    Neuroimaging AI (CNS)
+                    Alzheimer’s / CNS AI
                   </Typography>
                 </Stack>
                 <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
@@ -368,6 +434,7 @@ export default function HomePage() {
               "Motion Correction",
               "Neuroimaging",
               "Foundation Models",
+              "AI Agents",
             ].map((s) => (
               <Chip key={s} label={s} size="small" variant="outlined" sx={chipBaseSx} />
             ))}
