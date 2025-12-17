@@ -39,7 +39,7 @@ export default function HomePage() {
   const institution = "Washington University in St. Louis";
 
   const summary =
-    "I develop AI methods for accelerated MRI reconstruction and motion artifact correction, and I build neuroimaging models for Alzheimer’s disease and related CNS conditions. I also maintain interests in efficient AI, including spiking neural networks, as a complementary direction.";
+    "I develop AI systems for medical imaging and efficient intelligence. My work spans foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks for compute-efficient inference.";
 
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
@@ -214,7 +214,7 @@ export default function HomePage() {
             <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
               <Chip label="Foundation Models" size="small" variant="outlined" sx={chipBaseSx} />
               <Chip label="AI Agents" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Spiking Neural Networks (Interest)" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Spiking Neural Networks" size="small" variant="outlined" sx={chipBaseSx} />
             </Stack>
 
             <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap" sx={{ mt: 2.3 }}>
