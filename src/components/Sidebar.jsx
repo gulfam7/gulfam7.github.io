@@ -30,7 +30,7 @@ import profilePic from "./IMG_7270.jpg";
 export const drawerWidth = 260;
 export const collapsedWidth = 84;
 
-const WASHU_RED = "#0f172a";
+const WASHU_RED = "#b50505";
 const CYAN = "#22d3ee";
 const PAPER_BG = "#0f172a";
 
