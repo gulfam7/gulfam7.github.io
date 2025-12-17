@@ -30,7 +30,7 @@ import profilePic from "./IMG_7270.jpg";
 export const drawerWidth = 260;
 export const collapsedWidth = 84;
 
-const WASHU_RED = "#BA0C2F";
+const WASHU_RED = "#0f172a";
 const CYAN = "#22d3ee";
 const PAPER_BG = "#0f172a";
 
@@ -38,7 +38,7 @@ const user = {
   name: "Gulfam Ahmed Saju, PhD",
   title: "Postdoctoral Research Associate",
   institute: "Mallinckrodt Institute of Radiology",
-  org: "Washington University in St. Louis",
+  org: "WASHINGTON UNIVERSITY IN ST. LOUIS",
   email: "gsaju@wustl.edu",
   loc: "St. Louis, MO",
   img: profilePic,
