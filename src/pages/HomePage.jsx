@@ -1,5 +1,5 @@
 // src/pages/HomePage.jsx
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 import {
   Box,
   Typography,
@@ -11,48 +11,46 @@ import {
   CardContent,
   Stack,
   Divider,
-} from '@mui/material';
-import { alpha, useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import { Link as RouterLink } from "react-router-dom";
 
 // Icons
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
-import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
-import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
+import AutoFixHighRoundedIcon from "@mui/icons-material/AutoFixHighRounded";
+import PsychologyRoundedIcon from "@mui/icons-material/PsychologyRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 
 // Particles
-import Particles from 'react-tsparticles';
-import { loadSlim } from 'tsparticles-slim';
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
 
-function HomePage() {
+export default function HomePage() {
   const theme = useTheme();
 
-  // Accent consistent with your cyan UI
-  const ACCENT = '#22d3ee';
-  // WashU (approx. brand red used on many official assets)
-  const WASHU_RED = '#A51417';
+  const ACCENT = "#22d3ee";
+  // Use your project-wide WashU red (also used in Sidebar)
+  const WASHU_RED = "#BA0C2F";
 
-  const name = 'Gulfam Ahmed Saju, PhD';
-  const role = 'Postdoctoral Research Associate';
-  const institution = 'Washington University in St. Louis';
+  const name = "Gulfam Ahmed Saju, PhD";
+  const role = "Postdoctoral Research Associate";
+  const institution = "Washington University in St. Louis";
 
   const summary =
-    'I develop AI systems for medical imaging and efficient intelligence. My work spans foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks for compute-efficient inference.';
+    "I develop AI methods for accelerated MRI reconstruction and motion artifact correction, and I build neuroimaging models for Alzheimer’s disease and related CNS conditions. I also maintain interests in efficient AI, including spiking neural networks, as a complementary direction.";
 
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
 
-  // Lighter particles for a white background
   const particlesOptions = {
     fpsLimit: 60,
     interactivity: {
       events: {
-        onClick: { enable: false, mode: 'push' },
-        onHover: { enable: true, mode: 'repulse' },
+        onClick: { enable: false, mode: "push" },
+        onHover: { enable: true, mode: "repulse" },
         resize: true,
       },
       modes: {
@@ -61,9 +59,9 @@ function HomePage() {
       },
     },
     particles: {
-      color: { value: '#64748b' }, // slate-500
+      color: { value: "#64748b" },
       links: {
-        color: '#94a3b8', // slate-400
+        color: "#94a3b8",
         distance: 160,
         enable: true,
         opacity: 0.12,
@@ -71,65 +69,67 @@ function HomePage() {
       },
       collisions: { enable: false },
       move: {
-        direction: 'none',
+        direction: "none",
         enable: true,
-        outModes: { default: 'bounce' },
+        outModes: { default: "bounce" },
         random: true,
         speed: 0.7,
         straight: false,
       },
       number: { density: { enable: true, area: 950 }, value: 38 },
       opacity: { value: 0.28 },
-      shape: { type: 'circle' },
+      shape: { type: "circle" },
       size: { value: { min: 1, max: 3 } },
     },
     detectRetina: true,
   };
 
-  const chipSx = {
-    borderColor: alpha(ACCENT, 0.35),
-    backgroundColor: alpha(ACCENT, 0.08),
-    '&:hover': { backgroundColor: alpha(ACCENT, 0.12) },
+  const chipBaseSx = {
+    borderColor: alpha("#0f172a", 0.12),
+    color: alpha("#0f172a", 0.76),
+    backgroundColor: alpha(ACCENT, 0.06),
+    "&:hover": { backgroundColor: alpha(ACCENT, 0.10) },
+    "& .MuiChip-label": { fontWeight: 800 },
   };
 
   const cardSx = {
-    height: '100%',
+    height: "100%",
     borderRadius: 3,
-    border: `1px solid ${alpha('#0f172a', 0.08)}`,
-    boxShadow: `0 10px 30px ${alpha('#0f172a', 0.08)}`,
-    transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
-    '&:hover': {
-      transform: 'translateY(-3px)',
+    border: `1px solid ${alpha("#0f172a", 0.08)}`,
+    background: "linear-gradient(180deg, #ffffff 0%, #fbfdff 100%)",
+    boxShadow: `0 10px 30px ${alpha("#0f172a", 0.08)}`,
+    transition: "transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+    "&:hover": {
+      transform: "translateY(-3px)",
       borderColor: alpha(ACCENT, 0.35),
-      boxShadow: `0 14px 40px ${alpha('#0f172a', 0.12)}`,
+      boxShadow: `0 14px 40px ${alpha("#0f172a", 0.12)}`,
     },
   };
 
   return (
     <Box
       sx={{
-        // IMPORTANT: removes the visible white gutter caused by Layout's `p: 4`
-        // If you later set Layout's content padding to 0, remove these two lines.
+        // Removes visible gutter if Layout uses content padding (p: 4)
         mx: { xs: -4, md: -4 },
         my: { xs: -4, md: -4 },
 
-        position: 'relative',
-        overflow: 'hidden',
-        bgcolor: '#ffffff',
-        minHeight: '100%',
+        position: "relative",
+        overflow: "hidden",
+        bgcolor: "#ffffff",
+        minHeight: "100%",
       }}
     >
       {/* Subtle background tint */}
       <Box
         sx={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
           background: `radial-gradient(900px 420px at 18% 14%, ${alpha(
             ACCENT,
             0.10
           )} 0%, rgba(255,255,255,0) 55%),
                        radial-gradient(700px 360px at 85% 22%, ${alpha(
-                         '#3b82f6',
+                         "#3b82f6",
                          0.06
                        )} 0%, rgba(255,255,255,0) 58%)`,
           zIndex: 0,
@@ -141,67 +141,83 @@ function HomePage() {
         id="tsparticles"
         init={particlesInit}
         options={particlesOptions}
-        style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+        style={{ position: "absolute", inset: 0, zIndex: 0 }}
       />
 
       {/* Content */}
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, py: { xs: 5, md: 7 } }}>
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, py: { xs: 5, md: 7 } }}>
         {/* Hero */}
         <Box
           sx={{
             borderRadius: 4,
-            border: `1px solid ${alpha('#0f172a', 0.08)}`,
-            background: `linear-gradient(180deg, ${alpha('#ffffff', 0.92)} 0%, ${alpha(
-              '#f8fafc',
-              0.92
+            border: `1px solid ${alpha("#0f172a", 0.08)}`,
+            background: `linear-gradient(180deg, ${alpha("#ffffff", 0.94)} 0%, ${alpha(
+              "#f8fafc",
+              0.94
             )} 100%)`,
-            boxShadow: `0 18px 55px ${alpha('#0f172a', 0.10)}`,
+            boxShadow: `0 18px 55px ${alpha("#0f172a", 0.10)}`,
             px: { xs: 3, md: 5 },
             py: { xs: 4, md: 5 },
           }}
         >
-          <Stack spacing={1.2}>
-            <Typography variant="overline" sx={{ color: alpha('#0f172a', 0.60), letterSpacing: 2 }}>
-              AI • Medical Imaging • Efficient Inference
+          <Stack spacing={1.15}>
+            <Typography variant="overline" sx={{ color: alpha("#0f172a", 0.60), letterSpacing: 2 }}>
+              AI • MRI Reconstruction • Neuroimaging
             </Typography>
 
             <Typography
               variant="h3"
               component="h1"
-              sx={{ fontWeight: 900, lineHeight: 1.08, color: '#0f172a' }}
+              sx={{ fontWeight: 900, lineHeight: 1.08, color: "#0f172a" }}
             >
               {name}
             </Typography>
 
-            <Typography variant="h5" sx={{ fontWeight: 700, color: alpha('#0f172a', 0.85) }}>
+            <Typography variant="h5" sx={{ fontWeight: 750, color: alpha("#0f172a", 0.86) }}>
               {role}
             </Typography>
 
+            {/* Larger WashU line */}
             <Typography
-              variant="subtitle1"
+              variant="h6"
               sx={{
-                color: alpha('#0f172a', 0.72),
-                maxWidth: 980,
-                lineHeight: 1.75,
-                fontSize: '1.05rem',
+                fontWeight: 900,
+                color: WASHU_RED,
+                lineHeight: 1.25,
+                fontSize: { xs: "1.10rem", md: "1.22rem" },
               }}
             >
-              <Box component="span" sx={{ color: WASHU_RED, fontWeight: 800 }}>
-                {institution}
-              </Box>
-              {' — '}
+              {institution}
+            </Typography>
+
+            {/* Summary on new line */}
+            <Typography
+              sx={{
+                color: alpha("#0f172a", 0.72),
+                maxWidth: 980,
+                lineHeight: 1.85,
+                fontSize: "1.03rem",
+              }}
+            >
               {summary}
             </Typography>
 
-            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.5 }}>
-              <Chip label="Foundation-Model Agents" size="small" variant="outlined" sx={chipSx} />
-              <Chip label="MRI Reconstruction" size="small" variant="outlined" sx={chipSx} />
-              <Chip label="Motion / Artifact Correction" size="small" variant="outlined" sx={chipSx} />
-              <Chip label="Spiking Neural Networks" size="small" variant="outlined" sx={chipSx} />
-              <Chip label="Efficient Inference" size="small" variant="outlined" sx={chipSx} />
+            {/* Current focus */}
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.4 }}>
+              <Chip label="Accelerated MRI" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Motion Artifact Correction" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Neuroimaging AI" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Alzheimer’s / CNS" size="small" variant="outlined" sx={chipBaseSx} />
             </Stack>
 
-            <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap" sx={{ mt: 2.5 }}>
+            {/* Expertise / interests */}
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+              <Chip label="Foundation Models" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="AI Agents" size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip label="Spiking Neural Networks (Interest)" size="small" variant="outlined" sx={chipBaseSx} />
+            </Stack>
+
+            <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap" sx={{ mt: 2.3 }}>
               <Button
                 component={RouterLink}
                 to="/research"
@@ -211,10 +227,10 @@ function HomePage() {
                   borderRadius: 999,
                   px: 2.6,
                   py: 1.15,
-                  fontWeight: 800,
+                  fontWeight: 900,
                   backgroundColor: alpha(ACCENT, 0.95),
-                  color: '#061018',
-                  '&:hover': { backgroundColor: ACCENT },
+                  color: "#061018",
+                  "&:hover": { backgroundColor: ACCENT },
                 }}
               >
                 Research
@@ -229,10 +245,10 @@ function HomePage() {
                   borderRadius: 999,
                   px: 2.6,
                   py: 1.15,
-                  fontWeight: 800,
-                  borderColor: alpha('#0f172a', 0.18),
-                  color: alpha('#0f172a', 0.80),
-                  '&:hover': {
+                  fontWeight: 900,
+                  borderColor: alpha("#0f172a", 0.18),
+                  color: alpha("#0f172a", 0.82),
+                  "&:hover": {
                     borderColor: alpha(ACCENT, 0.55),
                     backgroundColor: alpha(ACCENT, 0.06),
                   },
@@ -250,9 +266,9 @@ function HomePage() {
                   borderRadius: 999,
                   px: 2.0,
                   py: 1.15,
-                  fontWeight: 800,
-                  color: alpha('#0f172a', 0.78),
-                  '&:hover': { backgroundColor: alpha('#0f172a', 0.04) },
+                  fontWeight: 900,
+                  color: alpha("#0f172a", 0.80),
+                  "&:hover": { backgroundColor: alpha("#0f172a", 0.04) },
                 }}
               >
                 CV
@@ -267,9 +283,9 @@ function HomePage() {
                   borderRadius: 999,
                   px: 2.0,
                   py: 1.15,
-                  fontWeight: 800,
-                  color: alpha('#0f172a', 0.78),
-                  '&:hover': { backgroundColor: alpha('#0f172a', 0.04) },
+                  fontWeight: 900,
+                  color: alpha("#0f172a", 0.80),
+                  "&:hover": { backgroundColor: alpha("#0f172a", 0.04) },
                 }}
               >
                 Contact
@@ -278,7 +294,7 @@ function HomePage() {
           </Stack>
         </Box>
 
-        <Divider sx={{ borderColor: alpha('#0f172a', 0.10), my: 4 }} />
+        <Divider sx={{ borderColor: alpha("#0f172a", 0.10), my: 4 }} />
 
         {/* Cards */}
         <Grid container spacing={3}>
@@ -287,13 +303,13 @@ function HomePage() {
               <CardContent sx={{ p: 3 }}>
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
                   <ScienceRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: '#0f172a', fontWeight: 900 }}>
-                    Research Focus
+                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
+                    Accelerated MRI
                   </Typography>
                 </Stack>
-                <Typography sx={{ color: alpha('#0f172a', 0.72), lineHeight: 1.75 }}>
-                  AI-enabled medical imaging, with emphasis on robust reconstruction and automated
-                  decision-making using modern foundation models.
+                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
+                  AI methods to accelerate MRI reconstruction while preserving clinically meaningful structure and
+                  quantitative fidelity.
                 </Typography>
               </CardContent>
             </Card>
@@ -303,14 +319,14 @@ function HomePage() {
             <Card sx={cardSx}>
               <CardContent sx={{ p: 3 }}>
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
-                  <AutoAwesomeRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: '#0f172a', fontWeight: 900 }}>
-                    Foundation-Model Agents
+                  <AutoFixHighRoundedIcon sx={{ color: ACCENT }} />
+                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
+                    Motion / Artifact Correction
                   </Typography>
                 </Stack>
-                <Typography sx={{ color: alpha('#0f172a', 0.72), lineHeight: 1.75 }}>
-                  Agentic pipelines that classify corruption, plan corrective actions, and orchestrate
-                  specialized models for end-to-end MRI workflows.
+                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
+                  Robust correction of motion and real-world degradations to reduce rescans and stabilize downstream
+                  analysis.
                 </Typography>
               </CardContent>
             </Card>
@@ -320,14 +336,14 @@ function HomePage() {
             <Card sx={cardSx}>
               <CardContent sx={{ p: 3 }}>
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
-                  <BoltRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: '#0f172a', fontWeight: 900 }}>
-                    Efficient Intelligence
+                  <PsychologyRoundedIcon sx={{ color: ACCENT }} />
+                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
+                    Neuroimaging AI (CNS)
                   </Typography>
                 </Stack>
-                <Typography sx={{ color: alpha('#0f172a', 0.72), lineHeight: 1.75 }}>
-                  Spiking neural networks and compute-aware inference strategies for efficient,
-                  reliable, and deployable AI systems.
+                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
+                  Learning-based detection and characterization for Alzheimer’s disease and related CNS conditions
+                  using brain imaging.
                 </Typography>
               </CardContent>
             </Card>
@@ -336,37 +352,24 @@ function HomePage() {
 
         {/* Skills */}
         <Box sx={{ mt: 4 }}>
-          <Typography variant="subtitle2" sx={{ color: alpha('#0f172a', 0.70), fontWeight: 900, mb: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ color: alpha("#0f172a", 0.72), fontWeight: 900, mb: 1.5 }}>
             Core Skills
           </Typography>
 
           <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
             {[
-              'Python',
-              'PyTorch',
-              'TensorFlow',
-              'MUI',
-              'HPC',
-              'Medical Image Analysis',
-              'MRI Reconstruction',
-              'Generative Models',
-              'Foundation Models',
-              'AI Agents',
-              'Spiking Neural Networks',
+              "Python",
+              "PyTorch",
+              "TensorFlow",
+              "MUI",
+              "HPC",
+              "Medical Image Analysis",
+              "MRI Reconstruction",
+              "Motion Correction",
+              "Neuroimaging",
+              "Foundation Models",
             ].map((s) => (
-              <Chip
-                key={s}
-                label={s}
-                size="small"
-                variant="outlined"
-                sx={{
-                  ...chipSx,
-                  color: alpha('#0f172a', 0.75),
-                  borderColor: alpha('#0f172a', 0.12),
-                  backgroundColor: alpha(ACCENT, 0.06),
-                  '&:hover': { backgroundColor: alpha(ACCENT, 0.10) },
-                }}
-              />
+              <Chip key={s} label={s} size="small" variant="outlined" sx={chipBaseSx} />
             ))}
           </Stack>
         </Box>
@@ -374,6 +377,3 @@ function HomePage() {
     </Box>
   );
 }
-
-export default HomePage;
-
