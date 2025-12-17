@@ -30,19 +30,20 @@ import { loadSlim } from "tsparticles-slim";
 export default function HomePage() {
   const theme = useTheme();
 
+  // Color Palette
   const ACCENT = "#22d3ee";
-  // Use your project-wide WashU red (consistent with your sidebar usage)
   const WASHU_RED = "#BA0C2F";
+  const DARK_TEXT = "#0f172a";
 
   const name = "Gulfam Ahmed Saju, PhD";
   const role = "Postdoctoral Research Associate";
   const institution = "Washington University in St. Louis";
   const school = "School of Medicine";
 
-  // Keep EXACT summary text as you provided
   const summary =
     "I develop AI systems for medical imaging and efficient intelligence. My work spans foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks for compute-efficient inference.";
 
+  // --- Particles Config (Kept safe & optimized) ---
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
@@ -86,58 +87,90 @@ export default function HomePage() {
     detectRetina: true,
   };
 
-  const chipBaseSx = {
-    borderColor: alpha("#0f172a", 0.12),
-    color: alpha("#0f172a", 0.76),
-    backgroundColor: alpha(ACCENT, 0.06),
-    "&:hover": { backgroundColor: alpha(ACCENT, 0.10) },
-    "& .MuiChip-label": { fontWeight: 800 },
+  // --- Modern Styles ---
+
+  // "Glass" Card Style
+  const glassCardSx = {
+    background: "rgba(255, 255, 255, 0.65)", // High transparency
+    backdropFilter: "blur(12px)", // The frosted glass effect
+    WebkitBackdropFilter: "blur(12px)",
+    borderRadius: 4,
+    border: `1px solid ${alpha("#ffffff", 0.6)}`,
+    boxShadow: `0 8px 32px 0 ${alpha("#0f172a", 0.05)}`,
+    transition: "all 0.3s ease",
   };
 
-  const cardSx = {
+  // Interactive Card Style (extends glass)
+  const interactiveCardSx = {
+    ...glassCardSx,
     height: "100%",
-    borderRadius: 3,
-    border: `1px solid ${alpha("#0f172a", 0.08)}`,
-    background: "linear-gradient(180deg, #ffffff 0%, #fbfdff 100%)",
-    boxShadow: `0 10px 30px ${alpha("#0f172a", 0.08)}`,
-    transition: "transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease",
+    background: "rgba(255, 255, 255, 0.75)",
     "&:hover": {
-      transform: "translateY(-3px)",
-      borderColor: alpha(ACCENT, 0.35),
-      boxShadow: `0 14px 40px ${alpha("#0f172a", 0.12)}`,
+      transform: "translateY(-5px)",
+      borderColor: alpha(ACCENT, 0.5),
+      boxShadow: `0 15px 40px -10px ${alpha(ACCENT, 0.15)}`,
+    },
+  };
+
+  const chipBaseSx = {
+    fontWeight: 600,
+    border: `1px solid ${alpha(DARK_TEXT, 0.08)}`,
+    backgroundColor: alpha("#ffffff", 0.5),
+    backdropFilter: "blur(4px)",
+    color: alpha(DARK_TEXT, 0.8),
+    transition: "all 0.2s ease",
+    "&:hover": {
+      backgroundColor: alpha(ACCENT, 0.1),
+      borderColor: alpha(ACCENT, 0.3),
+      transform: "translateY(-1px)",
     },
   };
 
   return (
     <Box
       sx={{
-        // Removes visible gutter if Layout uses content padding (p: 4)
         mx: { xs: -4, md: -4 },
         my: { xs: -4, md: -4 },
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#ffffff",
+        bgcolor: "#f8fafc", // Very slight grey base
         minHeight: "100%",
       }}
     >
-      {/* Subtle background tint */}
+      {/* Dynamic Background Blobs */}
       <Box
         sx={{
           position: "absolute",
           inset: 0,
-          background: `radial-gradient(900px 420px at 18% 14%, ${alpha(
-            ACCENT,
-            0.10
-          )} 0%, rgba(255,255,255,0) 55%),
-                       radial-gradient(700px 360px at 85% 22%, ${alpha(
-                         "#3b82f6",
-                         0.06
-                       )} 0%, rgba(255,255,255,0) 58%)`,
+          overflow: "hidden",
           zIndex: 0,
         }}
-      />
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "-10%",
+            left: "-10%",
+            width: "50%",
+            height: "50%",
+            background: `radial-gradient(circle, ${alpha(ACCENT, 0.15)} 0%, rgba(0,0,0,0) 70%)`,
+            filter: "blur(60px)",
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "10%",
+            right: "-5%",
+            width: "40%",
+            height: "40%",
+            background: `radial-gradient(circle, ${alpha("#3b82f6", 0.1)} 0%, rgba(0,0,0,0) 70%)`,
+            filter: "blur(60px)",
+          }}
+        />
+      </Box>
 
-      {/* Particles */}
+      {/* Particles Layer */}
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -145,53 +178,25 @@ export default function HomePage() {
         style={{ position: "absolute", inset: 0, zIndex: 0 }}
       />
 
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, py: { xs: 5, md: 7 } }}>
-        {/* Hero */}
-        <Box
-          sx={{
-            borderRadius: 4,
-            border: `1px solid ${alpha("#0f172a", 0.08)}`,
-            background: `linear-gradient(180deg, ${alpha("#ffffff", 0.94)} 0%, ${alpha(
-              "#f8fafc",
-              0.94
-            )} 100%)`,
-            boxShadow: `0 18px 55px ${alpha("#0f172a", 0.10)}`,
-            px: { xs: 3, md: 5 },
-            py: { xs: 4, md: 5 },
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Sleek “upper portion” treatment (keeps your colors) */}
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              pointerEvents: "none",
-              background: `radial-gradient(520px 260px at 12% 18%, ${alpha(
-                ACCENT,
-                0.14
-              )} 0%, rgba(255,255,255,0) 62%),
-                           radial-gradient(520px 280px at 88% 22%, ${alpha(
-                             WASHU_RED,
-                             0.08
-                           )} 0%, rgba(255,255,255,0) 60%)`,
-            }}
-          />
-
-          <Stack spacing={1.15} sx={{ position: "relative" }}>
-            {/* Small status pill (like your reference), but using your palette */}
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, py: { xs: 5, md: 8 } }}>
+        
+        {/* --- Hero Section --- */}
+        <Box sx={{ ...glassCardSx, px: { xs: 3, md: 6 }, py: { xs: 5, md: 6 }, mb: 6 }}>
+          <Stack spacing={2}>
+            
+            {/* Status Pill */}
             <Box
               sx={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 1,
                 width: "fit-content",
-                px: 1.4,
-                py: 0.6,
+                px: 1.5,
+                py: 0.5,
                 borderRadius: 999,
-                border: `1px solid ${alpha(ACCENT, 0.35)}`,
-                backgroundColor: alpha(ACCENT, 0.06),
+                border: `1px solid ${alpha(ACCENT, 0.3)}`,
+                backgroundColor: alpha(ACCENT, 0.08),
+                mb: 1,
               }}
             >
               <Box
@@ -200,90 +205,85 @@ export default function HomePage() {
                   height: 8,
                   borderRadius: "50%",
                   backgroundColor: ACCENT,
-                  boxShadow: `0 0 0 4px ${alpha(ACCENT, 0.12)}`,
+                  boxShadow: `0 0 10px ${ACCENT}`,
+                  animation: "pulse 2s infinite",
+                  "@keyframes pulse": {
+                    "0%": { boxShadow: `0 0 0 0 ${alpha(ACCENT, 0.4)}` },
+                    "70%": { boxShadow: `0 0 0 6px rgba(0, 0, 0, 0)` },
+                    "100%": { boxShadow: `0 0 0 0 rgba(0, 0, 0, 0)` },
+                  },
                 }}
               />
-              <Typography sx={{ fontSize: 13, fontWeight: 900, color: alpha("#0f172a", 0.78) }}>
-                Open to collaborations
+              <Typography sx={{ fontSize: 12, fontWeight: 800, color: alpha(DARK_TEXT, 0.8), letterSpacing: 0.5 }}>
+                OPEN TO COLLABORATIONS
               </Typography>
             </Box>
 
-            <Typography
-              variant="h3"
-              component="h1"
-              sx={{
-                fontWeight: 900,
-                lineHeight: 1.08,
-                color: "#0f172a",
-                letterSpacing: -0.6,
-              }}
-            >
-              {name}
-            </Typography>
+            {/* Name & Title */}
+            <Box>
+              <Typography
+                variant="h2"
+                component="h1"
+                sx={{
+                  fontWeight: 800,
+                  color: DARK_TEXT,
+                  letterSpacing: "-0.03em",
+                  fontSize: { xs: "2.5rem", md: "3.5rem" },
+                  mb: 1,
+                }}
+              >
+                {name}
+              </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 500,
+                  color: alpha(DARK_TEXT, 0.8),
+                  mb: 1,
+                }}
+              >
+                {role}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  color: alpha(DARK_TEXT, 0.9),
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: 1,
+                }}
+              >
+                <span style={{ color: WASHU_RED }}>{institution}</span>
+                <span style={{ color: alpha(DARK_TEXT, 0.4), fontWeight: 300 }}>|</span>
+                <span style={{ color: alpha(DARK_TEXT, 0.6) }}>{school}</span>
+              </Typography>
+            </Box>
 
-            <Typography variant="h5" sx={{ fontWeight: 750, color: alpha("#0f172a", 0.86) }}>
-              {role}
-            </Typography>
-
-            {/* Make WashU bigger + keep separate from summary */}
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 900,
-                lineHeight: 1.25,
-                fontSize: { xs: "1.12rem", md: "1.28rem" }, // increased
-                color: alpha("#0f172a", 0.90),
-              }}
-            >
-              <Box component="span" sx={{ color: WASHU_RED }}>
-                {institution}
-              </Box>
-              <Box component="span" sx={{ color: alpha("#0f172a", 0.55), fontWeight: 800 }}>
-                {" "}
-                | {school}
-              </Box>
-            </Typography>
-
-            {/* Summary on its own line (as you requested) */}
-            <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", mt: 0.5 }}>
+            {/* Summary */}
+            <Box sx={{ display: "flex", gap: 3, pt: 2 }}>
               <Box
                 sx={{
-                  width: 4,
-                  borderRadius: 999,
-                  backgroundColor: alpha(ACCENT, 0.55),
-                  mt: 0.4,
-                  alignSelf: "stretch",
-                  minHeight: 68,
+                  width: 3,
+                  borderRadius: 2,
+                  background: `linear-gradient(180deg, ${ACCENT} 0%, ${alpha(ACCENT, 0.1)} 100%)`,
                 }}
               />
               <Typography
                 sx={{
-                  color: alpha("#0f172a", 0.72),
-                  maxWidth: 980,
-                  lineHeight: 1.85,
-                  fontSize: "1.03rem",
+                  color: alpha(DARK_TEXT, 0.7),
+                  maxWidth: 800,
+                  lineHeight: 1.8,
+                  fontSize: "1.05rem",
                 }}
               >
                 {summary}
               </Typography>
             </Box>
 
-            {/* Current focus (WashU work) */}
-            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.2 }}>
-              <Chip label="Accelerated MRI" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Motion Artifact Correction" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Neuroimaging AI (CNS)" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Alzheimer’s Disease" size="small" variant="outlined" sx={chipBaseSx} />
-            </Stack>
-
-            {/* Expertise / interests (keep SNN as interest area, not framed as current postdoc work) */}
-            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-              <Chip label="Foundation Models" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="AI Agents" size="small" variant="outlined" sx={chipBaseSx} />
-              <Chip label="Spiking Neural Networks" size="small" variant="outlined" sx={chipBaseSx} />
-            </Stack>
-
-            <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap" sx={{ mt: 2.3 }}>
+            {/* Action Buttons */}
+            <Stack direction="row" spacing={2} sx={{ pt: 3 }} flexWrap="wrap" useFlexGap>
               <Button
                 component={RouterLink}
                 to="/research"
@@ -291,12 +291,18 @@ export default function HomePage() {
                 endIcon={<ArrowForwardRoundedIcon />}
                 sx={{
                   borderRadius: 999,
-                  px: 2.6,
-                  py: 1.15,
-                  fontWeight: 900,
-                  backgroundColor: alpha(ACCENT, 0.95),
-                  color: "#061018",
-                  "&:hover": { backgroundColor: ACCENT },
+                  px: 3.5,
+                  py: 1.2,
+                  fontWeight: 700,
+                  backgroundColor: DARK_TEXT,
+                  color: "#fff",
+                  boxShadow: `0 10px 20px -5px ${alpha(DARK_TEXT, 0.3)}`,
+                  "&:hover": { 
+                    backgroundColor: alpha(DARK_TEXT, 0.9),
+                    transform: "translateY(-2px)",
+                    boxShadow: `0 15px 30px -5px ${alpha(DARK_TEXT, 0.4)}`,
+                  },
+                  transition: "all 0.2s ease"
                 }}
               >
                 Explore Research
@@ -306,137 +312,90 @@ export default function HomePage() {
                 component={RouterLink}
                 to="/publications"
                 variant="outlined"
-                endIcon={<ArrowForwardRoundedIcon />}
                 sx={{
                   borderRadius: 999,
-                  px: 2.6,
-                  py: 1.15,
-                  fontWeight: 900,
-                  borderColor: alpha("#0f172a", 0.18),
-                  color: alpha("#0f172a", 0.82),
+                  px: 3.5,
+                  py: 1.2,
+                  fontWeight: 700,
+                  borderColor: alpha(DARK_TEXT, 0.2),
+                  color: DARK_TEXT,
+                  borderWidth: "1.5px",
                   "&:hover": {
-                    borderColor: alpha(ACCENT, 0.55),
-                    backgroundColor: alpha(ACCENT, 0.06),
+                    borderColor: ACCENT,
+                    backgroundColor: alpha(ACCENT, 0.05),
+                    borderWidth: "1.5px",
                   },
                 }}
               >
-                View Publications
+                Publications
               </Button>
-
-              <Button
-                component={RouterLink}
-                to="/cv"
-                variant="text"
-                startIcon={<DescriptionRoundedIcon />}
-                sx={{
-                  borderRadius: 999,
-                  px: 2.0,
-                  py: 1.15,
-                  fontWeight: 900,
-                  color: alpha("#0f172a", 0.80),
-                  "&:hover": { backgroundColor: alpha("#0f172a", 0.04) },
-                }}
-              >
-                CV
-              </Button>
-
-              <Button
-                component={RouterLink}
-                to="/contact"
-                variant="text"
-                startIcon={<EmailRoundedIcon />}
-                sx={{
-                  borderRadius: 999,
-                  px: 2.0,
-                  py: 1.15,
-                  fontWeight: 900,
-                  color: alpha("#0f172a", 0.80),
-                  "&:hover": { backgroundColor: alpha("#0f172a", 0.04) },
-                }}
-              >
-                Contact
-              </Button>
+              
+              <Stack direction="row" spacing={0}>
+                  <Button component={RouterLink} to="/cv" sx={{ color: alpha(DARK_TEXT, 0.7), fontWeight: 600 }}>CV</Button>
+                  <Button component={RouterLink} to="/contact" sx={{ color: alpha(DARK_TEXT, 0.7), fontWeight: 600 }}>Contact</Button>
+              </Stack>
             </Stack>
           </Stack>
         </Box>
 
-        <Divider sx={{ borderColor: alpha("#0f172a", 0.10), my: 4 }} />
-
-        {/* Cards (aligned with your new postdoc focus) */}
+        {/* --- Research Areas Cards --- */}
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <Card sx={cardSx}>
-              <CardContent sx={{ p: 3 }}>
-                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
-                  <ScienceRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
-                    Accelerated MRI
+          {[
+            {
+              icon: <ScienceRoundedIcon fontSize="large" sx={{ color: ACCENT }} />,
+              title: "Accelerated MRI",
+              desc: "AI methods to accelerate MRI reconstruction while preserving clinically meaningful structure and quantitative fidelity.",
+            },
+            {
+              icon: <AutoFixHighRoundedIcon fontSize="large" sx={{ color: ACCENT }} />,
+              title: "Motion / Artifact Correction",
+              desc: "Robust correction of motion and real-world degradations to reduce rescans and stabilize downstream analysis.",
+            },
+            {
+              icon: <PsychologyRoundedIcon fontSize="large" sx={{ color: ACCENT }} />,
+              title: "Alzheimer’s / CNS AI",
+              desc: "Learning-based detection and characterization for Alzheimer’s disease and related CNS conditions using brain imaging.",
+            },
+          ].map((item, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Card sx={interactiveCardSx}>
+                <CardContent sx={{ p: 4 }}>
+                  <Box sx={{ 
+                    mb: 2, 
+                    p: 1.5, 
+                    width: "fit-content", 
+                    borderRadius: 3, 
+                    bgcolor: alpha(ACCENT, 0.1) 
+                  }}>
+                    {item.icon}
+                  </Box>
+                  <Typography variant="h6" sx={{ color: DARK_TEXT, fontWeight: 800, mb: 1.5 }}>
+                    {item.title}
                   </Typography>
-                </Stack>
-                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
-                  AI methods to accelerate MRI reconstruction while preserving clinically meaningful structure and
-                  quantitative fidelity.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={cardSx}>
-              <CardContent sx={{ p: 3 }}>
-                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
-                  <AutoFixHighRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
-                    Motion / Artifact Correction
+                  <Typography sx={{ color: alpha(DARK_TEXT, 0.65), lineHeight: 1.7 }}>
+                    {item.desc}
                   </Typography>
-                </Stack>
-                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
-                  Robust correction of motion and real-world degradations to reduce rescans and stabilize downstream
-                  analysis.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={cardSx}>
-              <CardContent sx={{ p: 3 }}>
-                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.2 }}>
-                  <PsychologyRoundedIcon sx={{ color: ACCENT }} />
-                  <Typography variant="h6" sx={{ color: "#0f172a", fontWeight: 900 }}>
-                    Alzheimer’s / CNS AI
-                  </Typography>
-                </Stack>
-                <Typography sx={{ color: alpha("#0f172a", 0.72), lineHeight: 1.75 }}>
-                  Learning-based detection and characterization for Alzheimer’s disease and related CNS conditions
-                  using brain imaging.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
 
-        {/* Skills */}
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="subtitle2" sx={{ color: alpha("#0f172a", 0.72), fontWeight: 900, mb: 1.5 }}>
-            Core Skills
+        {/* --- Skills Section --- */}
+        <Box sx={{ mt: 6 }}>
+          <Divider sx={{ mb: 4, borderColor: alpha(DARK_TEXT, 0.08) }} />
+          <Typography variant="subtitle2" sx={{ color: alpha(DARK_TEXT, 0.5), fontWeight: 800, mb: 2, textTransform: "uppercase", letterSpacing: 1 }}>
+            Technical Arsenal
           </Typography>
 
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap">
             {[
-              "Python",
-              "PyTorch",
-              "TensorFlow",
-              "MUI",
-              "HPC",
-              "Medical Image Analysis",
-              "MRI Reconstruction",
-              "Motion Correction",
-              "Neuroimaging",
-              "Foundation Models",
-              "AI Agents",
+              "Python", "PyTorch", "TensorFlow", "MUI", "HPC",
+              "Medical Image Analysis", "MRI Reconstruction",
+              "Motion Correction", "Neuroimaging",
+              "Foundation Models", "AI Agents"
             ].map((s) => (
-              <Chip key={s} label={s} size="small" variant="outlined" sx={chipBaseSx} />
+              <Chip key={s} label={s} size="medium" sx={chipBaseSx} />
             ))}
           </Stack>
         </Box>
