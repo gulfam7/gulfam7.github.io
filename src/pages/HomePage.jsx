@@ -37,7 +37,7 @@ function HomePage() {
 
   const name = 'Gulfam Ahmed Saju, PhD';
   const role = 'Postdoctoral Research Associate';
-  const institution = 'Washington University School of Medicine';
+  const institution = 'Washington University in St. Louis';
 
   const summary =
     'I develop AI systems for medical imaging and efficient intelligence. My work spans foundation-model-driven agents, MRI reconstruction and artifact correction, and brain-inspired spiking neural networks for compute-efficient inference.';
