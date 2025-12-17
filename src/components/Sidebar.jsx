@@ -33,7 +33,8 @@ export const collapsedWidth = 84;
 const user = {
   name: 'Gulfam Ahmed Saju, PhD',
   title: 'Postdoctoral Research Associate',
-  org: 'Washington University School of Medicine',
+  org: 'Washington University University in St. Louis',
+  institute: 'Mallinckrodt Institute of Radiology',
   email: 'gsaju@wustl.edu',
   loc: 'St. Louis, MO',
   img: profilePic,
