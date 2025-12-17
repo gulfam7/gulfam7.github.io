@@ -1,8 +1,3 @@
-/ Sidebar.jsx – modern slate/cyan style (MUI-only; safe copy-paste)
-
-// Keeps exports: drawerWidth, collapsedWidth (Layout.jsx compatible)
-
-
 
 import React from "react";
 
