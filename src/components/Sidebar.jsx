@@ -1,6 +1,4 @@
-// Sidebar.jsx – modern slate/cyan style (MUI-only; safe copy-paste)
-// Keeps exports: drawerWidth, collapsedWidth (Layout.jsx compatible)
-
+// Sidebar.jsx
 import React from "react";
 import {
   Drawer,
@@ -27,12 +25,14 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FaResearchgate, FaOrcid } from "react-icons/fa";
 import profilePic from "./IMG_7270.jpg";
 
-export const drawerWidth = 260;
-export const collapsedWidth = 84;
+// Keep exports consistent for Layout.jsx
+export const drawerWidth = 280; // Slightly wider for better spacing
+export const collapsedWidth = 90;
 
 const WASHU_RED = "#b50505";
 const CYAN = "#22d3ee";
-const PAPER_BG = "#0f172a";
+// A rich, dark slate for the glass effect
+const GLASS_BG = alpha("#0f172a", 0.95); 
 
 const user = {
   name: "Gulfam Ahmed Saju, PhD",
@@ -76,42 +76,46 @@ export default function Sidebar() {
   const collapsed = useMediaQuery("(max-width:900px)");
   const width = collapsed ? collapsedWidth : drawerWidth;
 
-  const border = alpha(theme.palette.common.white, 0.06);
-  const muted = alpha(theme.palette.common.white, 0.62);
+  const border = alpha(theme.palette.common.white, 0.08);
 
+  // Modern Item Style
   const itemSx = {
-    borderRadius: 3,
-    mx: collapsed ? 1 : 1.5,
-    my: 0.5,
-    px: collapsed ? 1 : 1.5,
-    py: 1,
+    borderRadius: 2, // Slightly softer corners
+    mx: collapsed ? 1 : 2,
+    my: 0.8,
+    px: collapsed ? 1 : 2,
+    py: 1.2,
     justifyContent: collapsed ? "center" : "flex-start",
-    color: muted,
-    transition: theme.transitions.create(["background-color", "color", "transform"], {
-      duration: theme.transitions.duration.shortest,
-    }),
+    color: alpha("#fff", 0.65),
+    transition: "all 0.25s ease-in-out",
+    border: "1px solid transparent",
     "&:hover": {
-      bgcolor: alpha(theme.palette.common.white, 0.05),
-      color: CYAN,
+      bgcolor: alpha(CYAN, 0.08),
+      color: "#fff",
+      borderColor: alpha(CYAN, 0.2),
+      boxShadow: `0 0 15px ${alpha(CYAN, 0.1)}`, // Subtle glow
     },
     "&:hover .sidebar-icon": {
       color: CYAN,
+      transform: "scale(1.1)",
     },
     "&:hover .chev": {
       opacity: 1,
-      transform: "translateX(2px)",
+      transform: "translateX(4px)",
     },
   };
 
   const iconBoxSx = {
-    minWidth: collapsed ? 0 : 40,
-    mr: collapsed ? 0 : 1.25,
-    display: "grid",
-    placeItems: "center",
-    color: alpha(theme.palette.common.white, 0.55),
-    transition: theme.transitions.create(["color"], {
-      duration: theme.transitions.duration.shortest,
-    }),
+    minWidth: collapsed ? 0 : 42,
+    mr: collapsed ? 0 : 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: alpha("#fff", 0.5),
+    transition: "all 0.2s ease",
+    "& .sidebar-icon": {
+        transition: "transform 0.2s ease, color 0.2s ease"
+    }
   };
 
   const SectionLabel = ({ label }) =>
@@ -119,13 +123,15 @@ export default function Sidebar() {
       <Typography
         variant="overline"
         sx={{
-          px: 3,
-          mt: 2,
-          mb: 0.75,
-          fontSize: 10,
-          letterSpacing: 2,
+          px: 3.5,
+          mt: 3,
+          mb: 1,
+          display: "block",
+          fontSize: 11,
+          letterSpacing: 2.5,
           fontWeight: 800,
-          color: alpha(theme.palette.common.white, 0.35),
+          color: alpha("#fff", 0.3),
+          textTransform: "uppercase",
         }}
       >
         {label}
@@ -140,6 +146,16 @@ export default function Sidebar() {
       disableHoverListener={!collapsed}
       disableFocusListener={!collapsed}
       disableTouchListener={!collapsed}
+      componentsProps={{
+        tooltip: {
+            sx: {
+                bgcolor: alpha("#0f172a", 0.95),
+                border: `1px solid ${alpha(CYAN, 0.2)}`,
+                backdropFilter: "blur(4px)"
+            }
+        },
+        arrow: { sx: { color: alpha("#0f172a", 0.95) } }
+      }}
     >
       <Box>{children}</Box>
     </Tooltip>
@@ -155,7 +171,8 @@ export default function Sidebar() {
           width,
           boxSizing: "border-box",
           border: "none",
-          backgroundColor: PAPER_BG,
+          backgroundColor: GLASS_BG, // Dark Glass Background
+          backdropFilter: "blur(12px)", // The modern blur effect
           borderRight: `1px solid ${border}`,
           overflowX: "hidden",
           transition: theme.transitions.create("width", {
@@ -165,53 +182,71 @@ export default function Sidebar() {
         },
       }}
     >
-      {/* Profile */}
+      {/* Profile Section */}
       <Box
         sx={{
-          pt: 3,
-          pb: 2,
-          px: collapsed ? 1 : 2,
+          pt: 5,
+          pb: 4,
+          px: collapsed ? 1 : 3,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          background: `linear-gradient(180deg, ${alpha("#ffffff", 0.03)} 0%, transparent 100%)`
         }}
       >
         <Avatar
           src={user.img}
           alt={user.name}
           sx={{
-            width: collapsed ? 48 : 92,
-            height: collapsed ? 48 : 92,
-            mb: 1.5,
-            border: `2px solid ${alpha(CYAN, 0.35)}`,
-            boxShadow: `0 0 18px ${alpha(CYAN, 0.16)}`,
+            width: collapsed ? 50 : 100,
+            height: collapsed ? 50 : 100,
+            mb: 2,
+            border: `2px solid ${alpha(CYAN, 0.5)}`,
+            boxShadow: `0 0 25px ${alpha(CYAN, 0.25)}`, // Glowing effect
+            transition: "all 0.3s ease",
+            "&:hover": {
+                boxShadow: `0 0 35px ${alpha(CYAN, 0.4)}`,
+                borderColor: CYAN
+            }
           }}
         />
 
         {!collapsed && (
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: "center", width: "100%" }}>
             <Typography
               sx={{
                 color: "#fff",
                 fontWeight: 800,
-                fontSize: 16,
-                letterSpacing: -0.2,
-                lineHeight: 1.15,
+                fontSize: 18,
+                letterSpacing: -0.3,
+                lineHeight: 1.2,
+                mb: 0.5
               }}
             >
               {user.name}
             </Typography>
 
-            <Typography sx={{ color: CYAN, fontSize: 12, fontWeight: 600, mt: 0.5 }}>
+            <Typography 
+                sx={{ 
+                    color: CYAN, 
+                    fontSize: 12, 
+                    fontWeight: 700, 
+                    letterSpacing: 0.5,
+                    textTransform: "uppercase",
+                    opacity: 0.9
+                }}
+            >
               {user.title}
             </Typography>
 
+            <Box sx={{ my: 1.5, height: "1px", width: "40%", mx: "auto", bgcolor: alpha("#fff", 0.1) }} />
+
             <Typography
               sx={{
-                color: alpha(theme.palette.common.white, 0.55),
+                color: alpha("#fff", 0.6),
                 fontSize: 11,
-                mt: 0.75,
-                fontWeight: 700,
+                lineHeight: 1.4,
+                fontWeight: 500,
               }}
             >
               {user.institute}
@@ -220,10 +255,11 @@ export default function Sidebar() {
             <Typography
               sx={{
                 color: WASHU_RED,
-                fontSize: 11,
-                mt: 0.35,
-                fontWeight: 800,
-                letterSpacing: 0.2,
+                fontSize: 10,
+                mt: 0.5,
+                fontWeight: 900,
+                letterSpacing: 0.5,
+                textTransform: "uppercase"
               }}
             >
               {user.org}
@@ -232,13 +268,11 @@ export default function Sidebar() {
         )}
       </Box>
 
-      <Divider sx={{ borderColor: border }} />
-
       {/* Content */}
-      <Box sx={{ flex: 1, py: 1.5 }}>
-        <SectionLabel label="Account" />
+      <Box sx={{ flex: 1, py: 1 }}>
+        <SectionLabel label="Contact Info" />
 
-        <Box sx={{ mt: 0.5 }}>
+        <Box>
           <WithTooltip title={user.email}>
             <ListItemButton
               component={MuiLink}
@@ -256,7 +290,7 @@ export default function Sidebar() {
                   primary={user.email}
                   primaryTypographyProps={{
                     variant: "body2",
-                    sx: { color: "inherit", fontWeight: 600 },
+                    sx: { fontWeight: 500, fontFamily: "monospace", fontSize: 13 },
                     noWrap: true,
                   }}
                 />
@@ -275,7 +309,7 @@ export default function Sidebar() {
                   primary={user.loc}
                   primaryTypographyProps={{
                     variant: "body2",
-                    sx: { color: "inherit", fontWeight: 600 },
+                    sx: { fontWeight: 500 },
                     noWrap: true,
                   }}
                 />
@@ -284,15 +318,9 @@ export default function Sidebar() {
           </WithTooltip>
         </Box>
 
-        {!collapsed && (
-          <Box sx={{ px: 3, mt: 2 }}>
-            <Box sx={{ height: 1, bgcolor: border, width: "100%", mb: 2 }} />
-          </Box>
-        )}
+        <SectionLabel label="Scientific Profiles" />
 
-        <SectionLabel label="Profiles" />
-
-        <Box sx={{ mt: 0.5 }}>
+        <Box>
           {user.links.map((link) => (
             <WithTooltip key={link.text} title={link.text}>
               <ListItemButton
@@ -305,7 +333,7 @@ export default function Sidebar() {
                 aria-label={link.text}
               >
                 <ListItemIcon sx={iconBoxSx}>
-                  <Box className="sidebar-icon" sx={{ display: "grid", placeItems: "center" }}>
+                  <Box className="sidebar-icon" sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     {link.icon}
                   </Box>
                 </ListItemIcon>
@@ -316,7 +344,7 @@ export default function Sidebar() {
                       primary={link.text}
                       primaryTypographyProps={{
                         variant: "body2",
-                        sx: { color: "inherit", fontWeight: 600 },
+                        sx: { fontWeight: 600 },
                       }}
                     />
                     <Box
@@ -324,11 +352,9 @@ export default function Sidebar() {
                       sx={{
                         ml: "auto",
                         opacity: 0,
-                        transform: "translateX(0px)",
-                        transition: theme.transitions.create(["opacity", "transform"], {
-                          duration: theme.transitions.duration.shortest,
-                        }),
-                        color: alpha(CYAN, 0.9),
+                        transform: "translateX(-5px)",
+                        transition: "all 0.3s ease",
+                        color: CYAN,
                         display: "flex",
                         alignItems: "center",
                       }}
@@ -345,12 +371,14 @@ export default function Sidebar() {
 
       {/* Footer */}
       {!collapsed && (
-        <Box sx={{ p: 2.5, borderTop: `1px solid ${border}` }}>
+        <Box sx={{ p: 3, borderTop: `1px solid ${border}` }}>
           <Typography
             sx={{
               fontSize: 10,
-              color: alpha(theme.palette.common.white, 0.3),
+              color: alpha("#fff", 0.25),
               textAlign: "center",
+              fontWeight: 600,
+              letterSpacing: 1
             }}
           >
             © {new Date().getFullYear()} G. A. Saju
