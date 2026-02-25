@@ -86,35 +86,6 @@ export default function Sidebar() {
         },
       }}
     >
-      {/* â”€â”€ Top: EXPLORER label â”€â”€ */}
-      <Box
-        sx={{
-          px: collapsed ? 0 : 2,
-          py: 1.25,
-          borderBottom: `1px solid ${BORDER}`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: collapsed ? "center" : "space-between",
-          minHeight: 40,
-          bgcolor: "#0d1117",
-        }}
-      >
-        {!collapsed && (
-          <Typography
-            sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 10.5,
-              fontWeight: 700,
-              letterSpacing: 1.8,
-              color: COMMENT,
-              textTransform: "uppercase",
-            }}
-          >
-            Explorer
-          </Typography>
-        )}
-      </Box>
-
       {/* â”€â”€ Profile section â”€â”€ */}
       <Box
         sx={{
