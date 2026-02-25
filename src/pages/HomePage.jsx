@@ -485,7 +485,7 @@ export default function HomePage() {
               mb: 2,
             }}
           >
-            <Cm c="/** Technical Stack â€” tools & methods */" />
+            <Cm c="/** Technical Stack, tools & methods */" />
           </Typography>
           <Divider sx={{ mb: 2.5, borderColor: BORDER }} />
           <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
