@@ -100,7 +100,7 @@ export default function ContactPage() {
                   Email
                 </Typography>
                 <Typography sx={{ color: "text.secondary", mt: 0.25 }}>
-                  Typically responds within 1â€“2 business days.
+                  Typically responds within 1-2 business days.
                 </Typography>
               </Box>
             </Stack>

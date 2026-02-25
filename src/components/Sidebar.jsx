@@ -319,7 +319,7 @@ export default function Sidebar() {
               mt: 1.5,
             }}
           >
-            Â© {new Date().getFullYear()} G. A. Saju
+            © {new Date().getFullYear()} G. A. Saju
           </Typography>
         </Box>
       )}
