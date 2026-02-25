@@ -271,7 +271,7 @@ export default function HomePage() {
                 {"  "}<Gr c="location" />{":   "}<S c='"St. Louis, MO, USA"' />{",\n"}
                 {"  "}<Gr c="status" />{":     "}<N c="open_to_collaborations" />{",\n"}
                 {"\n"}
-                {"  "}<Gr c="focus" />{":["\n"}
+                {"  "}<Gr c="focus" />{":[\n"}
                 {"    "}<S c='"Accelerated MRI Reconstruction"' />{",\n"}
                 {"    "}<S c='"Motion & Artifact Correction"' />{",\n"}
                 {"    "}<S c='"Foundation Models & AI Agents"' />{",\n"}
