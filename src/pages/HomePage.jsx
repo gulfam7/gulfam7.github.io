@@ -261,7 +261,7 @@ export default function HomePage() {
                   wordBreak: "break-word",
                 }}
               >
-                <Cm c="// researcher profile â€” Washington University in St. Louis" />{"\n"}
+                <Cm c="// researcher profile -- Washington University in St. Louis" />{"\n"}
                 {"\n"}
                 <K c="const" />{" "}<V c="researcher" />{" = {\n"}
                 {"  "}<Gr c="name" />{":         "}<S c='"Gulfam Ahmed Saju, PhD"' />{",\n"}
