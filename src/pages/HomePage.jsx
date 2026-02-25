@@ -335,7 +335,7 @@ export default function HomePage() {
                 Gulfam Ahmed Saju
               </Typography>
               <Typography sx={{ color: COMMENT, fontFamily: '"JetBrains Mono", monospace', fontSize: 13, mb: 2 }}>
-                PhD &nbsp;Â·&nbsp; AI / Medical Imaging Researcher
+                PhD; AI / Medical Imaging Researcher
               </Typography>
 
               <Typography sx={{ color: "#c9d1d9", lineHeight: 1.8, mb: 3, fontSize: "0.95rem" }}>
