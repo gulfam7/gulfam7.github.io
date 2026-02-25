@@ -146,13 +146,13 @@ export default function Sidebar() {
         {!collapsed && (
           <>
             <Typography sx={{ color: "#e6edf3", fontWeight: 700, fontSize: 14, lineHeight: 1.3, mb: 0.25 }}>
-              Gulfam Ahmed Saju
+              Gulfam Ahmed Saju, PhD
             </Typography>
             <Typography sx={{ color: ACCENT, fontFamily: '"JetBrains Mono", monospace', fontSize: 11, mb: 0.5 }}>
-              PhD Â· Postdoctoral Researcher
+              Postdoctoral Researcher
             </Typography>
             <Typography sx={{ color: COMMENT, fontFamily: '"JetBrains Mono", monospace', fontSize: 10.5, lineHeight: 1.5 }}>
-              WashU Â· Mallinckrodt Institute
+              Mallinckrodt Institute, WashU
             </Typography>
 
             {/* Contact info row */}

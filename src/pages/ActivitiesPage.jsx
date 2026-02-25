@@ -1,4 +1,4 @@
-// src/pages/ActivitiesPage.jsx
+﻿// src/pages/ActivitiesPage.jsx
 import React from "react";
 import {
   Box,
@@ -125,30 +125,23 @@ function BulletList({ items }) {
 
 export default function ActivitiesPage() {
   const theme = useTheme();
-  const ACCENT = "#22d3ee";
+  const ACCENT = "#58a6ff";
 
-  // Modern, non-dark “border”: gradient border + soft shadow
   const cardSx = {
     height: "100%",
     borderRadius: 3,
-    border: "1px solid transparent",
-    background: `
-      linear-gradient(${alpha("#ffffff", 0.96)}, ${alpha("#ffffff", 0.96)}) padding-box,
-      linear-gradient(135deg, ${alpha(ACCENT, 0.28)}, ${alpha("#0b1220", 0.10)}) border-box
-    `,
-    boxShadow: `0 12px 34px ${alpha("#0b1220", 0.10)}`,
-    transition: "transform 220ms ease, box-shadow 220ms ease, background 220ms ease",
+    bgcolor: "#161b22",
+    border: "1px solid #30363d",
+    boxShadow: "none",
+    transition: "border-color 200ms, box-shadow 200ms, transform 200ms",
     "&:hover": {
       transform: "translateY(-4px)",
-      boxShadow: `0 18px 55px ${alpha("#0b1220", 0.14)}`,
-      background: `
-        linear-gradient(${alpha("#ffffff", 0.98)}, ${alpha("#ffffff", 0.98)}) padding-box,
-        linear-gradient(135deg, ${alpha(ACCENT, 0.40)}, ${alpha("#0b1220", 0.10)}) border-box
-      `,
+      borderColor: ACCENT,
+      boxShadow: `0 0 0 1px ${alpha(ACCENT, 0.15)}`,
     },
   };
 
-  const lightDivider = { borderColor: alpha("#0b1220", 0.08) };
+  const lightDivider = { borderColor: "#30363d" };
 
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>

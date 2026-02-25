@@ -1,4 +1,4 @@
-// src/pages/ContactPage.jsx
+﻿// src/pages/ContactPage.jsx
 import React, { useMemo, useState } from "react";
 import {
   Box,
@@ -50,7 +50,7 @@ export default function ContactPage() {
     }
   };
 
-  // Modern, consistent “soft border” card (no black outline)
+  // Modern, consistent â€œsoft borderâ€ card (no black outline)
   const cardSx = {
     bgcolor: "#161b22",
     border: `1px solid ${BORDER}`,
@@ -100,7 +100,7 @@ export default function ContactPage() {
                   Email
                 </Typography>
                 <Typography sx={{ color: "text.secondary", mt: 0.25 }}>
-                  Typically responds within 1–2 business days.
+                  Typically responds within 1â€“2 business days.
                 </Typography>
               </Box>
             </Stack>
@@ -114,8 +114,8 @@ export default function ContactPage() {
               sx={{
                 p: 2,
                 borderRadius: 2.5,
-                backgroundColor: alpha("#0b1220", 0.03),
-                border: `1px solid ${alpha("#0b1220", 0.08)}`,
+                backgroundColor: alpha("#ffffff", 0.04),
+                border: `1px solid #30363d`,
               }}
             >
               <Typography
@@ -153,10 +153,10 @@ export default function ContactPage() {
                       width: 44,
                       height: 44,
                       borderRadius: 999,
-                      border: `1px solid ${alpha("#0b1220", 0.10)}`,
-                      backgroundColor: alpha("#ffffff", 0.7),
+                      border: `1px solid #30363d`,
+                      backgroundColor: alpha("#ffffff", 0.07),
                       "&:hover": {
-                        backgroundColor: alpha("#ffffff", 0.95),
+                        backgroundColor: alpha("#58a6ff", 0.16),
                         borderColor: alpha(ACCENT, 0.35),
                       },
                     }}
@@ -202,11 +202,11 @@ export default function ContactPage() {
                     borderRadius: 999,
                     textTransform: "none",
                     fontWeight: 800,
-                    borderColor: alpha("#0b1220", 0.12),
+                    borderColor: "#30363d",
                     color: "text.primary",
-                    backgroundColor: alpha("#ffffff", 0.65),
+                    backgroundColor: alpha("#58a6ff", 0.08),
                     "&:hover": {
-                      backgroundColor: alpha("#ffffff", 0.95),
+                      backgroundColor: alpha("#58a6ff", 0.16),
                       borderColor: alpha(ACCENT, 0.40),
                     },
                   }}
