@@ -382,115 +382,66 @@ function scrollToId(id) {
 // =========================
 // UI
 // =========================
-function PublicationCard({ pub, index, accent, kindLabel }) {
-  const year = pub.year ? String(pub.year) : "—";
+// =========================
+// Refactored UI Components
+// =========================
+
+function PublicationItem({ pub, index }) {
   const venue = formatVenue(pub);
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        borderRadius: 3,
-        p: { xs: 2.25, md: 2.75 },
-        background: SURFACE,
-        border: `1px solid ${BORDER}`,
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        transition: "border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease",
-        overflow: "hidden",
-        "&:hover": {
-          borderColor: alpha(accent, 0.45),
-          boxShadow: `0 0 0 1px ${alpha(accent, 0.12)}, 0 24px 48px -24px rgba(0,0,0,0.55)`,
-          transform: "translateY(-2px)",
-        },
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: 3,
-          borderRadius: "12px 0 0 12px",
-          background: `linear-gradient(180deg, ${accent}, ${alpha(accent, 0.35)})`,
-        },
+    <Box 
+      sx={{ 
+        mb: 3.5, 
+        pl: { xs: 0, sm: 2 },
+        position: "relative"
       }}
     >
-      <Stack spacing={1.5} sx={{ pl: 0.5 }}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          flexWrap="wrap"
-          useFlexGap
-          gap={1}
-        >
-          <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap" useFlexGap>
-            <Chip
-              label={`#${index + 1}`}
-              size="small"
-              sx={{
-                height: 24,
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 11,
-                fontWeight: 700,
-                bgcolor: alpha(accent, 0.12),
-                color: accent,
-                border: `1px solid ${alpha(accent, 0.25)}`,
-              }}
-            />
-            <Chip
-              label={year}
-              size="small"
-              sx={{
-                height: 24,
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: 11,
-                fontWeight: 600,
-                bgcolor: alpha("#e6edf3", 0.06),
-                color: "#c9d1d9",
-                border: `1px solid ${alpha("#e6edf3", 0.08)}`,
-              }}
-            />
-            <Chip
-              label={kindLabel}
-              size="small"
-              sx={{
-                height: 24,
-                fontSize: 10.5,
-                fontWeight: 700,
-                letterSpacing: 0.6,
-                textTransform: "uppercase",
-                bgcolor: "transparent",
-                color: MUTED,
-                border: `1px solid ${alpha(MUTED, 0.35)}`,
-              }}
-            />
-          </Stack>
-        </Stack>
+      {/* Optional: A subtle left border or bullet for visual rhythm */}
+      <Box 
+        sx={{ 
+          display: { xs: 'none', sm: 'block' },
+          position: 'absolute', 
+          left: 0, 
+          top: 6, 
+          bottom: 0, 
+          width: '2px', 
+          bgcolor: alpha(MUTED, 0.2) 
+        }} 
+      />
 
+      <Stack spacing={0.5}>
+        {/* Title */}
         <Typography
           sx={{
-            fontWeight: 750,
-            fontSize: { xs: "1.05rem", md: "1.12rem" },
-            lineHeight: 1.45,
-            letterSpacing: "-0.02em",
-            color: "#f0f3f6",
+            fontWeight: 600,
+            fontSize: "1.05rem",
+            lineHeight: 1.4,
+            color: "#e6edf3",
           }}
         >
           {pub.title}
         </Typography>
 
+        {/* Authors */}
         <Typography
-          component="div"
           sx={{
-            fontSize: "0.9rem",
-            lineHeight: 1.75,
-            color: alpha("#e6edf3", 0.88),
+            fontSize: "0.95rem",
+            lineHeight: 1.6,
+            color: alpha("#e6edf3", 0.8),
           }}
         >
           {splitAuthors(pub.authors).map((name, i, arr) => (
             <React.Fragment key={`${name}-${i}`}>
-              <Box component="span" sx={{ fontWeight: isMyName(name) ? 800 : 500, color: isMyName(name) ? "#fff" : undefined }}>
+              <Box 
+                component="span" 
+                sx={{ 
+                  fontWeight: isMyName(name) ? 700 : 400, 
+                  textDecoration: isMyName(name) ? "underline" : "none",
+                  textUnderlineOffset: "2px",
+                  color: isMyName(name) ? "#58a6ff" : "inherit" 
+                }}
+              >
                 {name}
               </Box>
               {i < arr.length - 1 ? ", " : ""}
@@ -498,77 +449,91 @@ function PublicationCard({ pub, index, accent, kindLabel }) {
           ))}
         </Typography>
 
-        {venue ? (
+        {/* Venue & Date */}
+        {venue && (
           <Typography
             sx={{
-              fontSize: "0.875rem",
-              lineHeight: 1.65,
+              fontSize: "0.95rem",
               color: MUTED,
               fontStyle: "italic",
             }}
           >
             {venue}
           </Typography>
-        ) : null}
+        )}
 
+        {/* Minimalist Links */}
         {(pub.url || pub.doi) && (
-          <Stack direction="row" flexWrap="wrap" useFlexGap gap={1} sx={{ pt: 0.5 }}>
-            {pub.url ? (
-              <Button
-                size="small"
-                variant="contained"
-                disableElevation
-                endIcon={<ArrowOutwardRoundedIcon sx={{ fontSize: 16 }} />}
+          <Stack direction="row" spacing={1.5} sx={{ pt: 0.5 }}>
+            {pub.url && (
+              <Typography
+                component="a"
                 href={pub.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  borderRadius: 999,
-                  textTransform: "none",
-                  fontWeight: 650,
-                  fontSize: 12.5,
-                  px: 2,
-                  bgcolor: alpha(accent, 0.22),
-                  color: "#f0f6fc",
-                  border: `1px solid ${alpha(accent, 0.35)}`,
-                  "&:hover": {
-                    bgcolor: alpha(accent, 0.32),
-                  },
+                  fontSize: "0.85rem",
+                  fontFamily: '"JetBrains Mono", monospace',
+                  color: ACCENT,
+                  textDecoration: "none",
+                  "&:hover": { textDecoration: "underline" },
                 }}
               >
-                Open
-              </Button>
-            ) : null}
-            {pub.doi ? (
-              <Button
-                size="small"
-                variant="outlined"
-                title={pub.doi}
-                endIcon={<OpenInNewRoundedIcon sx={{ fontSize: 16 }} />}
+                [Link]
+              </Typography>
+            )}
+            {pub.doi && (
+              <Typography
+                component="a"
                 href={`https://doi.org/${pub.doi}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  borderRadius: 999,
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: 12.5,
-                  px: 2,
+                  fontSize: "0.85rem",
                   fontFamily: '"JetBrains Mono", monospace',
-                  borderColor: alpha(MUTED, 0.45),
-                  color: alpha("#e6edf3", 0.92),
-                  "&:hover": {
-                    borderColor: accent,
-                    bgcolor: alpha(accent, 0.06),
-                  },
+                  color: ACCENT,
+                  textDecoration: "none",
+                  "&:hover": { textDecoration: "underline" },
                 }}
               >
-                DOI
-              </Button>
-            ) : null}
+                [DOI]
+              </Typography>
+            )}
           </Stack>
         )}
       </Stack>
+    </Box>
+  );
+}
+
+function SectionBlock({ id, title, items }) {
+  if (!items?.length) return null;
+
+  return (
+    <Box id={id} sx={{ scrollMarginTop: 24, mb: 6 }}>
+      {/* Clean, simple header */}
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: 700,
+          color: "#fff",
+          borderBottom: `1px solid ${BORDER}`,
+          pb: 1,
+          mb: 3,
+        }}
+      >
+        {title}
+      </Typography>
+
+      <Box>
+        {items.map((pub, idx) => (
+          <PublicationItem
+            key={`${title}-${idx}`}
+            pub={pub}
+            index={idx}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }
