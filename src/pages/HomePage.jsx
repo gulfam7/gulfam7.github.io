@@ -339,7 +339,7 @@ export default function HomePage() {
               </Typography>
 
               <Typography sx={{ color: "#c9d1d9", lineHeight: 1.8, mb: 3, fontSize: "0.95rem" }}>
-                I build AI systems for medical imaging â€” from foundation-model-driven agents and MRI reconstruction to brain-inspired spiking neural networks for compute-efficient inference.
+                I build AI systems for medical imaging from foundation-model-driven agents and MRI reconstruction to brain-inspired spiking neural networks for compute-efficient inference.
               </Typography>
 
               <Stack spacing={1.5} sx={{ mb: 3 }}>
