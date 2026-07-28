@@ -54,7 +54,7 @@ const navItems = [
 ];
 
 const socialLinks = [
-  { text: "LinkedIn",    url: "https://www.linkedin.com/in/gulfam-ahmed-saju-5a953665/", icon: <LinkedInIcon  sx={{ fontSize: 16 }} /> },
+  { text: "LinkedIn",    url: "https://www.linkedin.com/in/gulfam-ahmed-saju-ph-d-5a953665", icon: <LinkedInIcon  sx={{ fontSize: 16 }} /> },
   { text: "Scholar",     url: "https://scholar.google.com/citations?user=qewXRr4AAAAJ",  icon: <SchoolIcon    sx={{ fontSize: 16 }} /> },
   { text: "ResearchGate",url: "https://www.researchgate.net/profile/Gulfam-Saju",        icon: <FaResearchgate size={14} /> },
   { text: "GitHub",      url: "https://github.com/gulfam7",                               icon: <GitHubIcon    sx={{ fontSize: 16 }} /> },
