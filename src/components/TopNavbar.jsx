@@ -1,5 +1,5 @@
 ﻿// src/components/TopNavbar.jsx  â€”  VS Code editor tab bar
-import React, { useMemo } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { AppBar, Toolbar, Box, Typography, useMediaQuery } from "@mui/material";
 import { alpha } from "@mui/material/styles";
@@ -55,6 +55,8 @@ export default function TopNavbar() {
     >
       <Toolbar
         disableGutters
+        component="nav"
+        aria-label="Page tabs"
         sx={{
           minHeight: "40px !important",
           px: 0,

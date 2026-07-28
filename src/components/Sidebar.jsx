@@ -26,7 +26,9 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { FaResearchgate, FaOrcid } from "react-icons/fa";
-import profilePic from "./IMG_7270.jpg";
+// 256x256 crop (~20 KB). The original IMG_7270.jpg is a 3024x4032, 1.77 MB
+// phone photo — it was being shipped in full to render a 52 px avatar.
+import profilePic from "../assets/avatar.jpg";
 
 export const drawerWidth   = 270;
 export const collapsedWidth = 60;
@@ -145,8 +147,10 @@ export default function Sidebar() {
         )}
       </Box>
 
-      {/* â”€â”€ Navigation (file tree) â”€â”€ */}
+      {/* ── Navigation (file tree) ── */}
       <Box
+        component="nav"
+        aria-label="Main navigation"
         sx={{
           flex: 1,
           overflowY: "auto",
@@ -191,6 +195,8 @@ export default function Sidebar() {
                 component={NavLink}
                 to={item.path}
                 end={item.path === "/"}
+                aria-current={isActive ? "page" : undefined}
+                aria-label={collapsed ? `${item.label}.${item.ext}` : undefined}
                 sx={{
                   display: "flex",
                   alignItems: "center",

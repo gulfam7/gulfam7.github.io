@@ -23,7 +23,14 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Without eslint-plugin-react, ESLint doesn't treat `<Icon />` in JSX as
+      // a use of `Icon`, so component-shaped props (`{ icon: Icon }`) were
+      // reported as unused. Capitalised args follow the component convention
+      // and are exempt for the same reason capitalised vars already were.
+      'no-unused-vars': [
+        'error',
+        { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^[A-Z_]' },
+      ],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

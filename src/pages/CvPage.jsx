@@ -1,49 +1,27 @@
 // src/pages/CvPage.jsx
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  Stack,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent, Button, Stack, Divider } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 
+import PageShell from "../components/PageShell";
+import { C, MONO } from "../theme";
 import cvPath from "../components/Gulfam_CV_updated.pdf";
 
 export default function CvPage() {
-  const ACCENT  = "#58a6ff";
-  const BORDER   = "#30363d";
-
-  const cardSx = {
-    bgcolor: "#161b22",
-    border: `1px solid ${BORDER}`,
-    borderRadius: 2,
-    "&:hover": { borderColor: ACCENT },
-  };
-
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-      <Box sx={{ mb: 3.5 }}>
-        <Typography variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.4 }}>
-          Curriculum Vitae
-        </Typography>
-        <Typography sx={{ color: "text.secondary", mt: 1, maxWidth: 860, lineHeight: 1.75 }}>
-          View or download the most recent CV.
-        </Typography>
-      </Box>
-
-      <Card sx={cardSx}>
+    <PageShell
+      eyebrow="Document"
+      title="Curriculum Vitae"
+      intro="View or download the most recent CV."
+      accent={C.keyword}
+    >
+      <Card sx={{ bgcolor: C.surface, border: `1px solid ${C.border}`, borderRadius: 2, maxWidth: 1000 }}>
         <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
-          {/* Header */}
-          <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 2 }}>
+          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
             <Box
               sx={{
                 width: 38,
@@ -51,43 +29,38 @@ export default function CvPage() {
                 borderRadius: 2,
                 display: "grid",
                 placeItems: "center",
-                background: alpha(ACCENT, 0.10),
-                border: `1px solid ${alpha(ACCENT, 0.22)}`,
+                flex: "0 0 auto",
+                background: alpha(C.keyword, 0.1),
+                border: `1px solid ${alpha(C.keyword, 0.25)}`,
               }}
             >
-              <DescriptionRoundedIcon sx={{ color: ACCENT }} />
+              <DescriptionRoundedIcon sx={{ color: C.keyword }} />
             </Box>
 
             <Box>
-              <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: -0.2 }}>
-                PDF
+              <Typography variant="h2" sx={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.02em" }}>
+                Gulfam_CV.pdf
               </Typography>
-              <Typography sx={{ color: "text.secondary", mt: 0.25 }}>
-                Download for offline use or open in a new tab.
+              <Typography sx={{ color: C.textSecondary, mt: 0.25, fontSize: "0.9rem" }}>
+                Download for offline use, or open in a new tab.
               </Typography>
             </Box>
           </Stack>
 
-          {/* Actions */}
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ mb: 2.25 }}>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ mb: 2.5 }}>
             <Button
               variant="contained"
               startIcon={<DownloadRoundedIcon />}
               href={cvPath}
-              download
-              sx={{
-                borderRadius: 999,
-                px: 2.25,
-                py: 1.05,
-                fontWeight: 900,
-                backgroundColor: alpha(ACCENT, 0.9),
-                color: "#081018",
-                "&:hover": { backgroundColor: ACCENT },
-              }}
+              download="Gulfam_Ahmed_Saju_CV.pdf"
+              sx={{ borderRadius: 999, px: 2.5, py: 1.05, fontWeight: 700, fontFamily: MONO }}
             >
-              Download (PDF)
+              Download PDF
             </Button>
 
+            {/* Previously this button used a near-white background with
+                text.primary (#e6edf3) as its colour — light-on-light, and
+                effectively invisible on the dark theme. */}
             <Button
               variant="outlined"
               endIcon={<OpenInNewRoundedIcon />}
@@ -96,16 +69,16 @@ export default function CvPage() {
               rel="noopener noreferrer"
               sx={{
                 borderRadius: 999,
-                px: 2.25,
+                px: 2.5,
                 py: 1.05,
-                fontWeight: 900,
-                textTransform: "none",
-                borderColor: alpha("#0b1220", 0.12),
-                color: "text.primary",
-                backgroundColor: alpha("#ffffff", 0.65),
+                fontWeight: 700,
+                fontFamily: MONO,
+                borderColor: C.border,
+                color: C.textPrimary,
+                backgroundColor: alpha(C.accent, 0.06),
                 "&:hover": {
-                  backgroundColor: alpha("#ffffff", 0.95),
-                  borderColor: alpha(ACCENT, 0.40),
+                  backgroundColor: alpha(C.accent, 0.14),
+                  borderColor: alpha(C.accent, 0.5),
                 },
               }}
             >
@@ -113,23 +86,29 @@ export default function CvPage() {
             </Button>
           </Stack>
 
-          <Divider sx={{ borderColor: alpha("#0b1220", 0.08), mb: 2.25 }} />
+          <Divider sx={{ borderColor: C.border, mb: 2.5 }} />
 
-          {/* Inline preview */}
           <Box
             component="iframe"
-            title="CV Preview"
+            title="Curriculum Vitae preview"
             src={cvPath}
             sx={{
               width: "100%",
-              height: { xs: 520, md: 820 },
-              border: `1px solid ${alpha("#0b1220", 0.10)}`,
-              borderRadius: 2.5,
-              backgroundColor: alpha("#ffffff", 0.65),
+              height: { xs: 480, md: 820 },
+              border: `1px solid ${C.border}`,
+              borderRadius: 2,
+              backgroundColor: "#20232a",
+              display: "block",
             }}
           />
+
+          <Typography sx={{ mt: 1.5, color: C.textMuted, fontFamily: MONO, fontSize: 11 }}>
+            {/* iOS Safari and some mobile browsers refuse to render PDFs in an
+                iframe, so the buttons above remain the reliable path there. */}
+            If the preview does not load on mobile, use “Download PDF” above.
+          </Typography>
         </CardContent>
       </Card>
-    </Container>
+    </PageShell>
   );
 }

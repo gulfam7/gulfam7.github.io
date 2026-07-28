@@ -3,188 +3,235 @@ import React from "react";
 import {
   Box,
   Typography,
-  Container,
-  Card,
-  CardContent,
   Stack,
-  Divider,
   Chip,
   Button,
   Grid,
+  Divider,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
-import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
-import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
-import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import { Link as RouterLink } from "react-router-dom";
 
-const ACCENT  = "#58a6ff";
-const COMMENT = "#8b949e";
-const BORDER  = "#30363d";
-const STR     = "#a5d6ff";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
+import ScienceRoundedIcon from "@mui/icons-material/ScienceRounded";
+import AutoFixHighRoundedIcon from "@mui/icons-material/AutoFixHighRounded";
+import PsychologyRoundedIcon from "@mui/icons-material/PsychologyRounded";
+import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 
-const panelSx = {
-  bgcolor: "#161b22",
-  border: `1px solid ${BORDER}`,
-  borderRadius: 2,
-  transition: "border-color 180ms, box-shadow 180ms",
-  "&:hover": {
-    borderColor: ACCENT,
-    boxShadow: `0 0 0 1px ${ACCENT}26`,
-  },
+import PageShell from "../components/PageShell";
+import Reveal from "../components/Reveal";
+import { ResearchViz, VizFrame } from "../components/viz";
+import { researchAreas } from "../data/research";
+import { publications } from "../data/publications";
+import { C, MONO } from "../theme";
+
+const ICONS = {
+  recon: ScienceRoundedIcon,
+  motion: AutoFixHighRoundedIcon,
+  agents: PsychologyRoundedIcon,
+  spiking: BoltRoundedIcon,
 };
 
-function ProjectCard({ icon: Icon, title, text, tags }) {
+// Papers that back each research area, matched on title keywords so the list
+// stays correct as publications are added.
+const EVIDENCE = {
+  recon: /reconstruction|jsense|sensitivity|untrained|attention-unn|calibration|dixon|kernel|phase-constrained/i,
+  motion: /motion|propeller|blade|blurring|cyclegan|ghost/i,
+  agents: /agent|language model|multimodal|llm|vision language/i,
+  spiking: /spiking|steg-aiw|timestep/i,
+};
+
+function relatedCount(id) {
+  return publications.filter((p) => EVIDENCE[id].test(p.title)).length;
+}
+
+function ProjectPanel({ area, index }) {
+  const Icon = ICONS[area.id];
+  const flip = index % 2 === 1;
+  const count = relatedCount(area.id);
+
   return (
-    <Card sx={panelSx}>
-      <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
-        <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 1.25 }}>
-          <Box
-            sx={{
-              width: 38,
-              height: 38,
-              borderRadius: 2,
-              display: "grid",
-              placeItems: "center",
-              background: alpha(ACCENT, 0.10),
-              border: `1px solid ${alpha(ACCENT, 0.22)}`,
-              flex: "0 0 auto",
-            }}
+    <Reveal>
+      <Box
+        sx={{
+          borderRadius: 3,
+          border: `1px solid ${C.border}`,
+          bgcolor: alpha(C.surface, 0.85),
+          overflow: "hidden",
+          transition: "border-color 200ms ease, box-shadow 200ms ease",
+          "&:hover": {
+            borderColor: alpha(area.accent, 0.5),
+            boxShadow: `0 24px 60px -40px ${alpha(area.accent, 0.6)}`,
+          },
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            insetInline: 0,
+            top: 0,
+            height: 2,
+            background: `linear-gradient(90deg, ${area.accent}, transparent 70%)`,
+          },
+        }}
+      >
+        <Grid container spacing={0}>
+          {/* ── text column ── */}
+          {/* `order` is not a Grid prop in MUI v7 — it must go through sx or it
+              is forwarded to the DOM and silently does nothing. */}
+          <Grid
+            size={{ xs: 12, md: 7 }}
+            sx={{ p: { xs: 2.5, md: 3.5 }, order: { xs: 2, md: flip ? 2 : 1 } }}
           >
-            <Icon sx={{ color: ACCENT }} />
-          </Box>
-          <Typography variant="h6" sx={{ fontWeight: 950, letterSpacing: -0.2 }}>
-            {title}
-          </Typography>
-        </Stack>
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.75 }}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  display: "grid",
+                  placeItems: "center",
+                  flex: "0 0 auto",
+                  background: `linear-gradient(145deg, ${alpha(area.accent, 0.22)}, ${alpha(area.accent, 0.05)})`,
+                  border: `1px solid ${alpha(area.accent, 0.3)}`,
+                }}
+              >
+                <Icon sx={{ color: area.accent, fontSize: 21 }} />
+              </Box>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography
+                  sx={{
+                    fontFamily: MONO,
+                    fontSize: 10.5,
+                    letterSpacing: 1.4,
+                    textTransform: "uppercase",
+                    color: alpha(area.accent, 0.9),
+                    fontWeight: 700,
+                  }}
+                >
+                  {`0${index + 1}`} · {count} paper{count === 1 ? "" : "s"}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.2 }}
+                >
+                  {area.title}
+                </Typography>
+              </Box>
+            </Stack>
 
-        <Typography sx={{ color: "text.secondary", lineHeight: 1.85 }}>
-          {text}
-        </Typography>
+            <Typography sx={{ color: C.textSecondary, lineHeight: 1.85, fontSize: "0.96rem" }}>
+              {area.long}
+            </Typography>
 
-        {tags?.length ? (
-          <>
-            <Divider sx={{ borderColor: alpha("#0b1220", 0.08), my: 2 }} />
-            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-              {tags.map((t) => (
+            <Divider sx={{ my: 2.25, borderColor: C.border }} />
+
+            <Stack direction="row" spacing={0.85} flexWrap="wrap" useFlexGap>
+              {area.tags.map((t) => (
                 <Chip
                   key={t}
                   label={t}
                   size="small"
                   sx={{
                     borderRadius: 999,
-                    fontWeight: 800,
-                    border: `1px solid ${alpha(ACCENT, 0.22)}`,
-                    backgroundColor: alpha(ACCENT, 0.08),
-                    color: STR,
-                fontFamily: '"JetBrains Mono", monospace',
+                    fontFamily: MONO,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    border: `1px solid ${alpha(area.accent, 0.28)}`,
+                    backgroundColor: alpha(area.accent, 0.08),
+                    color: alpha(C.textPrimary, 0.92),
                   }}
                 />
               ))}
             </Stack>
-          </>
-        ) : null}
-      </CardContent>
-    </Card>
+          </Grid>
+
+          {/* ── visualisation column ── */}
+          <Grid
+            size={{ xs: 12, md: 5 }}
+            sx={{
+              p: { xs: 2, md: 2.5 },
+              display: "flex",
+              alignItems: "center",
+              order: { xs: 1, md: flip ? 1 : 2 },
+              borderLeft: { md: flip ? "none" : `1px solid ${C.border}` },
+              borderRight: { md: flip ? `1px solid ${C.border}` : "none" },
+              bgcolor: alpha("#010409", 0.35),
+            }}
+          >
+            <Box sx={{ width: "100%" }}>
+              <VizFrame label={area.fn} accent={area.accent} caption={area.caption}>
+                <ResearchViz viz={area.viz} accent={area.accent} height={210} />
+              </VizFrame>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </Reveal>
   );
 }
 
 export default function ResearchPage() {
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-      <Box sx={{ mb: 3.5 }}>
-        <Typography variant="h4" sx={{ fontWeight: 950, letterSpacing: -0.4 }}>
-          Research
+    <PageShell
+      eyebrow="Research"
+      title="Solving inverse problems in MRI with AI"
+      intro="My work advances MRI through modern AI methods, with emphasis on robust reconstruction, motion artifact correction, and automated pipelines that reduce manual intervention. A key goal is improving reliability under realistic degradations while maintaining clinically meaningful image quality."
+      accent={C.green}
+      grid
+      headerExtra={
+        <Typography
+          sx={{
+            fontFamily: MONO,
+            fontSize: 11.5,
+            color: C.textMuted,
+            pt: 0.5,
+            display: "flex",
+            alignItems: "center",
+            gap: 0.75,
+          }}
+        >
+          <Box
+            component="span"
+            sx={{
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              bgcolor: C.green,
+              display: "inline-block",
+            }}
+          />
+          each panel below runs a live simulation of the method it describes
         </Typography>
+      }
+    >
+      <Stack spacing={{ xs: 3, md: 3.5 }}>
+        {researchAreas.map((area, i) => (
+          <ProjectPanel key={area.id} area={area} index={i} />
+        ))}
+      </Stack>
 
-        <Typography sx={{ color: "text.secondary", mt: 1, maxWidth: 980, lineHeight: 1.9 }}>
-          My research advances MRI through modern AI methods, with emphasis on robust reconstruction,
-          motion artifact correction, and automated pipelines that reduce manual intervention. A key
-          goal is improving reliability under realistic degradations while maintaining clinically meaningful
-          image quality.
-        </Typography>
-      </Box>
-
-      <Stack spacing={3}>
-        <Stack direction="row" spacing={1.25} alignItems="center">
-          <ScienceRoundedIcon sx={{ color: ACCENT }} />
-          <Typography variant="h5" sx={{ fontWeight: 950, letterSpacing: -0.2 }}>
-            Ongoing Projects
-          </Typography>
-        </Stack>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <ProjectCard
-              icon={AutoAwesomeRoundedIcon}
-              title="Generative AI for Motion Correction in MRI"
-              text="Motion artifacts are a major source of quality degradation in clinical MRI. I study generative and physics-guided approaches to correct motion-induced artifacts and improve robustness, with the practical objective of reducing rescans and stabilizing downstream analysis."
-              tags={["Motion Correction", "Generative Models", "Robustness", "Clinical MRI"]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <ProjectCard
-              icon={ScienceRoundedIcon}
-              title="Foundation Models for AI Agents in MRI Reconstruction"
-              text="I investigate agentic systems that can interpret MRI data, identify corruption types, and select appropriate reconstruction or correction strategies. The broader objective is an automated pipeline that integrates foundation models with specialized domain experts."
-              tags={["Foundation Models", "AI Agents", "Automated Pipelines", "MRI Reconstruction"]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={12}>
-            <ProjectCard
-              icon={BoltRoundedIcon}
-              title="Spiking Neural Networks for Efficient AI"
-              text="I explore spiking neural networks and related efficient inference strategies to improve compute and energy efficiency for temporal data. This work targets next-generation efficient learning and inference, including potential integration with imaging workloads."
-              tags={["Spiking Neural Networks", "Efficient Inference", "Temporal Models"]}
-            />
-          </Grid>
-        </Grid>
-
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 0.5 }}>
+      <Reveal>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 4 }}>
           <Button
             component={RouterLink}
             to="/publications"
             variant="outlined"
             endIcon={<ArrowForwardRoundedIcon />}
-            sx={{
-              borderRadius: 6,
-              px: 2.5,
-              py: 1.05,
-              textTransform: "none",
-              fontWeight: 700,
-              fontFamily: '"JetBrains Mono", monospace',
-              borderColor: `${BORDER}`,
-              color: "text.primary",
-              "&:hover": { borderColor: ACCENT },
-            }}
+            sx={{ borderRadius: 6, px: 2.5, py: 1.05, fontFamily: MONO, fontWeight: 700 }}
           >
-            See Publications
+            See publications
           </Button>
-
           <Button
             component={RouterLink}
             to="/contact"
             variant="contained"
             endIcon={<ArrowForwardRoundedIcon />}
-            sx={{
-              borderRadius: 999,
-              px: 2.5,
-              py: 1.05,
-              textTransform: "none",
-              fontWeight: 900,
-              backgroundColor: ACCENT,
-              color: "#0d1117",
-              fontFamily: '"JetBrains Mono", monospace',
-              "&:hover": { backgroundColor: "#79b8ff" },
-            }}
+            sx={{ borderRadius: 999, px: 2.5, py: 1.05, fontFamily: MONO, fontWeight: 700 }}
           >
-            Contact for Collaboration
+            Contact for collaboration
           </Button>
         </Stack>
-      </Stack>
-    </Container>
+      </Reveal>
+    </PageShell>
   );
 }

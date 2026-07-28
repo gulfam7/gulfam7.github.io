@@ -1,6 +1,8 @@
-/* src/index.css — GitHub Dark / VS Code theme */
+/* src/index.css — GitHub Dark / VS Code theme
+   Colour decisions live in src/theme.js. This file only holds the reset,
+   document-level defaults and motion/accessibility primitives. */
 
-/* base reset */
+/* ── base reset ─────────────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -10,12 +12,10 @@
 html,
 body {
   height: 100%;
-  background-color: #0d1117;
-  color: #e6edf3;
 }
 
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 body,
@@ -59,67 +59,70 @@ a {
   text-decoration: none;
 }
 
-/* ---------------------------
-   Theme tokens (edit here)
----------------------------- */
+/* ── document defaults ──────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-
-  --bg: #0b1220;          /* deep slate */
-  --panel: rgba(15, 23, 42, 0.65);
-  --panel-border: rgba(255, 255, 255, 0.08);
-
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-
-  --accent: #22d3ee;      /* cyan */
-  --accent-2: #60a5fa;    /* blue */
-
-  --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  --radius: 16px;
+  --accent: #58a6ff;
+  --bg: #0d1117;
 }
 
-/* ---------------------------
-   Base typography + layout
----------------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background-color: var(--bg);
+  color: #e6edf3;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  background: radial-gradient(1200px 600px at 15% 10%, rgba(34, 211, 238, 0.10), transparent 60%),
-              radial-gradient(900px 500px at 80% 25%, rgba(96, 165, 250, 0.10), transparent 60%),
-              var(--bg);
-
-  color: var(--text);
   line-height: 1.65;
-}
-
-/* Better default link affordance */
-a.link {
-  color: var(--accent);
-  text-decoration: none;
-}
-a.link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(34, 211, 238, 0.25);
-  color: var(--text);
+  background: rgba(88, 166, 255, 0.28);
+  color: #e6edf3;
 }
 
-/* Focus visibility for keyboard users */
+/* ── accessibility ──────────────────────────────────────────────────────── */
+
+/* Keyboard focus ring. Never removed — only made consistent. */
 :focus-visible {
-  outline: 2px solid rgba(34, 211, 238, 0.65);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* Reduced motion support (important for canvas/animations) */
+/* Skip link — visually hidden until focused. */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -100px;
+  z-index: 2000;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #161b22;
+  border: 1px solid var(--accent);
+  color: #e6edf3;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  transition: top 160ms ease;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* Reduced motion.
+   NOTE: this only disables CSS animation/transition. Canvas visualisations
+   drive their own requestAnimationFrame loops and check the same media query
+   in JS (see src/lib/useCanvasAnimation.js), where they render a single
+   static frame instead of animating. */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {

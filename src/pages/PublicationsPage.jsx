@@ -1,422 +1,102 @@
 // src/pages/PublicationsPage.jsx
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
-  Container,
   Typography,
   Stack,
+  InputBase,
+  Chip,
+  Button,
+  Tooltip,
+  IconButton,
+  Snackbar,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
-// =========================
-// Data
-// =========================
-export const publications = [
-  // Journals
-  {
-    type: "journal",
-    authors: "Gulfam Ahmed Saju, Marjan Akhi and Yuchou Chang",
-    title:
-      "AgentMRI: A Vison Language Model-Powered AI System for Self-regulating MRI Reconstruction with Multiple Degradations",
-    journal: "Journal of Imaging Informatics in Medicine",
-    volume: "",
-    issue: "",
-    month: "",
-    year: 2025,
-    pages: "",
-    url: "https://link.springer.com/epdf/10.1007/s10278-025-01617-0",
-    doi: "10.1007/s10278-025-01617-0",
-  },
-  {
-    type: "journal",
-    authors: "Gulfam Ahmed Saju, Alan Okinaka, Marjan Akhi and Yuchou Chang",
-    title:
-      "An ensemble approach for accelerated and noise-resilient parallel MRI reconstruction utilizing CycleGANs",
-    journal: "Machine Vision and Applications",
-    volume: "35",
-    issue: "",
-    month: "",
-    year: 2024,
-    pages: "Article 136",
-    url: "https://link.springer.com/article/10.1007/s00138-024-01617-0",
-    doi: "10.1007/s00138-024-01617-0",
-  },
-  {
-    type: "journal",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li, Hui Mao, Tianming Liu, and Yuchou Chang",
-    title: "Suppressing image blurring of PROPELLER MRI via untrained method",
-    journal: "Physics in Medicine and Biology",
-    volume: "68",
-    issue: "17",
-    month: "August",
-    year: 2023,
-    pages: "",
-    url: "https://iopscience.iop.org/article/10.1088/1361-6560/acebb1/meta",
-    doi: "10.1088/1361-6560/acebb1",
-  },
-  {
-    type: "journal",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li and Yuchou Chang",
-    title: "Improving Deep PROPELLER MRI via Synthetic Blade Augmentation and Enhanced Generalization",
-    journal: "Magnetic Resonance Imaging",
-    volume: "108",
-    issue: "",
-    month: "May",
-    year: 2024,
-    pages: "",
-    url: "https://www.sciencedirect.com/science/article/abs/pii/S0730725X24000237",
-    doi: "10.1016/j.mri.2024.01.017",
-  },
-  {
-    type: "journal",
-    authors: "Yuchou Chang, Zhiqiang Li, Gulfam Ahmed Saju, Hui Mao, and Tianming Liu",
-    title: "Deep Learning-Based Rigid Motion Correction for Magnetic Resonance Imaging: A Survey",
-    journal: "Meta-Radiology",
-    volume: "1",
-    issue: "1",
-    month: "June",
-    year: 2023,
-    pages: "",
-    url: "https://www.sciencedirect.com/science/article/pii/S2950162823000012",
-    doi: "10.1016/j.metrad.2023.100001",
-  },
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import FormatQuoteRoundedIcon from "@mui/icons-material/FormatQuoteRounded";
 
-  // Conferences
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Anton Spirkin, Felipe Marcelino, Yuchou Chang",
-    title: "STEG-AIW: Spatio-Temporal Gating and Adaptive-Timestep Inference for Efficient Spiking Neural Networks",
-    journal: "IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) 2026",
-    month: "March",
-    year: 2026,
-    pages: "",
-    url: "https://openaccess.thecvf.com/content/WACV2026/papers/Saju_STEG-AIW_Spatio-Temporal_Gating_and_Adaptive-Timestep_Inference_for_Efficient_Spiking_Neural_WACV_2026_paper.pdf",
-    doi: "10.1109/WACV61042.2026.00407",
-  },
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Marjan Akhi, Yuchou Chang",
-    title: "Large Multimodal Model for Simulating Big Training Data in Deep PROPELLER MRI",
-    journal: "28th IEEE High Performance Extreme Computing (HPEC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "https://ieee-hpec.org/wp-content/uploads/2025/02/HPEC2024-89.pdf",
-    doi: "",
-  },
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Marjan Akhi, Yuchou Chang",
-    title: "Evaluating the Impact of Noisy Blades on PROPELLER MRI Reconstruction Quality",
-    journal: "28th IEEE High Performance Extreme Computing (HPEC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "https://ieee-hpec.org/wp-content/uploads/2025/02/HPEC2024-85.pdf",
-    doi: "",
-  },
-  {
-    type: "conference",
-    authors: "Yuchou Chang, Huy Anh Pham, Gulfam Ahmed Saju",
-    title: "LLM-Based Task Planning for Navigating Companion Robot from Emotion Signals",
-    journal: "28th IEEE High Performance Extreme Computing (HPEC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "https://ieee-hpec.org/wp-content/uploads/2025/02/70.pdf",
-    doi: "",
-  },
-  {
-    type: "conference",
-    authors: "Girish Babu Reddy, Gulfam Ahmed Saju, Yi Liu, Yuchou Chang",
-    title: "Quantum Computing for Data Calibration in Parallel Magnetic Resonance Imaging Reconstruction",
-    journal: "28th IEEE High Performance Extreme Computing (HPEC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "https://ieeexplore.ieee.org/abstract/document/10938445",
-    doi: "10.1109/HPEC62836.2024.10938445",
-  },
-  {
-    type: "conference",
-    authors: "Alan Okinaka, Gulfam Ahmed Saju, Yuchou Chang",
-    title: "Transfer Learning Assisted Parameter Selection for Water-Fat Separation in Dixon MRI",
-    journal: "28th IEEE High Performance Extreme Computing (HPEC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Marjan Akhi, Yuchou Chang",
-    title: "Ensemble CycleGAN for Retrospective Rigid Motion Correction in MRI",
-    journal: "46th IEEE Engineering in Medicine and Biology Conference (EMBC)",
-    month: "July",
-    year: 2024,
-    pages: "",
-    url: "https://ieeexplore.ieee.org/abstract/document/10782023",
-    doi: "10.1109/EMBC53108.2024.10782023",
-  },
-  {
-    type: "conference",
-    authors: "Yuchou Chang, Zhiqiang Li, Huy Anh Pham, Gulfam Ahmed Saju",
-    title: "Intelligent Agent Planning for Optimizing Parallel MRI Reconstruction via a Large Language Model",
-    journal: "46th IEEE Engineering in Medicine and Biology Conference (EMBC)",
-    month: "",
-    year: 2024,
-    pages: "",
-    url: "https://ieeexplore.ieee.org/abstract/document/10782629",
-    doi: "10.1109/EMBC53108.2024.10782629",
-  },
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Alan Okinaka, Yuchou Chang",
-    title: "Exploiting Generative Adversarial Networks in Joint Sensitivity Encoding for Enhanced MRI Reconstruction",
-    journal: "18th International Symposium on Visual Computing (ISVC)",
-    month: "",
-    year: 2023,
-    pages: "",
-    url: "https://link.springer.com/chapter/10.1007/978-3-031-47966-3_35",
-    doi: "10.1007/978-3-031-47966-3_35",
-  },
-  {
-    type: "conference",
-    authors: "Alan Okinaka, Gulfam Ahmed Saju, Yuchou Chang",
-    title: "Automating Kernel Size Selection in MRI Reconstruction via a Transparent and Interpretable Search Approach",
-    journal: "18th International Symposium on Visual Computing (ISVC)",
-    month: "",
-    year: 2023,
-    pages: "",
-    url: "https://link.springer.com/chapter/10.1007/978-3-031-47966-3_33",
-    doi: "10.1007/978-3-031-47966-3_33",
-  },
-  {
-    type: "conference",
-    authors: "Alan Okinaka, Gulfam Ahmed Saju, Yuchou Chang",
-    title: "Enhancing Image Reconstruction via Phase-Constrained Data in an Iterative Process",
-    journal: "18th International Symposium on Visual Computing (ISVC)",
-    month: "",
-    year: 2023,
-    pages: "",
-    url: "https://link.springer.com/chapter/10.1007/978-3-031-47969-4_32",
-    doi: "10.1007/978-3-031-47969-4_32",
-  },
-  {
-    type: "conference",
-    authors:
-      "Gulfam Ahmed Saju, Nazrul Islam, Md. Moshgul Bhuiyan, Narayan Ranjan Chakraborty, Bimal Chandra Das, and Manoranjan Dash",
-    title:
-      "RECH-LEACH: A New Cluster Head Selection Algorithm of LEACH on the Basis of Residual Energy for Wireless Sensor Network",
-    journal: "Soft Computing and Signal Processing: Proceedings of 3rd ICSCSP 2020",
-    month: "",
-    year: 2020,
-    pages: "",
-    url: "https://link.springer.com/chapter/10.1007/978-981-33-6912-2_47",
-    doi: "10.1007/978-981-33-6912-2_47",
-  },
+import PageShell from "../components/PageShell";
+import {
+  publications,
+  SECTION_THEME,
+  splitAuthors,
+  isMyName,
+  formatVenue,
+  sortByYearDesc,
+  toBibTeX,
+  allBibTeX,
+} from "../data/publications";
+import { C, MONO } from "../theme";
 
-  // Under review
-  {
-    type: "under-review",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li, Marjan Akhi, Yuchou Chang",
-    title: "Attention-UNN: Attention-Enhanced Untrained Neural Networks for Accelerated MRI Reconstruction",
-    journal: "Magnetic Resonance Materials in Physics, Biology and Medicine (Under Review)",
-    month: "",
-    year: "",
-    pages: "",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "conference",
-    authors: "Gulfam Ahmed Saju, Marjan Akhi, Yuchou Chang",
-    title: "MRI-AgentNet: A Vision Language Models-Based Multi-Agent AI System for Solving Inverse Problems in MRI",
-    journal: "2026 IEEE International Conference on AI and Data Analytics (ICAD)",
-    month: "",
-    year: 2026,
-    pages: "",
-    url: "",
-    doi: "",
-  },
-
-  // Abstracts
-  {
-    type: "abstract",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li, Reza Abiri, Tianming Liu, and Yuchou Chang",
-    title: "Joint Estimation of Coil Sensitivity and Image by Using Untrained Neural Network without External Training Data",
-    journal: "International Society for Magnetic Resonance in Medicine Annual Meeting",
-    month: "",
-    year: 2023,
-    pages: "Abstract: 3893",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "abstract",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li, Reza Abiri, Tianming Liu, and Yuchou Chang",
-    title: "Improving JSENSE Using an Initial Reconstruction with an Unrolled Deep Network Prior",
-    journal: "International Society for Magnetic Resonance in Medicine Annual Meeting",
-    month: "",
-    year: 2023,
-    pages: "Abstract: 4037",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "abstract",
-    authors: "Gulfam Ahmed Saju, Zhiqiang Li, Reza Abiri, Tianming Liu, and Yuchou Chang",
-    title: "Incorporating Untrained Neural Network Prior in PROPELLER Imaging",
-    journal: "International Society for Magnetic Resonance in Medicine Annual Meeting",
-    month: "",
-    year: 2023,
-    pages: "Abstract: 4038",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "abstract",
-    authors: "Yuchou Chang, Gulfam Ahmed Saju, Jasina Yu, Reza Abiri, Zhiqiang Li, and Tianming Liu",
-    title: "Suppressing MRI Background Noise via Modeling Phase Variations",
-    journal: "International Society for Magnetic Resonance in Medicine Annual Meeting",
-    month: "",
-    year: 2023,
-    pages: "Abstract: 2031",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "abstract",
-    authors: "Yuchou Chang, Gulfam Ahmed Saju, Jasina Yu, Reza Abiri, Zhiqiang Li, and Tianming Liu",
-    title: "Phase-Constrained Reconstruction for Enhancing PROPELLER SNR",
-    journal: "International Society for Magnetic Resonance in Medicine Annual Meeting",
-    month: "",
-    year: 2023,
-    pages: "Abstract: 2004",
-    url: "",
-    doi: "",
-  },
-  {
-    type: "abstract",
-    authors: "Gulfam Ahmed Saju, Huy Anh Pham, Yuchou Chang",
-    title: "A Triple CycleGAN Model Ensemble for Motion Correction in 7T MR Brain Images",
-    journal: "14th Scientific Symposium on Clinical Needs, Research Promises and Technical Solutions in Ultrahigh Field Magnetic Resonance",
-    month: "",
-    year: "",
-    pages: "",
-    url: "",
-    doi: "",
-  },
-];
-
-// =========================
-// Design tokens
-// =========================
-const BG = "#0a0e14";
-const ACCENT = "#58a6ff";
-const MUTED = "#8b949e";
-
-const SECTION_THEME = {
-  journal: { color: "#58a6ff", label: "Journal" },
-  conference: { color: "#a371f7", label: "Conference" },
-  abstract: { color: "#39d0d8", label: "Abstract" },
-  "under-review": { color: "#ffa657", label: "Under review" },
+const ORDER = ["journal", "conference", "abstract", "under-review"];
+const TITLES = {
+  journal: "Peer-Reviewed Journal Articles",
+  conference: "Peer-Reviewed Conference Papers",
+  abstract: "Conference Abstracts",
+  "under-review": "Under Review",
 };
 
-// =========================
-// Helpers
-// =========================
-function isMyName(token) {
-  const t = token.trim().toLowerCase();
-  return t === "gulfam ahmed saju" || t === "gulfam a. saju";
+function matches(pub, q) {
+  if (!q) return true;
+  const hay = `${pub.title} ${pub.authors} ${pub.journal} ${pub.year}`.toLowerCase();
+  // every whitespace-separated term must appear somewhere
+  return q
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .every((term) => hay.includes(term));
 }
 
-function splitAuthors(authors) {
-  if (!authors) return [];
-  const normalized = authors
-    .replace(/\s*&\s*/g, ", ")
-    .replace(/\s+and\s+/gi, ", ")
-    .replace(/\s*,\s*/g, ", ");
-  return normalized
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-function formatVenue(pub) {
-  const parts = [];
-  if (pub.journal) parts.push(pub.journal);
-  const vol = pub.volume ? `vol. ${pub.volume}` : "";
-  const no = pub.issue ? `no. ${pub.issue}` : "";
-  const pages = pub.pages ? `pp. ${pub.pages}` : "";
-  const details = [vol, no, pages].filter(Boolean).join(", ");
-  if (details) parts.push(details);
-  if (pub.month) parts.push(pub.month);
-  if (pub.year) parts.push(String(pub.year));
-  return parts.join(". ") + (parts.length ? "." : "");
-}
-
-function sortByYearDesc(a, b) {
-  const ya = Number(a.year) || -1;
-  const yb = Number(b.year) || -1;
-  return yb - ya;
-}
-
-function scrollToId(id) {
-  const el = document.getElementById(id);
-  el?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-// =========================
-// UI Components
-// =========================
-function PublicationNode({ pub, index, accent }) {
+function PublicationNode({ pub, index, accent, onCite, isLast, highlight }) {
   const venue = formatVenue(pub);
-  const year = pub.year ? String(pub.year) : "Ongoing";
+  const year = pub.year ? String(pub.year) : "In progress";
 
   return (
     <Box
       sx={{
         position: "relative",
-        pl: { xs: 4, md: 6 },
-        pb: 5,
-        "&:last-of-type": { pb: 0 },
+        pl: { xs: 3.5, md: 5 },
+        pb: isLast ? 0 : 4.5,
         "&:hover .timeline-dot": {
           bgcolor: accent,
           boxShadow: `0 0 12px ${alpha(accent, 0.6)}`,
-          transform: "scale(1.2)",
+          transform: "scale(1.18)",
         },
-        "&:hover .pub-title": {
-          color: accent,
-        },
+        "&:hover .pub-title": { color: accent },
       }}
     >
-      {/* The Vertical Track */}
-      <Box
-        sx={{
-          position: "absolute",
-          left: { xs: 7, md: 11 },
-          top: 24,
-          bottom: -24,
-          width: "2px",
-          bgcolor: alpha(MUTED, 0.15),
-          "&:last-of-type": { display: "none" }, // Hide track after last item
-        }}
-      />
+      {/* vertical track — omitted on the last item so it doesn't dangle */}
+      {!isLast && (
+        <Box
+          aria-hidden
+          sx={{
+            position: "absolute",
+            left: { xs: 7, md: 11 },
+            top: 26,
+            bottom: 0,
+            width: "2px",
+            bgcolor: alpha(C.comment, 0.15),
+          }}
+        />
+      )}
 
-      {/* The Data Node (Dot) */}
       <Box
         className="timeline-dot"
+        aria-hidden
         sx={{
           position: "absolute",
-          left: { xs: 0, md: 0 },
-          top: 6,
+          left: 0,
+          top: 4,
           width: { xs: 16, md: 24 },
           height: { xs: 16, md: 24 },
           borderRadius: "50%",
-          bgcolor: "#161b22",
-          border: `2px solid ${alpha(MUTED, 0.4)}`,
+          bgcolor: highlight ? accent : C.surface,
+          border: `2px solid ${alpha(highlight ? accent : C.comment, highlight ? 1 : 0.4)}`,
           transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           zIndex: 2,
           display: "flex",
@@ -424,27 +104,18 @@ function PublicationNode({ pub, index, accent }) {
           justifyContent: "center",
         }}
       >
-        {/* Inner micro-dot */}
-        <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: alpha(MUTED, 0.6) }} />
+        <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: alpha(C.comment, 0.6) }} />
       </Box>
 
-      <Stack spacing={1}>
-        {/* Top Metadata Row: Monospace, Terminal-like */}
+      <Stack spacing={0.9}>
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Typography
-            sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: "0.8rem",
-              fontWeight: 700,
-              color: alpha(MUTED, 0.8),
-            }}
-          >
+          <Typography sx={{ fontFamily: MONO, fontSize: "0.78rem", fontWeight: 700, color: alpha(C.comment, 0.8) }}>
             [{String(index + 1).padStart(2, "0")}]
           </Typography>
           <Typography
             sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: "0.8rem",
+              fontFamily: MONO,
+              fontSize: "0.78rem",
               fontWeight: 600,
               color: accent,
               bgcolor: alpha(accent, 0.1),
@@ -457,36 +128,28 @@ function PublicationNode({ pub, index, accent }) {
           </Typography>
         </Stack>
 
-        {/* Title */}
         <Typography
           className="pub-title"
           sx={{
             fontWeight: 650,
-            fontSize: { xs: "1.05rem", md: "1.15rem" },
-            lineHeight: 1.4,
-            color: "#e6edf3",
+            fontSize: { xs: "1rem", md: "1.12rem" },
+            lineHeight: 1.42,
+            color: C.textPrimary,
             transition: "color 0.2s ease",
-            cursor: "default",
           }}
         >
           {pub.title}
         </Typography>
 
-        {/* Authors */}
-        <Typography
-          sx={{
-            fontSize: "0.95rem",
-            lineHeight: 1.6,
-            color: alpha("#e6edf3", 0.75),
-          }}
-        >
+        <Typography sx={{ fontSize: "0.93rem", lineHeight: 1.6, color: alpha(C.textPrimary, 0.75) }}>
           {splitAuthors(pub.authors).map((name, i, arr) => (
             <React.Fragment key={`${name}-${i}`}>
               <Box
                 component="span"
                 sx={{
-                  fontWeight: isMyName(name) ? 600 : 400,
+                  fontWeight: isMyName(name) ? 700 : 400,
                   color: isMyName(name) ? "#fff" : "inherit",
+                  borderBottom: isMyName(name) ? `1px solid ${alpha(accent, 0.5)}` : "none",
                 }}
               >
                 {name}
@@ -496,252 +159,371 @@ function PublicationNode({ pub, index, accent }) {
           ))}
         </Typography>
 
-        {/* Venue */}
         {venue && (
-          <Typography
-            sx={{
-              fontSize: "0.9rem",
-              color: MUTED,
-              fontStyle: "italic",
-            }}
-          >
+          <Typography sx={{ fontSize: "0.88rem", color: C.comment, fontStyle: "italic" }}>
             {venue}
           </Typography>
         )}
 
-        {/* Action Links */}
-        {(pub.url || pub.doi) && (
-          <Stack direction="row" spacing={2} sx={{ pt: 1 }}>
-            {pub.url && (
-              <Typography
-                component="a"
-                href={pub.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  fontSize: "0.85rem",
-                  fontFamily: '"JetBrains Mono", monospace',
-                  color: alpha(MUTED, 0.9),
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  "&:hover": { color: accent },
-                }}
-              >
-                <span style={{ color: accent }}>{'>'}</span> VIEW_PDF
-              </Typography>
-            )}
-            {pub.doi && (
-              <Typography
-                component="a"
-                href={`https://doi.org/${pub.doi}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  fontSize: "0.85rem",
-                  fontFamily: '"JetBrains Mono", monospace',
-                  color: alpha(MUTED, 0.9),
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.5,
-                  "&:hover": { color: accent },
-                }}
-              >
-                <span style={{ color: accent }}>{'>'}</span> RESOLVE_DOI
-              </Typography>
-            )}
-          </Stack>
-        )}
-      </Stack>
-    </Box>
-  );
-}
-
-function SectionBlock({ id, title, items, typeKey }) {
-  if (!items?.length) return null;
-  const theme = SECTION_THEME[typeKey] || SECTION_THEME.journal;
-
-  return (
-    <Box id={id} sx={{ scrollMarginTop: 40, mb: 8 }}>
-      {/* Scientific/Data Header */}
-      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 4 }}>
-        <Box
-          sx={{
-            width: 12,
-            height: 12,
-            bgcolor: theme.color,
-            boxShadow: `0 0 10px ${theme.color}`,
-          }}
-        />
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 800,
-            letterSpacing: "0.02em",
-            textTransform: "uppercase",
-            color: "#fff",
-          }}
-        >
-          {title}
-        </Typography>
-        <Box sx={{ flexGrow: 1, height: "1px", bgcolor: alpha(theme.color, 0.2) }} />
-        <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', color: theme.color }}>
-          COUNT:{items.length}
-        </Typography>
-      </Stack>
-
-      <Box sx={{ position: "relative" }}>
-        {items.map((pub, idx) => (
-          <PublicationNode
-            key={`${title}-${idx}`}
-            pub={pub}
-            index={idx}
-            accent={theme.color}
-          />
-        ))}
-      </Box>
-    </Box>
-  );
-}
-
-// =========================
-// Page
-// =========================
-export default function PublicationsPage() {
-  const safe = Array.isArray(publications) ? publications : [];
-
-  const grouped = useMemo(() => {
-    const journals = safe.filter((p) => p.type === "journal").slice().sort(sortByYearDesc);
-    const conferences = safe.filter((p) => p.type === "conference").slice().sort(sortByYearDesc);
-    const abstracts = safe.filter((p) => p.type === "abstract").slice().sort(sortByYearDesc);
-    const underReview = safe.filter((p) => p.type === "under-review").slice().sort(sortByYearDesc);
-
-    return { journals, conferences, abstracts, underReview };
-  }, [safe]);
-
-  const navItems = [
-    { id: "pub-journals", label: "JOURNALS", count: grouped.journals.length, color: SECTION_THEME.journal.color },
-    { id: "pub-conferences", label: "CONFERENCES", count: grouped.conferences.length, color: SECTION_THEME.conference.color },
-    { id: "pub-abstracts", label: "ABSTRACTS", count: grouped.abstracts.length, color: SECTION_THEME.abstract.color },
-    { id: "pub-review", label: "UNDER_REVIEW", count: grouped.underReview.length, color: SECTION_THEME["under-review"].color },
-  ].filter((x) => x.count > 0);
-
-  return (
-    <Box
-      sx={{
-        mx: { xs: -4, md: -4 },
-        my: { xs: -4, md: -4 },
-        minHeight: "100%",
-        position: "relative",
-        bgcolor: BG,
-        overflow: "hidden",
-      }}
-    >
-      <Container maxWidth="lg" sx={{ position: "relative", py: { xs: 5, md: 7 }, px: { xs: 2, sm: 3 } }}>
-        <Stack spacing={1.25} sx={{ mb: 4 }}>
-          <Typography
-            sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: 3,
-              color: alpha(ACCENT, 0.85),
-              textTransform: "uppercase",
-            }}
-          >
-            System Log // Research Output
-          </Typography>
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 850,
-              letterSpacing: "-0.04em",
-              fontSize: { xs: "2rem", md: "2.65rem" },
-              lineHeight: 1.1,
-              color: "#fff"
-            }}
-          >
-            Publications
-          </Typography>
-          <Typography
-            sx={{
-              color: MUTED,
-              maxWidth: 640,
-              lineHeight: 1.75,
-              fontSize: "1.02rem",
-            }}
-          >
-            A chronological ledger of peer-reviewed journal articles, conference papers, and manuscripts currently under review.
-          </Typography>
-        </Stack>
-
-        {/* Minimal Terminal-Style Navigation */}
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          useFlexGap
-          gap={3}
-          sx={{ 
-            mb: 6,
-            pb: 2,
-            borderBottom: `1px solid ${alpha(MUTED, 0.2)}`
-          }}
-        >
-          {navItems.map((n) => (
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ pt: 0.75 }} flexWrap="wrap" useFlexGap>
+          {pub.url && (
             <Typography
-              key={n.id}
-              onClick={() => scrollToId(n.id)}
+              component="a"
+              href={pub.url}
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
-                fontFamily: '"JetBrains Mono", monospace',
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                color: MUTED,
-                cursor: "pointer",
-                transition: "all 0.2s ease",
+                fontSize: "0.82rem",
+                fontFamily: MONO,
+                color: alpha(C.comment, 0.9),
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
-                "&:hover": {
-                  color: n.color,
-                },
+                gap: 0.5,
+                "&:hover": { color: accent },
               }}
             >
-              <span style={{ color: alpha(n.color, 0.7) }}>[</span>
-              {n.label} : {n.count}
-              <span style={{ color: alpha(n.color, 0.7) }}>]</span>
+              <span style={{ color: accent }}>{">"}</span> VIEW_PDF
             </Typography>
+          )}
+          {pub.doi && (
+            <Typography
+              component="a"
+              href={`https://doi.org/${pub.doi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontSize: "0.82rem",
+                fontFamily: MONO,
+                color: alpha(C.comment, 0.9),
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                "&:hover": { color: accent },
+              }}
+            >
+              <span style={{ color: accent }}>{">"}</span> RESOLVE_DOI
+            </Typography>
+          )}
+          <Tooltip title="Copy BibTeX entry" arrow>
+            <Typography
+              component="button"
+              type="button"
+              onClick={() => onCite(pub)}
+              sx={{
+                fontSize: "0.82rem",
+                fontFamily: MONO,
+                color: alpha(C.comment, 0.9),
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                background: "none",
+                border: "none",
+                p: 0,
+                cursor: "pointer",
+                "&:hover": { color: accent },
+              }}
+            >
+              <span style={{ color: accent }}>{">"}</span> CITE
+            </Typography>
+          </Tooltip>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+}
+
+export default function PublicationsPage() {
+  const [params, setParams] = useSearchParams();
+  const [query, setQuery] = useState(params.get("q") || "");
+  const [types, setTypes] = useState([]);      // empty = all
+  const [year, setYear] = useState(null);
+  const [toast, setToast] = useState("");
+
+  // keep ?q= in the URL so palette deep-links and browser history work
+  useEffect(() => {
+    const next = new URLSearchParams(params);
+    if (query) next.set("q", query);
+    else next.delete("q");
+    setParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  const years = useMemo(
+    () =>
+      [...new Set(publications.map((p) => p.year).filter(Boolean))].sort((a, b) => b - a),
+    []
+  );
+
+  const filtered = useMemo(
+    () =>
+      publications.filter(
+        (p) =>
+          matches(p, query) &&
+          (types.length === 0 || types.includes(p.type)) &&
+          (year === null || String(p.year) === String(year))
+      ),
+    [query, types, year]
+  );
+
+  const grouped = useMemo(() => {
+    const out = {};
+    for (const key of ORDER) {
+      out[key] = filtered.filter((p) => p.type === key).slice().sort(sortByYearDesc);
+    }
+    return out;
+  }, [filtered]);
+
+  const copy = async (text, message) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setToast(message);
+    } catch {
+      setToast("Clipboard unavailable — check browser permissions");
+    }
+  };
+
+  const toggleType = (t) =>
+    setTypes((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
+
+  const clearAll = () => {
+    setQuery("");
+    setTypes([]);
+    setYear(null);
+  };
+
+  const hasFilters = Boolean(query) || types.length > 0 || year !== null;
+
+  return (
+    <PageShell
+      eyebrow="System log // research output"
+      title="Publications"
+      intro="A chronological ledger of peer-reviewed journal articles, conference papers, abstracts, and manuscripts under review. Search by title, author, venue or year — every entry exports to BibTeX."
+      accent={C.variable}
+    >
+      {/* ── search + filters ────────────────────────────────────────── */}
+      <Box
+        sx={{
+          border: `1px solid ${C.border}`,
+          borderRadius: 2,
+          bgcolor: alpha(C.surface, 0.75),
+          p: { xs: 1.75, md: 2 },
+          mb: 4,
+          backdropFilter: "blur(8px)",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.25,
+            border: `1px solid ${C.border}`,
+            borderRadius: 1.5,
+            px: 1.5,
+            py: 0.75,
+            bgcolor: alpha("#010409", 0.5),
+            "&:focus-within": { borderColor: C.accent },
+          }}
+        >
+          <SearchRoundedIcon sx={{ fontSize: 18, color: C.comment }} />
+          <InputBase
+            fullWidth
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search title, author, venue…"
+            inputProps={{ "aria-label": "Search publications" }}
+            sx={{ fontFamily: MONO, fontSize: 13.5, color: C.textPrimary }}
+          />
+          {query ? (
+            <IconButton size="small" onClick={() => setQuery("")} aria-label="Clear search">
+              <CloseRoundedIcon sx={{ fontSize: 15 }} />
+            </IconButton>
+          ) : null}
+        </Box>
+
+        <Stack direction="row" spacing={0.85} flexWrap="wrap" useFlexGap sx={{ mt: 1.75 }}>
+          {ORDER.map((t) => {
+            const theme = SECTION_THEME[t];
+            const on = types.includes(t);
+            const n = publications.filter((p) => p.type === t).length;
+            return (
+              <Chip
+                key={t}
+                label={`${theme.label} ${n}`}
+                size="small"
+                onClick={() => toggleType(t)}
+                sx={{
+                  fontFamily: MONO,
+                  fontSize: 11.5,
+                  cursor: "pointer",
+                  borderRadius: 1.5,
+                  border: `1px solid ${alpha(theme.color, on ? 0.7 : 0.25)}`,
+                  bgcolor: alpha(theme.color, on ? 0.2 : 0.06),
+                  color: on ? "#fff" : alpha(theme.color, 0.95),
+                  "&:hover": { bgcolor: alpha(theme.color, 0.28) },
+                }}
+              />
+            );
+          })}
+
+          <Box sx={{ width: 1, bgcolor: C.border, mx: 0.5, alignSelf: "stretch" }} />
+
+          {years.map((y) => (
+            <Chip
+              key={y}
+              label={y}
+              size="small"
+              onClick={() => setYear((cur) => (String(cur) === String(y) ? null : y))}
+              sx={{
+                fontFamily: MONO,
+                fontSize: 11.5,
+                cursor: "pointer",
+                borderRadius: 1.5,
+                border: `1px solid ${alpha(C.comment, String(year) === String(y) ? 0.8 : 0.22)}`,
+                bgcolor: String(year) === String(y) ? alpha(C.accent, 0.2) : "transparent",
+                color: String(year) === String(y) ? "#fff" : C.comment,
+                "&:hover": { bgcolor: alpha(C.accent, 0.14) },
+              }}
+            />
           ))}
         </Stack>
 
-        <Stack spacing={2}>
-          <SectionBlock
-            id="pub-journals"
-            title="Peer-Reviewed Journal Articles"
-            items={grouped.journals}
-            typeKey="journal"
-          />
-          <SectionBlock
-            id="pub-conferences"
-            title="Peer-Reviewed Conference Papers"
-            items={grouped.conferences}
-            typeKey="conference"
-          />
-          <SectionBlock
-            id="pub-abstracts"
-            title="Conference Abstracts"
-            items={grouped.abstracts}
-            typeKey="abstract"
-          />
-          <SectionBlock
-            id="pub-review"
-            title="Under Review"
-            items={grouped.underReview}
-            typeKey="under-review"
-          />
+        <Stack
+          direction="row"
+          spacing={1.5}
+          alignItems="center"
+          sx={{ mt: 1.75, pt: 1.5, borderTop: `1px solid ${C.border}` }}
+          flexWrap="wrap"
+          useFlexGap
+        >
+          <Typography sx={{ fontFamily: MONO, fontSize: 11.5, color: C.textMuted }}>
+            {filtered.length} of {publications.length} shown
+          </Typography>
+
+          {hasFilters ? (
+            <Button
+              size="small"
+              onClick={clearAll}
+              sx={{ fontFamily: MONO, fontSize: 11.5, color: C.comment, minWidth: 0 }}
+            >
+              clear filters
+            </Button>
+          ) : null}
+
+          <Box sx={{ flexGrow: 1 }} />
+
+          <Button
+            size="small"
+            startIcon={<ContentCopyRoundedIcon sx={{ fontSize: 14 }} />}
+            onClick={() =>
+              copy(allBibTeX(filtered), `Copied ${filtered.length} BibTeX entries`)
+            }
+            disabled={filtered.length === 0}
+            sx={{ fontFamily: MONO, fontSize: 11.5 }}
+          >
+            copy all BibTeX
+          </Button>
+          <Button
+            size="small"
+            startIcon={<DownloadRoundedIcon sx={{ fontSize: 15 }} />}
+            onClick={() => {
+              const blob = new Blob([allBibTeX(filtered)], {
+                type: "application/x-bibtex;charset=utf-8",
+              });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "saju-publications.bib";
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            disabled={filtered.length === 0}
+            sx={{ fontFamily: MONO, fontSize: 11.5 }}
+          >
+            .bib
+          </Button>
         </Stack>
-      </Container>
-    </Box>
+      </Box>
+
+      {/* ── results ─────────────────────────────────────────────────── */}
+      {filtered.length === 0 ? (
+        <Box
+          sx={{
+            border: `1px dashed ${C.border}`,
+            borderRadius: 2,
+            p: 5,
+            textAlign: "center",
+          }}
+        >
+          <FormatQuoteRoundedIcon sx={{ color: C.textMuted, fontSize: 30, mb: 1 }} />
+          <Typography sx={{ fontFamily: MONO, color: C.comment, fontSize: 13.5 }}>
+            no publications match the current filters
+          </Typography>
+          <Button onClick={clearAll} sx={{ mt: 1.5, fontFamily: MONO }} size="small">
+            reset
+          </Button>
+        </Box>
+      ) : (
+        <Stack spacing={0}>
+          {ORDER.map((key) => {
+            const items = grouped[key];
+            if (!items.length) return null;
+            const theme = SECTION_THEME[key];
+            return (
+              <Box key={key} id={`pub-${key}`} sx={{ scrollMarginTop: 60, mb: 7 }}>
+                <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3.5 }}>
+                  <Box
+                    sx={{
+                      width: 11,
+                      height: 11,
+                      bgcolor: theme.color,
+                      boxShadow: `0 0 10px ${theme.color}`,
+                      flex: "0 0 auto",
+                    }}
+                  />
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontWeight: 800,
+                      fontSize: { xs: "1.05rem", md: "1.25rem" },
+                      letterSpacing: "0.02em",
+                      textTransform: "uppercase",
+                      color: "#fff",
+                    }}
+                  >
+                    {TITLES[key]}
+                  </Typography>
+                  <Box sx={{ flexGrow: 1, height: "1px", bgcolor: alpha(theme.color, 0.2) }} />
+                  <Typography sx={{ fontFamily: MONO, color: theme.color, fontSize: 12.5 }}>
+                    COUNT:{items.length}
+                  </Typography>
+                </Stack>
+
+                <Box>
+                  {items.map((pub, idx) => (
+                    <PublicationNode
+                      key={`${key}-${pub.title}`}
+                      pub={pub}
+                      index={idx}
+                      accent={theme.color}
+                      isLast={idx === items.length - 1}
+                      highlight={Boolean(query) && matches(pub, query)}
+                      onCite={(p) => copy(toBibTeX(p), "BibTeX entry copied")}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            );
+          })}
+        </Stack>
+      )}
+
+      <Snackbar
+        open={Boolean(toast)}
+        autoHideDuration={2200}
+        onClose={() => setToast("")}
+        message={toast}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
+    </PageShell>
   );
 }

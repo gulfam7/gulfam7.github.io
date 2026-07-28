@@ -1,9 +1,12 @@
-// src/theme.js  — VS Code / GitHub Dark aesthetic
+// src/theme.js — VS Code / GitHub Dark aesthetic
+// Single source of truth for design tokens. Import `C` rather than
+// re-declaring colour constants inside components.
 import { createTheme } from '@mui/material/styles';
 
 // ── Palette tokens ──────────────────────────────────────────────────────────
 export const C = {
-  bg:        '#0d1117',   // GitHub dark default
+  bg:        '#0d1117',   // GitHub dark default — canonical page background
+  bgDeep:    '#010409',   // chrome (sidebar, tab bar, footer)
   surface:   '#161b22',   // card / paper background
   elevated:  '#21262d',   // raised surface (nav, modals)
   border:    '#30363d',   // default border
@@ -19,14 +22,27 @@ export const C = {
 
   // accent
   accent:    '#58a6ff',   // blue — primary interactive
+  accentHi:  '#79b8ff',   // blue — hover
   green:     '#7ee787',   // green — success / active
   cyan:      '#39d0d8',   // secondary accent
+  violet:    '#a371f7',   // tertiary accent
 
   // text
   textPrimary:   '#e6edf3',
   textSecondary: '#8b949e',
   textMuted:     '#484f58',
 };
+
+// Per-research-area accent, shared by cards, tags and canvas visualisations so
+// each research theme reads as one colour system across the whole site.
+export const RESEARCH_ACCENT = {
+  recon:    C.number,    // Accelerated MRI reconstruction
+  motion:   C.func,      // Motion & artifact correction
+  agents:   C.green,     // Foundation-model agents
+  spiking:  C.variable,  // Spiking neural networks
+};
+
+export const MONO = '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
 
 const theme = createTheme({
   palette: {
@@ -52,9 +68,9 @@ const theme = createTheme({
     fontFamily: '"Inter", "Segoe UI", system-ui, -apple-system, sans-serif',
     h1: { fontWeight: 800, letterSpacing: '-0.03em' },
     h2: { fontWeight: 800, letterSpacing: '-0.02em' },
-    h3: { fontWeight: 700, letterSpacing: '-0.015em' },
-    h4: { fontWeight: 700, letterSpacing: '-0.01em' },
-    h5: { fontWeight: 700 },
+    h3: { fontWeight: 800, letterSpacing: '-0.03em' },
+    h4: { fontWeight: 800, letterSpacing: '-0.02em' },
+    h5: { fontWeight: 700, letterSpacing: '-0.01em' },
     h6: { fontWeight: 700 },
   },
   shape: { borderRadius: 8 },
@@ -73,7 +89,7 @@ const theme = createTheme({
             '&:hover': { background: '#484f58' },
           },
         },
-        '*::-webkit-scrollbar': { width: 6 },
+        '*::-webkit-scrollbar': { width: 6, height: 6 },
         '*::-webkit-scrollbar-track': { background: 'transparent' },
         '*::-webkit-scrollbar-thumb': {
           background: C.border,
@@ -114,7 +130,7 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           backgroundImage: 'none',
-          backgroundColor: '#010409',
+          backgroundColor: C.bgDeep,
           borderRight: `1px solid ${C.border}`,
         },
       },
@@ -143,8 +159,8 @@ const theme = createTheme({
         },
         containedPrimary: {
           backgroundColor: C.accent,
-          color: '#0d1117',
-          '&:hover': { backgroundColor: '#79b8ff' },
+          color: C.bg,
+          '&:hover': { backgroundColor: C.accentHi },
         },
         outlinedPrimary: {
           borderColor: `${C.accent}66`,

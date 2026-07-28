@@ -1,46 +1,53 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { useMediaQuery } from '@mui/material';
-import Sidebar, { drawerWidth, collapsedWidth } from './Sidebar';
+
+import Sidebar from './Sidebar';
 import TopNavbar from './TopNavbar';
+import ScrollToTop from './ScrollToTop';
+import CommandPalette from './CommandPalette';
+import { C, MONO } from '../theme';
 
 function Layout() {
-  const theme = useTheme();
-  const collapsed = useMediaQuery(theme.breakpoints.down('md'));
-  const sideW = collapsed ? collapsedWidth : drawerWidth;
-
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      {/* Keyboard users can jump past the sidebar and tab bar. */}
+      <Box component="a" href="#main-content" className="skip-link">
+        skip to content
+      </Box>
+
+      <ScrollToTop />
+      <CommandPalette />
+
       <Sidebar />
 
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
-          width: `calc(100% - ${sideW}px)`,
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
           minWidth: 0,
           bgcolor: 'background.default',
         }}
       >
         <TopNavbar />
 
-        <Box sx={{ flexGrow: 1, p: 4, overflowY: 'auto', overflowX: 'hidden' }}>
+        {/* No padding here — PageShell owns each page's own chrome, and the
+            document (not an inner div) does the scrolling so that sticky
+            positioning, scroll restoration and mobile URL-bar behaviour all
+            work the way the browser intends. */}
+        <Box component="main" id="main-content" sx={{ flexGrow: 1, minWidth: 0 }}>
           <Outlet />
         </Box>
 
         <Box
           component="footer"
           sx={{
-            py: 1.25,
+            py: 1.4,
             px: 3,
             mt: 'auto',
-            bgcolor: '#010409',
-            borderTop: '1px solid #21262d',
+            bgcolor: C.bgDeep,
+            borderTop: `1px solid ${C.borderSub}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -49,11 +56,7 @@ function Layout() {
         >
           <Typography
             variant="body2"
-            sx={{
-              color: '#484f58',
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 11,
-            }}
+            sx={{ color: C.textMuted, fontFamily: MONO, fontSize: 11 }}
           >
             © {new Date().getFullYear()} Gulfam Ahmed Saju · All Rights Reserved
           </Typography>
@@ -64,4 +67,3 @@ function Layout() {
 }
 
 export default Layout;
-

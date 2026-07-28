@@ -1,5 +1,5 @@
-﻿// src/pages/HomePage.jsx  â€”  VS Code / GitHub Dark coder aesthetic
-import React, { useEffect, useRef } from "react";
+// src/pages/HomePage.jsx — VS Code / GitHub Dark coder aesthetic
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -21,132 +21,47 @@ import AutoFixHighRoundedIcon from "@mui/icons-material/AutoFixHighRounded";
 import PsychologyRoundedIcon from "@mui/icons-material/PsychologyRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 
-// â”€â”€ Syntax colour tokens (GitHub Dark) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const KEYWORD  = "#ff7b72";  // red
-const FUNC     = "#d2a8ff";  // purple
-const STR      = "#a5d6ff";  // light blue
-const NUM      = "#79c0ff";  // cyan
-const COMMENT  = "#8b949e";  // grey
-const VARIABLE = "#ffa657";  // orange
-const GREEN    = "#7ee787";
-const BG       = "#0d1117";
-const SURFACE  = "#161b22";
-const BORDER   = "#30363d";
+import { C, MONO } from "../theme";
+import { researchAreas } from "../data/research";
+import { publications } from "../data/publications";
+import { ResearchViz, KSpaceField } from "../components/viz";
+import Reveal from "../components/Reveal";
+import { prefersReducedMotion } from "../lib/useCanvasAnimation";
 
-// â”€â”€ Codeâ€‘Rain Canvas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function CodeRainCanvas() {
-  const canvasRef = useRef(null);
+const ICONS = {
+  recon: ScienceRoundedIcon,
+  motion: AutoFixHighRoundedIcon,
+  agents: PsychologyRoundedIcon,
+  spiking: BoltRoundedIcon,
+};
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-
-    const FONT_SIZE = 13;
-    const CHARS =
-      "{}[]()<>const function return import export class async await" +
-      " void let var if else for while => !== === null undefined true" +
-      " false 0 1 ; : = . _ | * & ^ # @ ! // /** */";
-    const charArr = CHARS.split(" ").join("").split("");
-
-    const COLORS = [GREEN, NUM, FUNC, KEYWORD, VARIABLE, STR, COMMENT];
-
-    let W, H, cols, drops;
-    const init = () => {
-      W = canvas.width  = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
-      cols  = Math.floor(W / FONT_SIZE) + 1;
-      drops = Array.from({ length: cols }, () => Math.random() * -50);
-    };
-    init();
-
-    const ro = new ResizeObserver(init);
-    ro.observe(canvas);
-
-    let frame;
-    let lastTime = 0;
-
-    const draw = (ts) => {
-      frame = requestAnimationFrame(draw);
-      if (ts - lastTime < 60) return; // ~16 fps for subtlety
-      lastTime = ts;
-
-      // Fade trail
-      ctx.fillStyle = `rgba(13,17,23,0.12)`;
-      ctx.fillRect(0, 0, W, H);
-
-      ctx.font = `${FONT_SIZE}px "JetBrains Mono", monospace`;
-
-      drops.forEach((y, i) => {
-        const ch    = charArr[Math.floor(Math.random() * charArr.length)];
-        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        ctx.globalAlpha = Math.random() * 0.45 + 0.15;
-        ctx.fillStyle   = color;
-        ctx.fillText(ch, i * FONT_SIZE, y * FONT_SIZE);
-        ctx.globalAlpha = 1;
-
-        if (y * FONT_SIZE > H && Math.random() > 0.97) drops[i] = 0;
-        drops[i] += 0.55;
-      });
-    };
-    frame = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      ro.disconnect();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        opacity: 0.38,
-      }}
-    />
-  );
-}
-
-// â”€â”€ Terminal Window Wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Terminal Window Wrapper ────────────────────────────────────────────────
 function TerminalWindow({ filename, children, sx = {} }) {
   return (
     <Box
       sx={{
-        bgcolor: SURFACE,
-        border: `1px solid ${BORDER}`,
+        bgcolor: C.surface,
+        border: `1px solid ${C.border}`,
         borderRadius: 2,
         overflow: "hidden",
         ...sx,
       }}
     >
-      {/* title bar */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           gap: 1,
-          bgcolor: "#21262d",
+          bgcolor: C.elevated,
           px: 2,
           py: 0.9,
-          borderBottom: `1px solid ${BORDER}`,
+          borderBottom: `1px solid ${C.border}`,
         }}
       >
         <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "#ff5f57" }} />
         <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "#ffbd2e" }} />
         <Box sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: "#28c840" }} />
-        <Typography
-          sx={{
-            ml: 1.5,
-            color: COMMENT,
-            fontSize: 12,
-            fontFamily: '"JetBrains Mono", monospace',
-          }}
-        >
+        <Typography sx={{ ml: 1.5, color: C.comment, fontSize: 12, fontFamily: MONO }}>
           {filename}
         </Typography>
       </Box>
@@ -155,107 +70,147 @@ function TerminalWindow({ filename, children, sx = {} }) {
   );
 }
 
-// â”€â”€ Syntax-coloured spans â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const K  = ({ c }) => <span style={{ color: KEYWORD  }}>{c}</span>;
-const Fn = ({ c }) => <span style={{ color: FUNC     }}>{c}</span>;
-const S  = ({ c }) => <span style={{ color: STR      }}>{c}</span>;
-const N  = ({ c }) => <span style={{ color: NUM      }}>{c}</span>;
-const Cm = ({ c }) => <span style={{ color: COMMENT  }}>{c}</span>;
-const V  = ({ c }) => <span style={{ color: VARIABLE }}>{c}</span>;
-const Gr = ({ c }) => <span style={{ color: GREEN    }}>{c}</span>;
+// ── Syntax-coloured spans ─────────────────────────────────────────────────
+const K  = ({ c }) => <span style={{ color: C.keyword  }}>{c}</span>;
+const Fn = ({ c }) => <span style={{ color: C.func     }}>{c}</span>;
+const S  = ({ c }) => <span style={{ color: C.string   }}>{c}</span>;
+const N  = ({ c }) => <span style={{ color: C.number   }}>{c}</span>;
+const Cm = ({ c }) => <span style={{ color: C.comment  }}>{c}</span>;
+const V  = ({ c }) => <span style={{ color: C.variable }}>{c}</span>;
+const Gr = ({ c }) => <span style={{ color: C.green    }}>{c}</span>;
 
-export default function HomePage() {
-  const researchAreas = [
-    {
-      icon: <ScienceRoundedIcon sx={{ color: NUM }} />,
-      fn: "acceleratedMRI",
-      title: "Accelerated MRI",
-      desc: "AI methods to accelerate MRI reconstruction while preserving clinically meaningful structure and quantitative fidelity.",
-      tags: ["Reconstruction", "k-space", "Undersampling"],
-    },
-    {
-      icon: <AutoFixHighRoundedIcon sx={{ color: FUNC }} />,
-      fn: "motionCorrection",
-      title: "Motion & Artifact Correction",
-      desc: "Robust correction of motion-induced artifacts to reduce rescans and stabilize downstream analysis.",
-      tags: ["CycleGAN", "Generative AI", "PROPELLER MRI"],
-    },
-    {
-      icon: <PsychologyRoundedIcon sx={{ color: GREEN }} />,
-      fn: "agentMRI",
-      title: "Foundation Model Agents",
-      desc: "Agentic systems that interpret MRI data, route tasks, and integrate foundation models with specialized domain experts.",
-      tags: ["VLM", "AI Agents", "Automation"],
-    },
-    {
-      icon: <BoltRoundedIcon sx={{ color: VARIABLE }} />,
-      fn: "spikeNets",
-      title: "Spiking Neural Networks",
-      desc: "Brain-inspired, compute-efficient temporal inference for next-generation AI workloads.",
-      tags: ["SNN", "Efficient AI", "Temporal"],
-    },
-  ];
+// ── Count-up metric ───────────────────────────────────────────────────────
+function Metric({ value, label, suffix = "", colour }) {
+  const [shown, setShown] = useState(prefersReducedMotion() ? value : 0);
+  const ref = useRef(null);
 
-  const skills = [
-    { label: "Python",      color: NUM      },
-    { label: "PyTorch",     color: VARIABLE },
-    { label: "TensorFlow",  color: KEYWORD  },
-    { label: "HPC / SLURM", color: FUNC     },
-    { label: "MRI Physics", color: GREEN    },
-    { label: "Foundation Models", color: STR },
-    { label: "AI Agents",   color: NUM      },
-    { label: "Deep Learning", color: FUNC   },
-    { label: "Medical Imaging", color: GREEN },
-    { label: "Neuroimaging",  color: VARIABLE },
-    { label: "CycleGAN",    color: KEYWORD  },
-    { label: "Spiking Nets",color: STR      },
-  ];
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+    const el = ref.current;
+    if (!el) return undefined;
+    let raf = 0;
+    let start = null;
+    let done = false;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting || done) return;
+        done = true;
+        io.disconnect();
+        const tick = (ts) => {
+          if (start === null) start = ts;
+          const p = Math.min(1, (ts - start) / 900);
+          // ease-out so it decelerates into the final value
+          setShown(Math.round(value * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [value]);
 
   return (
-    <Box
-      sx={{
-        mx: { xs: -4, md: -4 },
-        my: { xs: -4, md: -4 },
-        position: "relative",
-        overflow: "hidden",
-        bgcolor: BG,
-        minHeight: "100%",
-      }}
-    >
-      {/* â”€â”€ code-rain canvas â”€â”€ */}
-      <CodeRainCanvas />
+    <Box ref={ref} sx={{ minWidth: 0 }}>
+      <Typography
+        sx={{
+          fontFamily: MONO,
+          fontWeight: 700,
+          fontSize: { xs: "1.5rem", md: "1.8rem" },
+          lineHeight: 1.1,
+          color: colour,
+        }}
+      >
+        {shown}
+        {suffix}
+      </Typography>
+      <Typography
+        sx={{
+          fontFamily: MONO,
+          fontSize: 10.5,
+          letterSpacing: 1.2,
+          textTransform: "uppercase",
+          color: C.textMuted,
+          mt: 0.4,
+        }}
+      >
+        {label}
+      </Typography>
+    </Box>
+  );
+}
 
-      {/* â”€â”€ subtle gradient overlay so content pops â”€â”€ */}
+export default function HomePage() {
+  const skills = [
+    { label: "Python",            color: C.number   },
+    { label: "PyTorch",           color: C.variable },
+    { label: "TensorFlow",        color: C.keyword  },
+    { label: "HPC / SLURM",       color: C.func     },
+    { label: "MRI Physics",       color: C.green    },
+    { label: "Foundation Models", color: C.string   },
+    { label: "AI Agents",         color: C.number   },
+    { label: "Deep Learning",     color: C.func     },
+    { label: "Medical Imaging",   color: C.green    },
+    { label: "Neuroimaging",      color: C.variable },
+    { label: "CycleGAN",          color: C.keyword  },
+    { label: "Spiking Nets",      color: C.string   },
+  ];
+
+  // derived from the real publication list, so these can never go stale
+  const peerReviewed = publications.filter(
+    (p) => p.type === "journal" || p.type === "conference"
+  ).length;
+  const venues = new Set(publications.map((p) => p.journal).filter(Boolean)).size;
+  const firstAuthor = publications.filter((p) =>
+    p.authors.trim().toLowerCase().startsWith("gulfam")
+  ).length;
+
+  return (
+    <Box sx={{ position: "relative", overflow: "hidden", bgcolor: C.bg, minHeight: "100%" }}>
+      {/* ambient k-space lattice — replaces the old generic code rain */}
+      <KSpaceField />
+
       <Box
+        aria-hidden
         sx={{
           position: "absolute",
           inset: 0,
           background: `
-            radial-gradient(ellipse 60% 50% at 20% 40%, ${alpha("#58a6ff", 0.06)} 0%, transparent 70%),
-            radial-gradient(ellipse 50% 40% at 80% 70%, ${alpha("#7ee787", 0.04)} 0%, transparent 70%)
+            radial-gradient(ellipse 60% 50% at 20% 40%, ${alpha(C.accent, 0.07)} 0%, transparent 70%),
+            radial-gradient(ellipse 50% 40% at 80% 70%, ${alpha(C.green, 0.045)} 0%, transparent 70%)
           `,
           pointerEvents: "none",
           zIndex: 1,
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 2, py: { xs: 5, md: 8 } }}>
-
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-        <Grid container spacing={4} alignItems="flex-start" sx={{ mb: 6 }}>
-
-          {/* â”€â”€ Left: terminal code block â”€â”€ */}
-          <Grid item xs={12} md={7}>
-            <TerminalWindow filename="profile.ts">
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 2,
+          py: { xs: 4, md: 7 },
+          px: { xs: 2.5, sm: 3, md: 4 },
+        }}
+      >
+        {/* ══════════════ HERO ══════════════ */}
+        <Grid container spacing={3.5} alignItems="stretch" sx={{ mb: { xs: 4, md: 6 } }}>
+          <Grid size={{ xs: 12, md: 7 }}>
+            <TerminalWindow filename="profile.ts" sx={{ height: "100%" }}>
               <Box
                 component="pre"
                 sx={{
                   m: 0,
-                  p: { xs: 2.5, md: 3 },
-                  fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: { xs: 12.5, md: 13.5 },
+                  p: { xs: 2, md: 3 },
+                  fontFamily: MONO,
+                  fontSize: { xs: 11.5, sm: 12.5, md: 13.5 },
                   lineHeight: 1.85,
-                  color: "#e6edf3",
+                  color: C.textPrimary,
                   overflowX: "auto",
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",
@@ -266,12 +221,12 @@ export default function HomePage() {
                 <K c="const" />{" "}<V c="researcher" />{" = {\n"}
                 {"  "}<Gr c="name" />{":         "}<S c='"Gulfam Ahmed Saju, PhD"' />{",\n"}
                 {"  "}<Gr c="role" />{":         "}<S c='"Postdoctoral Research Associate"' />{",\n"}
-                {"  "}<Gr c="institute" />{"  "}<S c='"Mallinckrodt Institute of Radiology"' />{",\n"}
-                {"  "}<Gr c="university" />{": "}<S c='"Washington University in St. Louis"' />{",\n"}
-                {"  "}<Gr c="location" />{":   "}<S c='"St. Louis, MO, USA"' />{",\n"}
-                {"  "}<Gr c="status" />{":     "}<N c="open_to_collaborations" />{",\n"}
+                {"  "}<Gr c="institute" />{":    "}<S c='"Mallinckrodt Institute of Radiology"' />{",\n"}
+                {"  "}<Gr c="university" />{":   "}<S c='"Washington University in St. Louis"' />{",\n"}
+                {"  "}<Gr c="location" />{":     "}<S c='"St. Louis, MO, USA"' />{",\n"}
+                {"  "}<Gr c="status" />{":       "}<N c="open_to_collaborations" />{",\n"}
                 {"\n"}
-                {"  "}<Gr c="focus" />{":[\n"}
+                {"  "}<Gr c="focus" />{": [\n"}
                 {"    "}<S c='"Accelerated MRI Reconstruction"' />{",\n"}
                 {"    "}<S c='"Motion & Artifact Correction"' />{",\n"}
                 {"    "}<S c='"Foundation Models & AI Agents"' />{",\n"}
@@ -287,18 +242,16 @@ export default function HomePage() {
             </TerminalWindow>
           </Grid>
 
-          {/* â”€â”€ Right: intro card â”€â”€ */}
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Box
               sx={{
-                bgcolor: SURFACE,
-                border: `1px solid ${BORDER}`,
+                bgcolor: C.surface,
+                border: `1px solid ${C.border}`,
                 borderRadius: 2,
-                p: { xs: 3, md: 3.5 },
+                p: { xs: 2.5, md: 3.5 },
                 height: "100%",
               }}
             >
-              {/* live dot pill */}
               <Box
                 sx={{
                   display: "inline-flex",
@@ -307,8 +260,8 @@ export default function HomePage() {
                   px: 1.5,
                   py: 0.5,
                   borderRadius: 999,
-                  bgcolor: `${GREEN}14`,
-                  border: `1px solid ${GREEN}40`,
+                  bgcolor: alpha(C.green, 0.08),
+                  border: `1px solid ${alpha(C.green, 0.25)}`,
                   mb: 2.5,
                 }}
               >
@@ -317,42 +270,54 @@ export default function HomePage() {
                     width: 7,
                     height: 7,
                     borderRadius: "50%",
-                    bgcolor: GREEN,
-                    boxShadow: `0 0 8px ${GREEN}`,
+                    bgcolor: C.green,
+                    boxShadow: `0 0 8px ${C.green}`,
                     animation: "liveGlow 2s ease-in-out infinite",
                     "@keyframes liveGlow": {
-                      "0%, 100%": { boxShadow: `0 0 4px ${GREEN}` },
-                      "50%":      { boxShadow: `0 0 12px ${GREEN}` },
+                      "0%, 100%": { boxShadow: `0 0 4px ${C.green}` },
+                      "50%":      { boxShadow: `0 0 12px ${C.green}` },
                     },
                   }}
                 />
-                <Typography sx={{ fontSize: 11, fontWeight: 700, color: GREEN, fontFamily: '"JetBrains Mono", monospace', letterSpacing: 0.8 }}>
+                <Typography
+                  sx={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: C.green,
+                    fontFamily: MONO,
+                    letterSpacing: 0.8,
+                  }}
+                >
                   OPEN TO COLLABORATIONS
                 </Typography>
               </Box>
 
-              <Typography variant="h4" sx={{ fontWeight: 800, mb: 0.5, lineHeight: 1.15 }}>
+              <Typography variant="h1" sx={{ fontWeight: 800, mb: 0.5, lineHeight: 1.15, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                 Gulfam Ahmed Saju
               </Typography>
-              <Typography sx={{ color: COMMENT, fontFamily: '"JetBrains Mono", monospace', fontSize: 13, mb: 2 }}>
-                PhD; AI / Medical Imaging Researcher
+              <Typography sx={{ color: C.comment, fontFamily: MONO, fontSize: 13, mb: 2 }}>
+                PhD · AI / Medical Imaging Researcher
               </Typography>
 
               <Typography sx={{ color: "#c9d1d9", lineHeight: 1.8, mb: 3, fontSize: "0.95rem" }}>
-                I build AI systems for medical imaging from foundation-model-driven agents and MRI reconstruction to brain-inspired spiking neural networks for compute-efficient inference.
+                I build AI systems for medical imaging — from foundation-model-driven agents
+                and MRI reconstruction to brain-inspired spiking neural networks for
+                compute-efficient inference.
               </Typography>
 
               <Stack spacing={1.5} sx={{ mb: 3 }}>
                 {[
-                  { label: "$ email",   val: "gsaju@wustl.edu",                    color: GREEN    },
-                  { label: "$ org",     val: "Washington University in St. Louis", color: STR      },
-                  { label: "$ dept",    val: "Mallinckrodt Institute of Radiology",color: NUM      },
+                  { label: "$ email", val: "gsaju@wustl.edu",                     color: C.green  },
+                  { label: "$ org",   val: "Washington University in St. Louis",  color: C.string },
+                  { label: "$ dept",  val: "Mallinckrodt Institute of Radiology", color: C.number },
                 ].map((row) => (
                   <Box key={row.label} sx={{ display: "flex", gap: 1.5, alignItems: "flex-start" }}>
-                    <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: COMMENT, flex: "0 0 60px", pt: "1px" }}>
+                    <Typography
+                      sx={{ fontFamily: MONO, fontSize: 12, color: C.comment, flex: "0 0 58px", pt: "1px" }}
+                    >
                       {row.label}
                     </Typography>
-                    <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12, color: row.color, lineHeight: 1.5 }}>
+                    <Typography sx={{ fontFamily: MONO, fontSize: 12, color: row.color, lineHeight: 1.5, minWidth: 0, wordBreak: "break-word" }}>
                       {row.val}
                     </Typography>
                   </Box>
@@ -366,17 +331,11 @@ export default function HomePage() {
                   variant="contained"
                   endIcon={<ArrowForwardRoundedIcon />}
                   size="small"
-                  sx={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 600 }}
+                  sx={{ fontFamily: MONO, fontWeight: 600 }}
                 >
                   ./research
                 </Button>
-                <Button
-                  component={RouterLink}
-                  to="/publications"
-                  variant="outlined"
-                  size="small"
-                  sx={{ fontFamily: '"JetBrains Mono", monospace' }}
-                >
+                <Button component={RouterLink} to="/publications" variant="outlined" size="small" sx={{ fontFamily: MONO }}>
                   ./publications
                 </Button>
                 <Button
@@ -384,7 +343,7 @@ export default function HomePage() {
                   to="/cv"
                   variant="outlined"
                   size="small"
-                  sx={{ fontFamily: '"JetBrains Mono", monospace', borderColor: `${COMMENT}66`, color: COMMENT }}
+                  sx={{ fontFamily: MONO, borderColor: alpha(C.comment, 0.4), color: C.comment }}
                 >
                   ./cv
                 </Button>
@@ -393,125 +352,171 @@ export default function HomePage() {
           </Grid>
         </Grid>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• RESEARCH AREAS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-        <Box sx={{ mb: 5 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 3 }}>
-            <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', color: COMMENT, fontSize: 13 }}>
-              <Cm c="// research.areas.map(area => &lt;Module /&gt;)" />
-            </Typography>
-          </Box>
-
-          <Grid container spacing={2.5}>
-            {researchAreas.map((area) => (
-              <Grid item xs={12} sm={6} key={area.fn}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    bgcolor: SURFACE,
-                    border: `1px solid ${BORDER}`,
-                    borderRadius: 2,
-                    transition: "border-color 180ms, box-shadow 180ms, transform 180ms",
-                    "&:hover": {
-                      borderColor: "#58a6ff",
-                      boxShadow: `0 0 0 1px #58a6ff26, 0 8px 24px ${alpha("#0d1117", 0.6)}`,
-                      transform: "translateY(-3px)",
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    {/* function-style header */}
-                    <Box
-                      sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 1.5,
-                        fontFamily: '"JetBrains Mono", monospace',
-                        fontSize: 12.5,
-                        color: COMMENT,
-                      }}
-                    >
-                      <K c="function" />{" "}
-                      <Fn c={area.fn} />
-                      {"() {"}
-                    </Box>
-                    <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 1.5 }}>
-                      <Box sx={{ mt: 0.25, flex: "0 0 auto" }}>{area.icon}</Box>
-                      <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.25 }}>
-                        {area.title}
-                      </Typography>
-                    </Stack>
-                    <Typography sx={{ color: COMMENT, lineHeight: 1.75, fontSize: "0.9rem", mb: 2 }}>
-                      {area.desc}
-                    </Typography>
-                    <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
-                      {area.tags.map((t) => (
-                        <Chip
-                          key={t}
-                          label={t}
-                          size="small"
-                          sx={{
-                            fontFamily: '"JetBrains Mono", monospace',
-                            fontSize: 11,
-                            bgcolor: "#21262d",
-                            border: `1px solid ${BORDER}`,
-                            color: STR,
-                          }}
-                        />
-                      ))}
-                    </Stack>
-                    <Typography sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 12.5, color: COMMENT, mt: 1.5 }}>{"}"}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SKILLS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
-        <Box
-          sx={{
-            bgcolor: SURFACE,
-            border: `1px solid ${BORDER}`,
-            borderRadius: 2,
-            p: { xs: 2.5, md: 3 },
-          }}
-        >
-          <Typography
+        {/* ══════════════ METRICS ══════════════ */}
+        <Reveal>
+          <Box
             sx={{
-              fontFamily: '"JetBrains Mono", monospace',
-              fontSize: 13,
-              color: COMMENT,
-              mb: 2,
+              bgcolor: alpha(C.surface, 0.8),
+              border: `1px solid ${C.border}`,
+              borderRadius: 2,
+              px: { xs: 2.5, md: 3.5 },
+              py: { xs: 2.25, md: 2.5 },
+              mb: { xs: 4, md: 5 },
+              display: "grid",
+              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(4, 1fr)" },
+              gap: { xs: 2.5, md: 2 },
+              backdropFilter: "blur(6px)",
             }}
           >
-            <Cm c="/** Technical Stack, tools & methods */" />
+            <Metric value={peerReviewed} label="peer-reviewed" colour={C.accent} />
+            <Metric value={firstAuthor} label="first author" colour={C.green} />
+            <Metric value={venues} label="venues" colour={C.func} />
+            <Metric value={5} label="years research" suffix="+" colour={C.variable} />
+          </Box>
+        </Reveal>
+
+        {/* ══════════════ RESEARCH AREAS ══════════════ */}
+        <Box sx={{ mb: 5 }}>
+          <Typography sx={{ fontFamily: MONO, color: C.comment, fontSize: 13, mb: 2.5 }}>
+            <Cm c="// research.areas.map(area => <Module />)" />
           </Typography>
-          <Divider sx={{ mb: 2.5, borderColor: BORDER }} />
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-            {skills.map((s) => (
-              <Chip
-                key={s.label}
-                label={s.label}
-                size="small"
-                sx={{
-                  fontFamily: '"JetBrains Mono", monospace',
-                  fontSize: 12,
-                  fontWeight: 500,
-                  bgcolor: "#21262d",
-                  border: `1px solid ${BORDER}`,
-                  color: s.color,
-                  transition: "border-color 160ms, background 160ms",
-                  "&:hover": {
-                    bgcolor: `${s.color}16`,
-                    borderColor: `${s.color}66`,
-                  },
-                }}
-              />
-            ))}
-          </Stack>
+
+          <Grid container spacing={2.5}>
+            {researchAreas.map((area, i) => {
+              const Icon = ICONS[area.id];
+              return (
+                <Grid size={{ xs: 12, sm: 6 }} key={area.id}>
+                  <Reveal delay={i * 70}>
+                    <Card
+                      sx={{
+                        height: "100%",
+                        bgcolor: C.surface,
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 2,
+                        transition: "border-color 180ms, box-shadow 180ms, transform 180ms",
+                        "&:hover": {
+                          borderColor: alpha(area.accent, 0.75),
+                          boxShadow: `0 0 0 1px ${alpha(area.accent, 0.2)}, 0 8px 24px ${alpha("#010409", 0.6)}`,
+                          transform: "translateY(-3px)",
+                        },
+                      }}
+                    >
+                      {/* live visualisation of this research area */}
+                      <Box
+                        sx={{
+                          borderBottom: `1px solid ${C.border}`,
+                          bgcolor: "#0a0e14",
+                          position: "relative",
+                        }}
+                      >
+                        <ResearchViz viz={area.viz} accent={area.accent} height={132} />
+                      </Box>
+
+                      <CardContent sx={{ p: { xs: 2.25, md: 2.75 } }}>
+                        <Box
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 1,
+                            mb: 1.25,
+                            fontFamily: MONO,
+                            fontSize: 12.5,
+                            color: C.comment,
+                          }}
+                        >
+                          <K c="function" />{" "}<Fn c={area.fn} />{"() {"}
+                        </Box>
+
+                        <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 1.5 }}>
+                          <Box sx={{ mt: 0.25, flex: "0 0 auto" }}>
+                            <Icon sx={{ color: area.accent }} />
+                          </Box>
+                          <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.25 }}>
+                            {area.title}
+                          </Typography>
+                        </Stack>
+
+                        <Typography sx={{ color: C.comment, lineHeight: 1.75, fontSize: "0.9rem", mb: 2 }}>
+                          {area.short}
+                        </Typography>
+
+                        <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+                          {area.tags.slice(0, 3).map((t) => (
+                            <Chip
+                              key={t}
+                              label={t}
+                              size="small"
+                              sx={{
+                                fontFamily: MONO,
+                                fontSize: 11,
+                                bgcolor: C.elevated,
+                                border: `1px solid ${C.border}`,
+                                color: C.string,
+                              }}
+                            />
+                          ))}
+                        </Stack>
+
+                        <Typography sx={{ fontFamily: MONO, fontSize: 12.5, color: C.comment, mt: 1.5 }}>
+                          {"}"}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Reveal>
+                </Grid>
+              );
+            })}
+          </Grid>
+
+          <Button
+            component={RouterLink}
+            to="/research"
+            variant="outlined"
+            endIcon={<ArrowForwardRoundedIcon />}
+            sx={{ mt: 3, fontFamily: MONO }}
+          >
+            explore the research
+          </Button>
         </Box>
 
+        {/* ══════════════ SKILLS ══════════════ */}
+        <Reveal>
+          <Box
+            sx={{
+              bgcolor: C.surface,
+              border: `1px solid ${C.border}`,
+              borderRadius: 2,
+              p: { xs: 2.5, md: 3 },
+            }}
+          >
+            <Typography sx={{ fontFamily: MONO, fontSize: 13, color: C.comment, mb: 2 }}>
+              <Cm c="/** Technical stack, tools & methods */" />
+            </Typography>
+            <Divider sx={{ mb: 2.5, borderColor: C.border }} />
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+              {skills.map((s) => (
+                <Chip
+                  key={s.label}
+                  label={s.label}
+                  size="small"
+                  sx={{
+                    fontFamily: MONO,
+                    fontSize: 12,
+                    fontWeight: 500,
+                    bgcolor: C.elevated,
+                    border: `1px solid ${C.border}`,
+                    color: s.color,
+                    transition: "border-color 160ms, background 160ms",
+                    "&:hover": {
+                      bgcolor: alpha(s.color, 0.09),
+                      borderColor: alpha(s.color, 0.4),
+                    },
+                  }}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </Reveal>
       </Container>
     </Box>
   );
