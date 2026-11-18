@@ -6,6 +6,20 @@ export const publications = [
   // ── Journals ──────────────────────────────────────────────────────────
   {
     type: "journal",
+    authors: "Gulfam Ahmed Saju, Jeramy Lewis, Satya V.V.N Kothapalli, Cihat Eldeniz and Dmitriy A. Yablonskiy",
+    title:
+      "A Deep Learning Framework for Retrospective Motion Detection and Conditional Correction (MDCC): Application to Multi-Gradient-Recalled Echo Quantitative MRI",
+    journal: "Journal of Imaging Informatics in Medicine",
+    volume: "",
+    issue: "",
+    month: "",
+    year: 2026,
+    pages: "",
+    url: "https://link.springer.com/article/10.1007/s10278-026-02525-7",
+    doi: "10.1007/s10278-026-02525-7",
+  },
+  {
+    type: "journal",
     authors: "Gulfam Ahmed Saju, Marjan Akhi and Yuchou Chang",
     title:
       "AgentMRI: A Vison Language Model-Powered AI System for Self-regulating MRI Reconstruction with Multiple Degradations",
